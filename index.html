@@ -197,8 +197,10 @@ var svgtext = d3.select("div#hodobox").append("svg").attr("class", "indices").at
 
 
 makeBarbTemplates();
-drawBackground();
+var allmoist = drawBackground();
 drawTextLabels();
+
+console.log(allmoist);
 
 var skewtgroup = svg.append("g").attr("class", "skewt"); // put skewt lines in this group
 var barbgroup  = svg.append("g").attr("class", "windbarb"); // put barbs in this group
@@ -210,7 +212,7 @@ dataParse('data_TOP.json'); // 2003 Jun 24 00Z
 //dataParse('data_LBF.json'); // 2003 Jun 23 00Z
 //dataParse('data_TBW.json'); // 2019 Nov 26 00Z
 //dataParse('data_ILX.json'); // 2013 Nov 17 15Z
-//dataParse('data_DNR_Snow.json'); // 2019 Nov 26 00Z
+//dataParse('data_DNR.json'); // 2019 Nov 26 00Z
 //dataParse('data_SkewT.json');// Interactive Skew-T
 
 function dataParse(fileName) {
@@ -1034,6 +1036,46 @@ if (parcel_flag=1) {
       focus2.attr("transform", "translate(" + (x(d.dwpt) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
       focus3.attr("transform", "translate(" + (x(d.twc) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
       focus4.attr("transform", "translate(" + (x(d.tv) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
+      focus5.attr("transform", "translate(" + (x(d.parcelT) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
+      focus5b.attr("transform", "translate(" + (x(d.parcelTmix) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
+      focus6.attr("transform", "translate(0," + y(d.press) + ")");
+      focus6b.attr("transform", "translate(0," + y(d.press) + ")");
+      focus7.attr("transform", "translate(" + width + "," + y(d.press) + ")");
+
+      focus.select("text").text(Math.round(d.temp)+"°C");
+      focus2.select("text").text(Math.round(d.dwpt)+"°C");
+      focus3.select("text").text(Math.round(d.twc)+"°C");
+      focus4.select("text").text(Math.round(d.tv)+"°C");
+      focus6.select("text").text("--"+(Math.round(d.hghtagl/100)/10)+"km");
+      focus6b.select("text").text("--"+d.press+"mb");
+      focus5.select("text").text(Math.round(d.parcelT)+"°C");
+      focus5b.select("text").text(Math.round(d.parcelTmix)+"°C");
+      focus6.select("text").text("<-"+(Math.round(d.hghtagl/100)/10)+"km");
+      focus6b.select("text").text("  " + d.press+"mb");
+      focus7.select("text").text(d.wspd+` @`+d.wdir+"˚");
+  }
+
+} else {
+
+  svg.append("rect")
+      .attr("class", "overlay")
+      .attr("width", width)
+      .attr("height", height)
+      .on("mouseover", function() { focus.style("display", null); focus2.style("display", null); focus3.style("display", null); focus4.style("display", null); focus6.style("display", null); focus6b.style("display", null); focus7.style("display", null);})
+      .on("mouseout", function() { focus.style("display", "none"); focus2.style("display", "none"); focus3.style("display", "none"); focus4.style("display", "none"); focus6.style("display", "none"); focus6b.style("display", "none"); focus7.style("display","none");})
+      .on("mousemove", mousemove);
+
+  function mousemove() {
+      var y0 = y.invert(d3.mouse(this)[1]); // get y value of mouse pointer in pressure space
+      var i = bisectTemp(mouseoverdata, y0, 1, mouseoverdata.length-1);
+      var d0 = mouseoverdata[i - 1];
+      var d1 = mouseoverdata[i];
+      var d = y0 - d0.press > d1.press - y0 ? d1 : d0;
+
+      focus.attr("transform", "translate(" + (x(d.temp) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
+      focus2.attr("transform", "translate(" + (x(d.dwpt) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
+      focus3.attr("transform", "translate(" + (x(d.twc) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
+      focus4.attr("transform", "translate(" + (x(d.tv) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
       focus6.attr("transform", "translate(0," + y(d.press) + ")");
       focus6b.attr("transform", "translate(0," + y(d.press) + ")");
       focus7.attr("transform", "translate(" + width + "," + y(d.press) + ")");
@@ -1046,6 +1088,8 @@ if (parcel_flag=1) {
       focus6b.select("text").text("--"+d.press+"mb");
       focus7.select("text").text(d.wspd+` @`+d.wdir+"˚");
   }
+}
+
 }
 
 }
@@ -1506,6 +1550,11 @@ if (capeType == "ML") {
 	var press_LFC = tlinetest[0][0][0].lfcP;
 	var press_LCL = tlinetest[0][0][0].lclP;
 	var temp_LCL = tlinetest[0][0][0].lclT;
+} else if (capeType == "Moist Adiabats") {
+	var press_EL = 100;
+	var press_LFC = 1000;
+	var press_LCL = 1000;
+	var temp_LCL = 10;
 } else {
 	var press_EL = tlinetest[0][0][0].elP;
 	var press_LFC = tlinetest[0][0][0].lfcP;
