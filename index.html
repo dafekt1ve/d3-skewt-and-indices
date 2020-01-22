@@ -3,11 +3,24 @@
 <link rel="stylesheet" type="text/css" href="sounding.css">
 <title></title>
 <body>
-<div class="rollover selected" id="0">00</div><div class="rollover" id="1">01</div><div class="rollover" id="2">02</div><div class="rollover" id="3">03</div><div class="rollover" id="4">04</div><div class="rollover" id="5">05</div><div class="rollover" id="6">06</div><div class="rollover" id="7">07</div><div class="rollover" id="8">08</div><div class="rollover" id="9">09</div><div class="rollover" id="10">10</div><div class="rollover" id="11">11</div><div class="rollover" id="12">12</div><div class="rollover" id="13">13</div><div class="rollover" id="14">14</div><div class="rollover" id="15">15</div><div class="rollover" id="16">16</div><div class="rollover" id="17">17</div><div class="rollover" id="18">18</div><div class="rollover" id="19">19</div><div class="rollover" id="20">20</div><div class="rollover" id="21">21</div><div class="rollover" id="22">22</div><div class="rollover" id="23">23</div><div class="rollover" id="24">24</div><div class="rollover" id="25">25</div><div class="rollover" id="26">26</div><div class="rollover" id="27">27</div><div class="rollover" id="28">28</div><div class="rollover" id="29">29</div><div class="rollover" id="30">30</div><div class="rollover" id="31">31</div><div class="rollover" id="32">32</div><div class="rollover" id="33">33</div><div class="rollover" id="34">34</div><div class="rollover" id="35">35</div><div class="rollover" id="36">36</div><div class="rollover" id="37">37</div><div class="rollover" id="38">38</div><div class="rollover" id="39">39</div><div class="rollover" id="40">40</div><div class="rollover" id="41">41</div><div class="rollover" id="42">42</div><div class="rollover" id="43">43</div><div class="rollover" id="44">44</div><div class="rollover" id="45">45</div><div class="rollover" id="46">46</div><div class="rollover" id="47">47</div><div class="rollover" id="48">48</div>
-
 <div id="container">
-<div id="mainbox"></div>
+<div id="mainbox">
+	<div>
+	 <label id="fileUpload" for="input-file">Specify a file:</label><br>
+	 <input type="file" id="input-file">
+	</div>
+
+	<div id="checks">
+		<label for="parcel_check"><input id="parcel_check" type="checkbox" checked="checked">Parcel Temperature</input></label>
+		<label for="parcelmix_check"><input id="parcelmix_check" type="checkbox" checked="checked">Mixed Parcel Temperature</input></label>
+		<label for="tvc_check"><input id="tvc_check" type="checkbox" checked="checked">Virtual Temperature</input></label>
+		<label for="twc_check"><input id="twc_check" type="checkbox" checked="checked">Wet Bulb Temperature</input></label>
+	</div>
+</div>
 <div id="hodobox"></div>
+</div>
+<div class="result">
+<p></p>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
@@ -15,32 +28,128 @@
 <script src="jsfunctions.js"></script>
 <script type="text/javascript">
 
-$(document).ready(function() {
-    $(" div.rollover " ).mouseover(function() {
-        var i = $( this ).attr('id');
-        
-        // change class for rollover
-        $("body div.rollover ").removeClass("selected");
-        $( this ).addClass("selected");
-        updateData(i);
-    });
+$(document).ready( function() {
+	$("input:checkbox").on("change", function() {
+		var checkbox_id = $(this).prop("id");
+		var className = checkbox_id.split("_",1).toString();
+		$("." + className + ".member").toggle();
+		$("." + className + ".focus").css('visibility', $('.' +className + '.focus').css('visibility') == 'hidden' ? 'visible' : 'hidden');
+		if(className == "twc") {
+			$(".wbztext, .wbz_rectline").css('visibility', $(".wbztext, .wbz_rectline").css('visibility') == 'hidden' ? 'visible' : 'hidden');
+		} else if (className == "tvc") {
+		} else if (className == "parcel") {
+			$(".lcltext, .lcl, .lfctext, .lfc, .eltext, .el").css('visibility', $(".lcltext, .lcl, .lfctext, .lfc, .eltext, .el").css('visibility') == 'hidden' ? 'visible' : 'hidden');
+		} else if (className == "parcelmix") {
+			$(".lclmixtext, .lclmix, .lfcmixtext, .lfcmix, .elmixtext, .elmix").css('visibility', $(".lclmixtext, .lclmix, .lfcmixtext, .lfcmix, .elmixtext, .elmix").css('visibility') == 'hidden' ? 'visible' : 'hidden');
+		} else {
+		}
+	})
+
+	$("#input-file").on("click", function () {
+		$("#parcel_check, #parcelmix_check, #tvc_check, #twc_check").prop("checked",true);
+	});
+
 });
 
-var m = [30, 40, 20, 35],
-    w = 700 - m[1] - m[3],
-    h = 700 - m[0] - m[2];
+var sounding = '';
 
-var deg2rad = (Math.PI/180);
-var tan = Math.tan(55*deg2rad),
+$("input[type='file']").on("change", function () {
+	const reader = new FileReader();
+	reader.readAsText(document.querySelector('input[type="file"]').files[0]);
+	reader.onload = () => storeResults(reader.result);
+});
+
+function storeResults(result) {
+	sounding = result;
+	jsonObj = convertFiletoJSON(sounding);
+	dataParse();
+}
+
+//some constants from meted.ucar.edu/awips/validate
+var R = 287.04; // J/Kg K--gas constant
+var Cp = 1004; // J/Kg K--specific heat at constant pressure
+var g = 9.80665;
+var c5 = -0.37329638;
+var c6 = 41.178204;
+var c7 = 0.0015945203;
+var c10 = 0.1419709;
+var c11 = 20.746475;
+var c12 = 6672.5713;
+var c13 = .000036336427;
+var T0 = 288.15;
+var P0 = 1013.25;
+
+var jsonObj;
+var sdata = new Array();
+var data_arr = [];
+var filtered = [];
+var title = '';
+
+var ppcl = 0;//pressure for parcel to be lifted
+var tpcl = 0;//temp for parcel to be lifted (C)
+var tdpcl = 0; //dewpoint for parcel to be lifted
+var plcl = 0; //pres at LCL
+var tlcl = 0; //temp at LCL
+var plfc = -1; //pressure at LFC
+var tlfc = 0; //temp at LFC 
+var pel = 0; //pressure at EL
+var tel = 0; //tempC at EL
+var thetae_lcl = 0;//theta-e at LCL
+var pccl = 0; //pres at ccl - set in calcCCL()
+var tccl = 0; //temp at ccl - set in calcCCL(), used by calcConvTemp()
+var p_pcl100 = 0;//_parent.capeMC.ppcl
+var t_pcl100 = 0;//_parent.capeMC.tpcl
+var td_pcl100 = 0;//_parent.capeMC.tdpcl
+var parcel_temp = 0;
+var parcel_temp_array = new Array();
+var pcl_t_arr = new Array();
+var ml_pcl_t_arr = new Array();
+var parcel_flag = 0;
+var cin_parcelT = 0;
+var cin_parcelT_array = new Array();
+var cin_parcelT_below_LCL_array = new Array();
+var pcl_cin_t_arr = new Array();
+var pcl_cin_t_below_LCL_arr = new Array();
+var bl_depth = 100;
+
+var t500 = 0; //temp(C) at 500 mb
+var ws500 = 0; //windspeed at 500 mb
+var wd500 = 0; //wind direction at 500 mb
+var t700 = 0; //temp at 700(C) mb
+var td700 = 0; //dewpoint at 700(C)
+var t850 = 0; //temp(C) at 850 mb
+var td850 = 0; //dewpoint at 850(C)
+var ws850 = 0; //windspeed at 850 mb
+var wd850 = 0; //wind direction at 850 mb
+var t1000 = 0; //temp(C) at 1000 mb
+var td1000 = 0; //dewpoint at 1000(C)
+var ws1000 = 0; //windspeed at 1000 mb
+var wd1000 = 0; //wind direction at 1000 mb
+var flag_1000 = 0;
+var flag_850 = 0;
+var flag_700 = 0;
+var flag_500 = 0;
+var tk = 0; //temp (K)
+var tdk = 0; //dewpoint (K)
+var p_sfc = 0;
+var t_sfc = 0;
+var td_sfc = 0;
+
+var m = [30, 40, 20, 35],
+    width = 700 - m[1] - m[3],
+    height = 700 - m[0] - m[2];
+
+var d2r = (Math.PI/180);
+var tan = Math.tan(55*d2r),
     basep = 1050,
     topp = 100,
-    plines = [1000,850,700,500,300,200,100]
+    plines = [1000,925,850,700,600,500,400,300,200,100]
     pticks = [950,900,800,750,650,600,550,450,400,350,250,150];
     barbsize = 25;
 
 // Scales and axes. Note the inverted domain for the y-scale: bigger is up!
-var x = d3.scale.linear().range([0, w]).domain([-45,50]),
-    y = d3.scale.log().range([0, h]).domain([topp, basep])
+var x = d3.scale.linear().range([0, width]).domain([-45,50]),
+    y = d3.scale.log().range([0, height]).domain([topp, basep])
     r = d3.scale.linear().range([0,300]).domain([0,150]),
     y2 = d3.scale.linear(),
     xAxis = d3.svg.axis().scale(x).tickSize(0,0).ticks(10).orient("bottom"),
@@ -53,14 +162,13 @@ var x = d3.scale.linear().range([0, w]).domain([-45,50]),
 var line = d3.svg.line()
     .interpolate("linear")
     .x(function(d,i) { return x(d.temp) + (y(basep)-y(d.press))/tan; })
-    //.x(function(d,i) { return x(d.temp); })
     .y(function(d,i) { return y(d.press); });
     
 var line2 = d3.svg.line()
     .interpolate("linear")
     .x(function(d,i) { return x(d.dwpt) + (y(basep)-y(d.press))/tan; })
     .y(function(d,i) { return y(d.press); });
-    
+
 var hodoline = d3.svg.line.radial()
     .radius(function(d) { return r(d.wspd); })
     .angle(function(d) { return (d.wdir+180)*(Math.PI/180); });
@@ -70,20 +178,23 @@ var bisectTemp = d3.bisector(function(d) { return d.press; }).left;
 
 // create svg container for sounding
 var svg = d3.select("div#mainbox").append("svg")
-      .attr("width", w + m[1] + m[3])
-      .attr("height", h + m[0] + m[2])      
+      .attr("width", width + m[1] + m[3])
+      .attr("height", height + m[0] + m[2])      
     .append("g")
       .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
     
+var titleText = d3.select("div#mainbox svg").append("svg").attr("class", "title").attr("width", 700).attr("height", 40).append("text").attr("class", "titleText");      
+
 // create svg container for hodograph
 var svghodo = d3.select("div#hodobox").append("svg")
-      .attr("width", 300)
+      .attr("width", 360)
       .attr("height", 300)
     .append("g")
       .attr("transform", "translate(150,150)");
       
-var svgtext = d3.select("div#hodobox").append("svg").attr("width", 300).attr("height", 400)
+var svgtext = d3.select("div#hodobox").append("svg").attr("class", "indices").attr("width", 360).attr("height", 400)
 			.append("g").attr("transform", "translate(0,50)");      
+
 
 makeBarbTemplates();
 drawBackground();
@@ -92,54 +203,101 @@ drawTextLabels();
 var skewtgroup = svg.append("g").attr("class", "skewt"); // put skewt lines in this group
 var barbgroup  = svg.append("g").attr("class", "windbarb"); // put barbs in this group
 var hodogroup = svghodo.append("g").attr("class", "hodo"); // put hodo stuff in this group
+
 drawToolTips();
 
-d3.json('data_OUN.js', function(err, json) {
-    parseDataNew(json);
-        
-	hodobarbstest = [], tlinetest = [], interpdots = [], barbstest = [];
-    for (var hr=0; hr<=48; hr++) {
-	    var temp = [], temp2 = [], temp3 = [];
-        for (var mem=0; mem<=10; mem++) {
-	        parsedCSV = alldata[mem][hr].filter(function(d) { return (d.temp > -1000 && d.dwpt > -1000); });
-	        barbs = parsedCSV.filter(function(d) { return (d.wdir >= 0 && d.wspd >= 0 && d.press >= topp); });
-	        hodobarbs = barbs.filter(function(d) { return (d.press >= 200); });
-	        //parsedCSVreversed = parsedCSV.reverse(); // bisector needs ascending array
+dataParse('data_TOP.json'); // 2003 Jun 24 00Z
+//dataParse('data_LBF.json'); // 2003 Jun 23 00Z
+//dataParse('data_TBW.json'); // 2019 Nov 26 00Z
+//dataParse('data_ILX.json'); // 2013 Nov 17 15Z
+//dataParse('data_DNR_Snow.json'); // 2019 Nov 26 00Z
+//dataParse('data_SkewT.json');// Interactive Skew-T
+
+function dataParse(fileName) {
+
+	hodobarbstest = [], tlinetest = [], interpdots = [], barbstest = [], flattened = [];
+	var hr=0;
+	var temp = [], temp2 = [], temp3 = [];
+	var mem = 0;
+	
+	if (fileName) {	
+		d3.json(fileName, function(err, json) {
+	    		parseDataNew(json);
+	
+	       		parsedCSV = alldata[mem][hr].filter(function(d) { return (d.temp > -1000 && d.dwpt > -1000); });
+	       		barbs = parsedCSV.filter(function(d) { return (d.wdir >= 0 && d.wspd >= 0 && d.press >= topp); });
+	       		hodobarbs = barbs.filter(function(d) { return (d.press >= 200); });
+	        	interpdot = interpobjects[hr + 49*mem];
+	
+		        temp.push(hodobarbs);
+	       		temp2.push(parsedCSV);
+	        	temp3.push(barbs);
+	        	interpdots.push(interpdot);
+	        	hodobarbstest.push(temp);
+	        	tlinetest.push(temp2);
+	        	barbstest.push(temp3);
+	
+		    // need this for dots for some reason
+		        mouseoverdata = tlinetest[0][0].slice(0).reverse();
+			flattened = interpdots.reduce(function(a,b) { return a.concat(b); });
+			drawSkew();
+			drawText();
+		});
+	} else {
+		alldata=[[sdata]];
+	       	parsedCSV = alldata[mem][hr].filter(function(d) { return (d.temp > -1000 && d.dwpt > -1000); });
+	       	barbs = parsedCSV.filter(function(d) { return (d.wdir >= 0 && d.wspd >= 0 && d.press >= topp); });
+	       	hodobarbs = barbs.filter(function(d) { return (d.press >= 200); });
+
+
+		var hAGL;
+		var test = [];
+		interpobjects = [];
+		test.push(parsedCSV[0]);
+		for (j=1; j< requestedLevels.length; j++) {
+			hAGL = requestedLevels[j]*1000+parsedCSV[0].hght;
+			for (i=1; i<parsedCSV.length; i++) {
+				if (parsedCSV[i].hght > hAGL) {
+					var interp = d3.interpolateObject(parsedCSV[i-1],parsedCSV[i]);
+    		    			var half = interp(1-(hAGL - parsedCSV[i].hght)/(parsedCSV[i-1].hght - parsedCSV[i].hght));
+    		    			test.push(half);
+					break;
+				}
+			};
+		};
+
+		interpobjects.push(test);
+
 	        interpdot = interpobjects[hr + 49*mem];
-	  
-	        temp.push(hodobarbs);
-	        temp2.push(parsedCSV);
+	
+		temp.push(hodobarbs);
+	       	temp2.push(parsedCSV);
 	        temp3.push(barbs);
 	        interpdots.push(interpdot);
-        }
-        hodobarbstest.push(temp);
-        tlinetest.push(temp2);
-        barbstest.push(temp3);
-    }
-    // need this for dots for some reason
-    mouseoverdata = tlinetest[0][10].slice(0).reverse();
-	flattened = interpdots.reduce(function(a,b) { return a.concat(b); });
-	drawFirstHour();
+	        hodobarbstest.push(temp);
+	        tlinetest.push(temp2);
+	        barbstest.push(temp3);
+	
+	// need this for dots for some reason
+		mouseoverdata = tlinetest[0][0].slice(0).reverse();
+		flattened = interpdots.reduce(function(a,b) { return a.concat(b); });
 
-});
+		for (i=0; i<tlinetest[0][0].length ; i++) {
+			if (i==0) {
+				var height0 = tlinetest[0][0][0].hght;
+			}
+			tlinetest[0][0][i].hghtagl = tlinetest[0][0][i].hght - height0;
+		}
 
-d3.json('conv_OUN.js', function(err, json) {
-	var keys = { 'sbcape':[], 'mlcape':[], 'mucape':[], 'shr01':[], 'srh01':[], 'shr03':[], 'srh03':[], 'shr06':[], 
-	             'srh06':[], 'stp':[], 'bunkers_dir':[], 'bunkers_spd':[], 'mllclp':[], 'mllclz':[]};
-    indices = [];
-    for (var f=0; f<json['sbcape'].length; f+=10) {
-      stats = { 'mean':[], 'min':[], 'max':[] } 
-      for (var key in keys) {
-        var scaled = (key == 'stp') ? 10 : 1;
-        var temp = json[key].slice(f,f+10);
-        stats['min'].push(Math.round(d3.min(temp))/scaled);
-        stats['mean'].push(Math.round(d3.mean(temp))/scaled);
-        stats['max'].push(Math.round(d3.max(temp))/scaled);
-      }
-      indices.push(stats);
-    }
-    drawFirstHourText();
-});
+		d3.selectAll("g.skewt > *").remove();
+		d3.selectAll("g.windbarb > *").remove();
+		d3.selectAll("g.hodo > *").remove();
+		makeBarbTemplates();
+		drawToolTips();
+		drawSkew();
+		drawText();
+	}
+}
 
 function parseDataNew(json) {
     requestedLevels = [0,1,3,6,9]; // levels in km agl
@@ -149,20 +307,19 @@ function parseDataNew(json) {
         	var obj = d.map(function(e,j) {
     	    	return {
     	    	     press: +json.pres[k][i][j],
-    			     hght: +json.hght[k][i][j],
-    	             temp: +json.tmpc[k][i][j]/10,
-    	             dwpt: +json.dwpc[k][i][j]/10,
+    		     hght: +json.hght[k][i][j],
+    	             temp: +json.tmpc[k][i][j],
+    	             dwpt: +json.dwpt[k][i][j],
     	             wdir: +json.wdir[k][i][j],
-    	             wspd: +json.wspd[k][i][j]/10,
+    	             wspd: +json.wspd[k][i][j],
     	             hghtagl: +json.hght[k][i][j] - +json.hght[k][i][0],
-    	             wspdround: Math.round((json.wspd[k][i][j]/10)/5) * 5
-				     }
+    	             wspdround: Math.round((json.wspd[k][i][j])/5) * 5
+		     }
         	});
         	
         	// interpolate to given heights for each sounding
     		var test = requestedLevels.map(function(d) {
     			if (d == 0) { return obj[0]; }
-    			
     			d = 1000*d+obj[0].hght; // want height AGL
     		    for (i=0; i<=obj.length; i++) {
     		        if (obj[i].hght > d) { var closeindex = i; break; } // since hghts increase monotonically
@@ -175,10 +332,11 @@ function parseDataNew(json) {
     	    return obj;
     	});
     });
+	return alldata;
 }
        
 function makeBarbTemplates() {
-    var speeds = d3.range(5,105,5);
+    var speeds = d3.range(5,205,5);
     barbdef = svg.append('defs')
     speeds.forEach(function(d) {
     	var thisbarb = barbdef.append('g').attr('id', 'barb'+d);
@@ -189,7 +347,7 @@ function makeBarbTemplates() {
         var px = barbsize;
         	    
 		// Draw wind barb stems
-		thisbarb.append("line").attr("x1", 0).attr("x2", 0).attr("y1", 0).attr("y2", barbsize);
+		thisbarb.append("line").attr("class", "stem").attr("x1", 0).attr("x2", 0).attr("y1", 0).attr("y2", barbsize);
      
     	// Draw wind barb flags and pennants for each stem
 	    for (i=0; i<flags; i++) {
@@ -219,89 +377,565 @@ function makeBarbTemplates() {
     });
 }
 
-function drawFirstHour() {
+function drawSkew() {
+    for (var i=0; i<tlinetest[0][0].length; i+=1) {
+         var tw = calcWetbulb(tlinetest[0][0][i].press, tlinetest[0][0][i].temp, tlinetest[0][0][i].dwpt);
+	 tlinetest[0][0][i].twc = tw;
+         var svp = calcVaporPressure(tlinetest[0][0][i].temp);
+	 tlinetest[0][0][i].es = svp;
+         var vp = calcVaporPressure(tlinetest[0][0][i].dwpt);
+	 tlinetest[0][0][i].e = vp;
+         var mixr = calcMixingRatio(tlinetest[0][0][i].e, tlinetest[0][0][i].press);
+	 tlinetest[0][0][i].mr = mixr;
+	 rh=calcRelHumidity(tlinetest[0][0][i].e, tlinetest[0][0][i].es);
+	 tlinetest[0][0][i].relh = rh;
+	 tv=calcVirtualtemperature(tlinetest[0][0][i].temp,tlinetest[0][0][i].mr);
+	 tlinetest[0][0][i].tv = tv;
+	 sh=calcSpecHumidity(tlinetest[0][0][i].e, tlinetest[0][0][i].press);
+	 tlinetest[0][0][0].sh = sh;
+	 pT=calcTheta(tlinetest[0][0][i].press, tlinetest[0][0][i].temp);
+	 tlinetest[0][0][0].theta = pT;
+	 epT=calcThetaE(tlinetest[0][0][i].press, tlinetest[0][0][i].temp, tlinetest[0][0][i].dwpt );
+	 tlinetest[0][0][0].thetaE = epT;
+	 z = calcZ(tlinetest[0][0][i].press);
+	 tlinetest[0][0][0].Z = z;
+
+    }
+
+	var pw_total = calcPrecipWater();
+	tlinetest[0][0][0].pw = pw_total;
+
+        wb0_pres = calcWetbulbZero();
+	tlinetest[0][0][0].wbz = wb0_pres;
+
+	frz_lvl=calcFreezeLevel();
+	tlinetest[0][0][0].frzl = frz_lvl;
+
+	thk = calcThick();
+	tlinetest[0][0][0].thick = thk;
+
+	for (i=0; i<tlinetest[0][0].length-1; i++) {
+		if (tlinetest[0][0][i].press == 1000) {
+			t1000 = tlinetest[0][0][i].temp;
+			td1000 = tlinetest[0][0][i].dwpt;
+			ws1000 = tlinetest[0][0][i].wspd;
+			wd1000 = tlinetest[0][0][i].wdir;
+			flag_1000 = 1;
+		} else if (tlinetest[0][0][i].press < 1000 && flag_1000 == 0) {
+			if (i == 0) {
+				t1000 = tlinetest[0][0][i].temp;
+				td1000 = tlinetest[0][0][i].dwpt;
+				ws1000 = tlinetest[0][0][i].wspd;
+				wd1000 = tlinetest[0][0][i].wdir;
+				flag_1000 = 1;
+			} else {
+				t1000 = interpVal(1000, tlinetest[0][0][i].press, tlinetest[0][0][i-1].press, tlinetest[0][0][i].temp, tlinetest[0][0][i-1].temp);
+				td1000 = interpVal(1000, tlinetest[0][0][i].press, tlinetest[0][0][i-1].press, tlinetest[0][0][i].dwpt, tlinetest[0][0][i-1].dwpt);
+				ws1000 = interpVal(1000, tlinetest[0][0][i].press, tlinetest[0][0][i-1].press, tlinetest[0][0][i].wspd, tlinetest[0][0][i-1].wspd);
+				wd1000 = interpVal(1000, tlinetest[0][0][i].press, tlinetest[0][0][i-1].press, tlinetest[0][0][i].wdir, tlinetest[0][0][i-1].wdir);
+				flag_1000 = 1;
+			}
+		} else if (tlinetest[0][0][i].press == 850) {
+			t850 = tlinetest[0][0][i].temp;
+			td850 = tlinetest[0][0][i].dwpt;
+			ws850 = tlinetest[0][0][i].wspd;
+			wd850 = tlinetest[0][0][i].wdir;
+			flag_850 = 1;
+		} else if (tlinetest[0][0][i].press < 850 && flag_850 == 0) {
+			t850 = interpVal(850, tlinetest[0][0][i].press, tlinetest[0][0][i-1].press, tlinetest[0][0][i].temp, tlinetest[0][0][i-1].temp);
+			td850 = interpVal(850, tlinetest[0][0][i].press, tlinetest[0][0][i-1].press, tlinetest[0][0][i].dwpt, tlinetest[0][0][i-1].dwpt);
+			ws850 = interpVal(850, tlinetest[0][0][i].press, tlinetest[0][0][i-1].press, tlinetest[0][0][i].wspd, tlinetest[0][0][i-1].wspd);
+			wd850 = interpVal(850, tlinetest[0][0][i].press, tlinetest[0][0][i-1].press, tlinetest[0][0][i].wdir, tlinetest[0][0][i-1].wdir);
+			flag_850 = 1;
+		} else if (tlinetest[0][0][i].press == 700) {
+			t700 = tlinetest[0][0][i].temp;
+			td700 = tlinetest[0][0][i].dwpt;
+			flag_700 = 1;
+		} else if (tlinetest[0][0][i].press < 700 && flag_700 == 0) {
+			t700 = interpVal(700, tlinetest[0][0][i].press, tlinetest[0][0][i-1].press, tlinetest[0][0][i].temp, tlinetest[0][0][i-1].temp);
+			td700 = interpVal(700, tlinetest[0][0][i].press, tlinetest[0][0][i-1].press, tlinetest[0][0][i].dwpt, tlinetest[0][0][i-1].dwpt);
+			flag_700 = 1;
+
+		} else if (tlinetest[0][0][i].press == 500) {
+			t500 = tlinetest[0][0][i].temp;
+			ws500 = tlinetest[0][0][i].wspd;
+			wd500 = tlinetest[0][0][i].wdir;
+			flag_500 = 1;
+		} else if (tlinetest[0][0][i].press < 500 && flag_500 == 0) {
+			t500 = interpVal(500, tlinetest[0][0][i].press, tlinetest[0][0][i-1].press, tlinetest[0][0][i].temp, tlinetest[0][0][i-1].temp);
+			ws500 = interpVal(500, tlinetest[0][0][i].press, tlinetest[0][0][i-1].press, tlinetest[0][0][i].wspd, tlinetest[0][0][i-1].wspd);
+			wd500 = interpVal(500, tlinetest[0][0][i].press, tlinetest[0][0][i-1].press, tlinetest[0][0][i].wdir, tlinetest[0][0][i-1].wdir);
+			flag_500 = 1;
+		} else {
+		}
+	}
+
+	mixed_parcel = getParcelVals();
+	p_pcl100 = mixed_parcel[0];
+	t_pcl100 = mixed_parcel[1];
+	td_pcl100 = mixed_parcel[2];
+	tlinetest[0][0][0].mixParcelP = p_pcl100;
+	tlinetest[0][0][0].mixParcelT = t_pcl100;
+	tlinetest[0][0][0].mixParcelTd = td_pcl100;
+
+	var pCCL = calcCCL();
+	tlinetest[0][0][0].CCL = pCCL;
+
+	var conv_temp = calcConvTemp();
+	tlinetest[0][0][0].tc = conv_temp;
+
+	tt=calcTT();//total totals
+	tlinetest[0][0][0].TT = tt;
+
+	ki=calcKI();//K-index
+	tlinetest[0][0][0].KI = ki;
+
+	sweat=calcSWEAT();
+	tlinetest[0][0][0].SWEAT = sweat;
+
+        lclData = calcLCL(tlinetest[0][0][0].press,tlinetest[0][0][0].temp,tlinetest[0][0][0].dwpt);
+        plcl = lclData[0];
+        tlcl = lclData[1];
+        zlcl = lclData[2];
+	tlinetest[0][0][0].lclP = plcl;
+	tlinetest[0][0][0].lclT = tlcl;
+	tlinetest[0][0][0].lclZ = zlcl;
+
+	capeBounds = findLFCandEL("SB");
+	plfc = capeBounds[0];
+	tlfc = capeBounds[1];
+	zlfc = capeBounds[2];
+	pel = capeBounds[3];
+	tel = capeBounds[4];
+	zel = capeBounds[5];
+	tlinetest[0][0][0].lfcP = plfc;
+	tlinetest[0][0][0].lfcT = tlfc;
+	tlinetest[0][0][0].lfcZ = zlfc;
+	tlinetest[0][0][0].elP = pel;
+	tlinetest[0][0][0].elT = tel;
+	tlinetest[0][0][0].elZ = zel;
+
+        mixlclData = calcLCL(tlinetest[0][0][0].mixParcelP,tlinetest[0][0][0].mixParcelT,tlinetest[0][0][0].mixParcelTd);
+        mixplcl = mixlclData[0];
+        mixtlcl = mixlclData[1];
+        mixzlcl = mixlclData[2];
+	tlinetest[0][0][0].lclPmix = mixplcl;
+	tlinetest[0][0][0].lclTmix = mixtlcl;
+	tlinetest[0][0][0].lclZmix = mixzlcl;
+
+	mixcapeBounds = findLFCandEL("ML");
+	mixplfc = mixcapeBounds[0];
+	mixtlfc = mixcapeBounds[1];
+	mixzlfc = mixcapeBounds[2];
+	mixpel = mixcapeBounds[3];
+	mixtel = mixcapeBounds[4];
+	mixzel = mixcapeBounds[5];
+	tlinetest[0][0][0].lfcPmix = mixplfc;
+	tlinetest[0][0][0].lfcTmix = mixtlfc;
+	tlinetest[0][0][0].lfcZmix = mixzlfc;
+	tlinetest[0][0][0].elPmix = mixpel;
+	tlinetest[0][0][0].elTmix = mixtel;
+	tlinetest[0][0][0].elZmix = mixzel;
+
+	capeArray = getCAPE("SB", 0);//SBCAPE
+	cape = capeArray[0];
+	pcl_t_arr = capeArray[1];
+	cin = capeArray[2];
+	brn = capeArray[3][0];
+	brnu = capeArray[3][1];
+	shr6km = capeArray[3][2];
+	tlinetest[0][0][0].cape = cape;
+	tlinetest[0][0][0].cin = cin;
+	tlinetest[0][0][0].brn = brn;
+	tlinetest[0][0][0].brnu = brnu;
+	tlinetest[0][0][0].shr6km = shr6km;
+
+	if (pcl_t_arr[0] === undefined) {
+		parcel_flag = 0;
+	} else {
+		parcel_flag = 1;
+		for (i=0; i<tlinetest[0][0].length; i++) {
+			if (pcl_t_arr[i] != null) {
+				tlinetest[0][0][i].parcelT = pcl_t_arr[i];
+			}
+		}
+	}
+
+	mlcapeArray = getCAPE("ML", 0);//MLCAPE
+	mlcape = mlcapeArray[0];
+	ml_pcl_t_arr = mlcapeArray[1];
+	mlcin = mlcapeArray[2];
+
+	tlinetest[0][0][0].mlcape = mlcape;
+	tlinetest[0][0][0].mlcin = mlcin;
+
+	if (ml_pcl_t_arr[0] === undefined) {
+		parcel_flag = 0;
+	} else {
+		parcel_flag = 1;
+		for (i=0; i<tlinetest[0][0].length; i++) {
+			if (ml_pcl_t_arr[i] != null) {
+				tlinetest[0][0][i].parcelTmix = ml_pcl_t_arr[i];
+			}
+		}
+	}
+
+	var obs_t_arr = new Array();
+	var pcl_t_arr = new Array();
+	var obs_hght_arr = new Array();
+	var ml_pcl_t_arr = new Array();
+	for (i=0; i<tlinetest[0][0].length-1; i++) {
+		obs_t_arr.push(tlinetest[0][0][i].temp);
+		obs_hght_arr.push(tlinetest[0][0][i].hghtagl);
+		pcl_t_arr.push(tlinetest[0][0][i].parcelT);
+		ml_pcl_t_arr.push(tlinetest[0][0][i].parcelTmix);
+	}
+
+	li = calcLI(pcl_t_arr, obs_t_arr);
+	tlinetest[0][0][0].LI  = li;
+
+	limix = calcLI(ml_pcl_t_arr, obs_t_arr);
+	tlinetest[0][0][0].LImix  = limix;
+
+	tlinetest[0][0][0].LR_1km = getLapseRate(obs_t_arr, obs_hght_arr, 0, 0, 1000);
+	tlinetest[0][0][0].LR_2km = getLapseRate(obs_t_arr, obs_hght_arr, 0, 0, 2000);
+	tlinetest[0][0][0].LR_3km = getLapseRate(obs_t_arr, obs_hght_arr, 0, 0, 3000);
+	tlinetest[0][0][0].LR_5km = getLapseRate(obs_t_arr, obs_hght_arr, 0, 0, 5000);
+	tlinetest[0][0][0].LR_7km = getLapseRate(obs_t_arr, obs_hght_arr, 0, 0, 7000);
+	tlinetest[0][0][0].LR_9km = getLapseRate(obs_t_arr, obs_hght_arr, 0, 0, 9000);
+	tlinetest[0][0][0].LR_10km = getLapseRate(obs_t_arr, obs_hght_arr, 0, 0, 10000);
+	tlinetest[0][0][0].LR_EL = getLapseRate(obs_t_arr, obs_hght_arr, 0, 0, tlinetest[0][0][0].elZ);
+
+	for (i=0; i< tlinetest[0][0].length; i++) {
+		if (tlinetest[0][0][0].lfcP > tlinetest[0][0][i].press) {
+			var lfc_index = i
+			break;
+		}
+	}
+	tlinetest[0][0][0].LR_lfc_1km = getLapseRate(obs_t_arr, obs_hght_arr, lfc_index, tlinetest[0][0][0].lfcZ, 1000);
+	tlinetest[0][0][0].LR_lfc_2km = getLapseRate(obs_t_arr, obs_hght_arr, lfc_index, tlinetest[0][0][0].lfcZ, 2000);
+	tlinetest[0][0][0].LR_lfc_3km = getLapseRate(obs_t_arr, obs_hght_arr, lfc_index, tlinetest[0][0][0].lfcZ, 3000);
+	tlinetest[0][0][0].LR_lfc_5km = getLapseRate(obs_t_arr, obs_hght_arr, lfc_index, tlinetest[0][0][0].lfcZ, 5000);
+	tlinetest[0][0][0].LR_lfc_7km = getLapseRate(obs_t_arr, obs_hght_arr, lfc_index, tlinetest[0][0][0].lfcZ, 7000);
+	tlinetest[0][0][0].LR_lfc_9km = getLapseRate(obs_t_arr, obs_hght_arr, lfc_index, tlinetest[0][0][0].lfcZ, 9000);
+	tlinetest[0][0][0].LR_lfc_10km = getLapseRate(obs_t_arr, obs_hght_arr, lfc_index, tlinetest[0][0][0].lfcZ, 10000);
+	tlinetest[0][0][0].LR_lfc_el = getLapseRate(obs_t_arr, obs_hght_arr, lfc_index, tlinetest[0][0][0].lfcZ, tlinetest[0][0][0].elZ-tlinetest[0][0][0].lfcZ);
+
     // draw initial set of lines
     tlines = skewtgroup.selectAll("tlines")
         .data(tlinetest[0]).enter().append("path")
           .attr("class", function(d,i) { return (i<10) ? "temp member" : "temp mean" })
           .attr("clip-path", "url(#clipper)")
+//	  .style("display","none")
           .attr("d", line);
           
     tdlines = skewtgroup.selectAll("tdlines")
         .data(tlinetest[0]).enter().append("path")
           .attr("class", function(d,i) { return (i<10) ? "dwpt member" : "dwpt mean" })
           .attr("clip-path", "url(#clipper)")
+//	  .style("display","none")
           .attr("d", line2);
+
+    var line3 = d3.svg.line()
+        .interpolate("linear")
+        .x(function(d,i) { return x(d.twc) + (y(basep)-y(d.press))/tan; })
+        .y(function(d,i) { return y(d.press); });
+        
+    twlines = skewtgroup.selectAll("twlines")
+        .data(tlinetest[0]).enter().append("path")
+          .attr("class", function(d,i) { return (i<10) ? "twc member" : "twc mean" })
+          .attr("clip-path", "url(#clipper)")
+//	  .style("display","none")
+          .attr("d", line3);
+
+    var line4 = d3.svg.line()
+        .interpolate("linear")
+        .x(function(d,i) { return x(d.tv) + (y(basep)-y(d.press))/tan; })
+        .y(function(d,i) { return y(d.press); });
+        
+    tvlines = skewtgroup.selectAll("tvlines")
+        .data(tlinetest[0]).enter().append("path")
+          .attr("class", function(d,i) { return (i<10) ? "tvc member" : "tvc mean" })
+          .attr("clip-path", "url(#clipper)")
+//	  .style("display","none")
+          .attr("d", line4);
+    
+	if (parcel_flag == 1) {
+		    var line5 = d3.svg.line()
+		        .interpolate("linear")
+		        .x(function(d,i) { return x(d.parcelT) + (y(basep)-y(d.press))/tan; })
+		        .y(function(d,i) { return y(d.press); });
+		        
+		    parlines = skewtgroup.selectAll("parcellines")
+		        .data(tlinetest[0]).enter().append("path")
+		          .attr("class", function(d,i) { return (i<10) ? "parcel member" : "parcel mean" })
+		          .attr("clip-path", "url(#clipper)")
+		          .attr("d", line5);
+
+		    var line6 = d3.svg.line()
+		        .interpolate("linear")
+		        .x(function(d,i) { return x(d.parcelTmix) + (y(basep)-y(d.press))/tan; })
+		        .y(function(d,i) { return y(d.press); });
+		        
+		    parlines = skewtgroup.selectAll("parcellines")
+		        .data(tlinetest[0]).enter().append("path")
+		          .attr("class", function(d,i) { return (i<10) ? "parcelmix member" : "parcelmix mean" })
+		          .attr("clip-path", "url(#clipper)")
+		          .attr("d", line6);
+    	}
+//    var line5 = d3.svg.line()
+//        .interpolate("linear")
+//        .x(function(d,i) { return x(d.thetaC) + (y(basep)-y(d.press))/tan; })
+//        .y(function(d,i) { return y(d.press); });
+//        
+//    thetaClines = skewtgroup.selectAll("thetaClines")
+//        .data(tlinetest[0]).enter().append("path")
+//          .attr("class", function(d,i) { return (i<10) ? "thetaC member" : "thetaC mean" })
+//          .attr("clip-path", "url(#clipper)")
+//          .attr("d", line5);
+//    
+//    var line6 = d3.svg.line()
+//        .interpolate("linear")
+//        .x(function(d,i) { return x(d.thetaEC) + (y(basep)-y(d.press))/tan; })
+//        .y(function(d,i) { return y(d.press); });
+//        
+//    thetaEClines = skewtgroup.selectAll("thetaEClines")
+//        .data(tlinetest[0]).enter().append("path")
+//          .attr("class", function(d,i) { return (i<10) ? "thetaEC member" : "thetaEC mean" })
+//          .attr("clip-path", "url(#clipper)")
+//          .attr("d", line6);
     
     holines = hodogroup.selectAll("hodolines")
         .data(hodobarbstest[0]).enter().append("path")
     	.attr("class", function(d,i) { return (i<10) ? "hodoline member" : "hodoline mean" })
     	.attr("d", hodoline);
+
           
     hododots = hodogroup.selectAll('hododots')
     	.data(flattened.slice(0,55)).enter().append("circle")
     	.attr("r", function(d, i) { return (i<50) ? 2 : 4 })
-    	.attr("cx", function(d, i) { return r(d.wspd * Math.sin((180+d.wdir)*deg2rad)); })
-    	.attr("cy", function(d, i) { return -r(d.wspd * Math.cos((180+d.wdir)*deg2rad)); })
+    	.attr("cx", function(d, i) { return r(d.wspd * Math.sin((180+d.wdir)*d2r)); })
+    	.attr("cy", function(d, i) { return -r(d.wspd * Math.cos((180+d.wdir)*d2r)); })
     	.attr("class", function(d,i) { return "hododot hgt"+(d.hghtagl/1000) });
     
     allbarbs = barbgroup.selectAll("barbs")
-        .data(barbstest[0][10]).enter().append("use")
+        .data(barbstest[0][0]).enter().append("use")
     	.attr("xlink:href", function (d) { return "#barb"+d.wspdround; })
-    	.attr("transform", function(d,i) { return "translate("+w+","+y(d.press)+") rotate("+(d.wdir+180)+")"; });
+    	.attr("transform", function(d,i) { return "translate("+width+","+y(d.press)+") rotate("+(d.wdir+180)+")"; });
+
 }
 
-function drawFirstHourText() {
-    units = [' J/kg', ' J/kg', ' J/kg', ' kts', '', ' kts', '', ' kts', '', '', '°', ' kts', ''];
+function drawText() {
+	d3.selectAll("text.titleText > *").remove();
+	d3.selectAll("text.indexVal").remove();
+    units = [' mb', ' mb', ' mb', ' mb', ' mb', ' mb', ' J/kg', 'J/kg', ' J/kg', ' J/kg', '', ' m2/s2', ' kts', '', '', '', '', '', ' mb', ' ˚C', ' m', ' mb', ' mb', ' in'];
+	indices = [];
+	indices.push(tlinetest[0][0][0].elP);
+	indices.push(tlinetest[0][0][0].elPmix);
+	indices.push(tlinetest[0][0][0].lfcP);
+	indices.push(tlinetest[0][0][0].lfcPmix);
+	indices.push(tlinetest[0][0][0].lclP);
+	indices.push(tlinetest[0][0][0].lclPmix);
+	indices.push(tlinetest[0][0][0].cape);
+	indices.push(tlinetest[0][0][0].mlcape);
+	indices.push(tlinetest[0][0][0].cin);
+	indices.push(tlinetest[0][0][0].mlcin);
+	indices.push(tlinetest[0][0][0].brn);
+	indices.push(tlinetest[0][0][0].brnu);
+	indices.push(tlinetest[0][0][0].shr6km);
+	indices.push(tlinetest[0][0][0].LI);
+	indices.push(tlinetest[0][0][0].LImix);
+	indices.push(tlinetest[0][0][0].KI);
+	indices.push(tlinetest[0][0][0].TT);
+	indices.push(tlinetest[0][0][0].SWEAT);
+
+	indices.push(tlinetest[0][0][0].CCL);
+	indices.push(tlinetest[0][0][0].tc);
+	indices.push(tlinetest[0][0][0].thick);
+	indices.push(tlinetest[0][0][0].wbz);
+	indices.push(tlinetest[0][0][0].frzl);
+	indices.push(tlinetest[0][0][0].pw);
+
     mins = svgtext.selectAll("mins")
-	  .data(indices[0].min.slice(0,12)).enter().append("text") // only plot first 12 parameters
+	  .data(indices.slice(0,18)).enter().append("text")
 	    .attr('x', 110)
         .attr('y', function(d,i) { return spacing*i; })
-    	.attr('class', 'index')
-    	.attr('text-anchor', 'middle')
-    	.text(function(d,i) { return d+units[i]});
-    	
-    means = svgtext.selectAll("means")
-	  .data(indices[0].mean.slice(0,12)).enter().append("text")
-	    .attr('x', 190)
-        .attr('y', function(d,i) { return spacing*i; })
-    	.attr('class', 'index')
+    	.attr('class', 'indexVal')
     	.attr('text-anchor', 'middle')
     	.text(function(d,i) { return d+units[i]});
     	
     maxs = svgtext.selectAll("maxs")
-	  .data(indices[0].max.slice(0,12)).enter().append("text")
+	  .data(indices.slice(18,33)).enter().append("text")
 	    .attr('x', 270)
         .attr('y', function(d,i) { return spacing*i; })
-    	.attr('class', 'index')
+    	.attr('class', 'indexVal')
     	.attr('text-anchor', 'middle')
-    	.text(function(d,i) { return d+units[i]});
+    	.text(function(d,i) { return d+units[i+18]});
     
-    lcl = skewtgroup.selectAll("lcl")
-	  .data([indices[0]]).enter().append("rect")
-    	.attr('x', w-70)
-    	.attr('y', function(d,i) { return y(d.min[12])})
-    	.attr('width', 20)
-    	//.attr('height', 3)
-    	.attr('height', function(d,i) { return y(d.max[12]) - y(d.min[12]); })
-    	.attr('class', 'rectline');
-    	
-    lclmean = skewtgroup.selectAll("lclmean")
-	  .data([indices[0]]).enter().append("rect")
-    	.attr('x', w-70)
-    	.attr('y', function(d,i) { return y(d.mean[12])})
-    	.attr('width', 20)
-    	.attr('height', 2)
-    	.attr('class', 'rectline2');
-    	
-    lcltext = skewtgroup.selectAll("lcltext")
-	  .data([indices[0]]).enter().append("text")
-    	.attr('x', w-70)
-    	.attr('y', function(d,i) { return y(d.mean[12])})
-    	.attr('dy', '0.4em')
-    	.attr('text-anchor', 'end')
-    	.attr('class', 'lcltext')
-    	.text(function(d,i) { return d.mean[13] + " m"; });
+    if (tlinetest[0][0][0].wbz > 100) {
+	    wb0 = skewtgroup.selectAll("wbz")
+		  .data([wb0_pres]).enter().append("rect")
+	    	.attr('x', width-70)
+	    	.attr('y', function(d,i) { return y(d)})
+	    	.attr('width', 20)
+	    	.attr('height', 2)
+	    	.attr('class', 'wbz_rectline');
+	
+	    wb0text = skewtgroup.selectAll("wbztext")
+		  .data([wb0_pres]).enter().append("text")
+	    	.attr('x', width-72)
+	    	.attr('y', function(d,i) { return y(d)})
+	    	.attr('dy', '0.4em')
+	    	.attr('text-anchor', 'end')
+	    	.attr('class', 'wbztext')
+	    	.text(function(d,i) { return d + " mb"; });
+    }
+
+    if (tlinetest[0][0][0].frzl > 100) {
+	for(j=0; j<=tlinetest[0][0][0].frzl.length-1; j++) {
+	    frzl = skewtgroup.selectAll("frzl")
+		  .data([tlinetest[0][0][0].frzl]).enter().append("rect")
+	    	.attr('x', width-70)
+	    	.attr('y', function(d,i) { return y(d[j])})
+	    	.attr('width', 20)
+	    	.attr('height', 2)
+	    	.attr('class', 'frzl_rectline');
+	
+	    frzltext = skewtgroup.selectAll("frzltext")
+		  .data([tlinetest[0][0][0].frzl]).enter().append("text")
+	    	.attr('x', width-72)
+	    	.attr('y', function(d,i) { return y(d[j])})
+	    	.attr('dy', '0.4em')
+	    	.attr('text-anchor', 'end')
+	    	.attr('class', 'frzltext')
+	    	.text(function(d,i) { return d[j] + " mb"; });
+	}
+    }
+
+    if (tlinetest[0][0][0].lclP > 100) {
+	    lcl = skewtgroup.selectAll("lcl")
+		  .data([tlinetest[0][0][0].lclP]).enter().append("rect")
+	    	.attr('x', width-70)
+	    	.attr('y', function(d,i) { return y(tlinetest[0][0][0].lclP)})
+	    	.attr('width', 20)
+	    	.attr('height', 2)
+	    	.attr('class', 'lcl rectline');
+	    	
+	    lcltext = skewtgroup.selectAll("lcltext")
+		  .data([tlinetest[0][0][0].lclP]).enter().append("text")
+	    	.attr('x', width-72)
+	    	.attr('y', function(d,i) { return y(tlinetest[0][0][0].lclP)})
+	    	.attr('dy', '0.4em')
+	    	.attr('text-anchor', 'end')
+	    	.attr('class', 'lcltext')
+	    	.text(function(d,i) { return tlinetest[0][0][0].lclP + " mb"; });
+    }
+
+    if (tlinetest[0][0][0].lclPmix > 100) {
+	    lcl = skewtgroup.selectAll("lcl")
+		  .data([tlinetest[0][0][0].lclPmix]).enter().append("rect")
+	    	.attr('x', width-70)
+	    	.attr('y', function(d,i) { return y(tlinetest[0][0][0].lclPmix)})
+	    	.attr('width', 20)
+	    	.attr('height', 2)
+	    	.attr('class', 'lclmix rectline');
+	    	
+	    lcltext = skewtgroup.selectAll("lcltext")
+		  .data([tlinetest[0][0][0].lclPmix]).enter().append("text")
+	    	.attr('x', width-72)
+	    	.attr('y', function(d,i) { return y(tlinetest[0][0][0].lclPmix)})
+	    	.attr('dy', '0.4em')
+	    	.attr('text-anchor', 'end')
+	    	.attr('class', 'lclmixtext')
+	    	.text(function(d,i) { return tlinetest[0][0][0].lclPmix + " mb (mix)"; });
+    }
+
+    if (tlinetest[0][0][0].lfcP > 100) {
+	    lfc = skewtgroup.selectAll("lfc")
+		  .data([tlinetest[0][0][0].lfcP]).enter().append("rect")
+	    	.attr('x', width-70)
+	    	.attr('y', function(d,i) { return y(tlinetest[0][0][0].lfcP)})
+	    	.attr('width', 20)
+	    	.attr('height', 2)
+	    	.attr('class', 'lfc rectline');
+	    	
+	    lfctext = skewtgroup.selectAll("lfctext")
+		  .data([tlinetest[0][0][0].lfcP]).enter().append("text")
+	    	.attr('x', width-72)
+	    	.attr('y', function(d,i) { return y(tlinetest[0][0][0].lfcP)})
+	    	.attr('dy', '0.4em')
+	    	.attr('text-anchor', 'end')
+	    	.attr('class', 'lfctext')
+	    	.text(function(d,i) { return tlinetest[0][0][0].lfcP + " mb"; });
+    }
+
+    if (tlinetest[0][0][0].elP > 100) {
+	    el = skewtgroup.selectAll("el")
+		  .data([tlinetest[0][0][0].elP]).enter().append("rect")
+	    	.attr('x', width-70)
+	    	.attr('y', function(d,i) { return y(tlinetest[0][0][0].elP)})
+	    	.attr('width', 20)
+	    	.attr('height', 2)
+	    	.attr('class', 'el rectline');
+	    	
+	    eltext = skewtgroup.selectAll("eltext")
+		  .data([tlinetest[0][0][0].elP]).enter().append("text")
+	    	.attr('x', width-72)
+	    	.attr('y', function(d,i) { return y(tlinetest[0][0][0].elP)})
+	    	.attr('dy', '0.4em')
+	    	.attr('text-anchor', 'end')
+	    	.attr('class', 'eltext')
+	    	.text(function(d,i) { return tlinetest[0][0][0].elP + " mb"; });
+    }
+
+    if (tlinetest[0][0][0].lfcPmix > 100) {
+	    lfc = skewtgroup.selectAll("lfcmix")
+		  .data([tlinetest[0][0][0].lfcPmix]).enter().append("rect")
+	    	.attr('x', width-70)
+	    	.attr('y', function(d,i) { return y(tlinetest[0][0][0].lfcPmix)})
+	    	.attr('width', 20)
+	    	.attr('height', 2)
+	    	.attr('class', 'lfcmix rectline');
+	    	
+	    lfctext = skewtgroup.selectAll("lfcmixtext")
+		  .data([tlinetest[0][0][0].lfcPmix]).enter().append("text")
+	    	.attr('x', width-72)
+	    	.attr('y', function(d,i) { return y(tlinetest[0][0][0].lfcPmix)})
+	    	.attr('dy', '0.4em')
+	    	.attr('text-anchor', 'end')
+	    	.attr('class', 'lfcmixtext')
+	    	.text(function(d,i) { return tlinetest[0][0][0].lfcPmix + " mb (mix)"; });
+    }
+
+    if (tlinetest[0][0][0].elPmix > 100) {
+	    el = skewtgroup.selectAll("elmix")
+		  .data([tlinetest[0][0][0].elPmix]).enter().append("rect")
+	    	.attr('x', width-70)
+	    	.attr('y', function(d,i) { return y(tlinetest[0][0][0].elPmix)})
+	    	.attr('width', 20)
+	    	.attr('height', 2)
+	    	.attr('class', 'elmix rectline');
+	    	
+	    eltext = skewtgroup.selectAll("elmixtext")
+		  .data([tlinetest[0][0][0].elPmix]).enter().append("text")
+	    	.attr('x', width-72)
+	    	.attr('y', function(d,i) { return y(tlinetest[0][0][0].elPmix)})
+	    	.attr('dy', '0.4em')
+	    	.attr('text-anchor', 'end')
+	    	.attr('class', 'elmixtext')
+	    	.text(function(d,i) { return tlinetest[0][0][0].elPmix + " mb (mix)"; });
+    }
+
+    titleText = skewtgroup.selectAll("title")
+	  .data([title]).enter().append("text")
+        .attr('dy', '0.4em')
+    	.attr('class', 'titleText')
+    	.attr('text-anchor', 'left')
+	.attr("transform", "translate(0,-15)")
+    	.text(title);
+
+	$(".result p").text("Variables for Hawk Migration: " + tlinetest[0][0][0].cape + ", " + tlinetest[0][0][0].mlcape + ", " + tlinetest[0][0][0].cin + ", " + tlinetest[0][0][0].mlcin + ", " + tlinetest[0][0][0].brn + ", " + tlinetest[0][0][0].brnu + ", " + tlinetest[0][0][0].shr6km + ", " + tlinetest[0][0][0].LI + ", " + tlinetest[0][0][0].LImix + ", " + tlinetest[0][0][0].lclP + ", " + tlinetest[0][0][0].lclPmix + ", " + tlinetest[0][0][0].lfcP + ", " + tlinetest[0][0][0].lfcPmix + ", NaN, " + tlinetest[0][0][0].LR_1km + ", " + tlinetest[0][0][0].LR_2km + ", " + tlinetest[0][0][0].LR_3km + ", " + tlinetest[0][0][0].LR_5km + ", " + tlinetest[0][0][0].LR_7km  + ", " + tlinetest[0][0][0].LR_9km + ", " + tlinetest[0][0][0].LR_10km + ", " + tlinetest[0][0][0].LR_EL + ", " + tlinetest[0][0][0].LR_lfc_1km + ", " + tlinetest[0][0][0].LR_lfc_2km + ", " + tlinetest[0][0][0].LR_lfc_3km + ", " + tlinetest[0][0][0].LR_lfc_5km + ", " + tlinetest[0][0][0].LR_lfc_7km + ", " + tlinetest[0][0][0].LR_lfc_9km + ", " + tlinetest[0][0][0].LR_lfc_10km + ", " + tlinetest[0][0][0].LR_lfc_el);
+
 }
 
 function drawToolTips() {
@@ -314,42 +948,124 @@ function drawToolTips() {
   focus2.append("circle").attr("r", 4);
   focus2.append("text").attr("x", -9).attr("text-anchor", "end").attr("dy", ".35em");
   
-  focus3 = skewtgroup.append("g").attr("class", "focus").style("display", "none");
-  focus3.append("text").attr("x", 0).attr("text-anchor", "start").attr("dy", ".35em");
+  focus3 = skewtgroup.append("g").attr("class", "focus twc").style("display", "none");
+  focus3.append("circle").attr("r", 4);
+  focus3.append("text").attr("x", -9).attr("y",14).attr("text-anchor", "end").attr("dy", ".35em");
 
+  focus4 = skewtgroup.append("g").attr("class", "focus tvc").style("display", "none");
+  focus4.append("circle").attr("r", 4);
+  focus4.append("text").attr("x", 9).attr("y",-14).attr("dy", ".35em");
+
+	if (parcel_flag=1) {
+	  focus5 = skewtgroup.append("g").attr("class", "focus parcel").style("display", "none");
+	  focus5.append("circle").attr("r", 4);
+	  focus5.append("text").attr("x", 9).attr("y", 14).attr("dy", ".35em");
+
+	  focus5b = skewtgroup.append("g").attr("class", "focus parcelmix").style("display", "none");
+	  focus5b.append("circle").attr("r", 4);
+	  focus5b.append("text").attr("x", 9).attr("y", -14).attr("dy", ".35em");
+	}
+
+  focus6 = skewtgroup.append("g").attr("class", "focus").style("display", "none");
+  focus6.append("text").attr("x", 0).attr("text-anchor", "start").attr("dy", ".35em");
+
+  focus6b = skewtgroup.append("g").attr("class", "focus").style("display", "none");
+  focus6b.append("text").attr("x", 11).attr("y", -14).attr("text-anchor", "start").attr("dy", ".35em");
+
+  focus7 = skewtgroup.append("g").attr("class", "focus windt").style("display", "none");
+  focus7.append("circle").attr("r", 4);
+  focus7.append("text").attr("x", -32).attr("text-anchor", "end").attr("dy", ".35em");
+
+if (parcel_flag=1) {
   svg.append("rect")
       .attr("class", "overlay")
-      .attr("width", w)
-      .attr("height", h)
-      .on("mouseover", function() { focus.style("display", null); focus2.style("display", null); focus3.style("display", null);})
-      .on("mouseout", function() { focus.style("display", "none"); focus2.style("display", "none"); focus3.style("display", "none");})
+      .attr("width", width)
+      .attr("height", height)
+      .on("mouseover", function() { focus.style("display", null); focus2.style("display", null); focus3.style("display", null); focus4.style("display", null); focus5.style("display", null); focus5b.style("display", null); focus6.style("display", null); focus6b.style("display", null); focus7.style("display", null);})
+      .on("mouseout", function() { focus.style("display", "none"); focus2.style("display", "none"); focus3.style("display", "none"); focus4.style("display", "none"); focus5.style("display", "none"); focus5b.style("display", "none"); focus6.style("display", "none"); focus6b.style("display","none"); focus7.style("display","none");})
       .on("mousemove", mousemove);
-      
+
   function mousemove() {
       var y0 = y.invert(d3.mouse(this)[1]); // get y value of mouse pointer in pressure space
-	  var i = bisectTemp(mouseoverdata, y0, 1, mouseoverdata.length-1);
+      var i = bisectTemp(mouseoverdata, y0, 1, mouseoverdata.length-1);
       var d0 = mouseoverdata[i - 1];
       var d1 = mouseoverdata[i];
       var d = y0 - d0.press > d1.press - y0 ? d1 : d0;
+
       focus.attr("transform", "translate(" + (x(d.temp) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
       focus2.attr("transform", "translate(" + (x(d.dwpt) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
-      focus3.attr("transform", "translate(0," + y(d.press) + ")");
+      focus3.attr("transform", "translate(" + (x(d.twc) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
+      focus4.attr("transform", "translate(" + (x(d.tv) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
+      focus5.attr("transform", "translate(" + (x(d.parcelT) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
+      focus5b.attr("transform", "translate(" + (x(d.parcelTmix) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
+      focus6.attr("transform", "translate(0," + y(d.press) + ")");
+      focus6b.attr("transform", "translate(0," + y(d.press) + ")");
+      focus7.attr("transform", "translate(" + width + "," + y(d.press) + ")");
+
       focus.select("text").text(Math.round(d.temp)+"°C");
       focus2.select("text").text(Math.round(d.dwpt)+"°C");
-      focus3.select("text").text("--"+(Math.round(d.hghtagl/100)/10)+"km");
+      focus3.select("text").text(Math.round(d.twc)+"°C");
+      focus4.select("text").text(Math.round(d.tv)+"°C");
+      focus5.select("text").text(Math.round(d.parcelT)+"°C");
+      focus5b.select("text").text(Math.round(d.parcelTmix)+"°C");
+      focus6.select("text").text("<-"+(Math.round(d.hghtagl/100)/10)+"km");
+      focus6b.select("text").text("  " + d.press+"mb");
+      focus7.select("text").text(d.wspd+` @`+d.wdir+"˚");
   }
+
+} else {
+
+  svg.append("rect")
+      .attr("class", "overlay")
+      .attr("width", width)
+      .attr("height", height)
+      .on("mouseover", function() { focus.style("display", null); focus2.style("display", null); focus3.style("display", null); focus4.style("display", null); focus6.style("display", null); focus6b.style("display", null); focus7.style("display", null);})
+      .on("mouseout", function() { focus.style("display", "none"); focus2.style("display", "none"); focus3.style("display", "none"); focus4.style("display", "none"); focus6.style("display", "none"); focus6b.style("display", "none"); focus7.style("display","none");})
+      .on("mousemove", mousemove);
+
+  function mousemove() {
+      var y0 = y.invert(d3.mouse(this)[1]); // get y value of mouse pointer in pressure space
+      var i = bisectTemp(mouseoverdata, y0, 1, mouseoverdata.length-1);
+      var d0 = mouseoverdata[i - 1];
+      var d1 = mouseoverdata[i];
+      var d = y0 - d0.press > d1.press - y0 ? d1 : d0;
+
+      focus.attr("transform", "translate(" + (x(d.temp) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
+      focus2.attr("transform", "translate(" + (x(d.dwpt) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
+      focus3.attr("transform", "translate(" + (x(d.twc) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
+      focus4.attr("transform", "translate(" + (x(d.tv) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
+      focus6.attr("transform", "translate(0," + y(d.press) + ")");
+      focus6b.attr("transform", "translate(0," + y(d.press) + ")");
+      focus7.attr("transform", "translate(" + width + "," + y(d.press) + ")");
+
+      focus.select("text").text(Math.round(d.temp)+"°C");
+      focus2.select("text").text(Math.round(d.dwpt)+"°C");
+      focus3.select("text").text(Math.round(d.twc)+"°C");
+      focus4.select("text").text(Math.round(d.tv)+"°C");
+      focus6.select("text").text("--"+(Math.round(d.hghtagl/100)/10)+"km");
+      focus6b.select("text").text("--"+d.press+"mb");
+      focus7.select("text").text(d.wspd+` @`+d.wdir+"˚");
+  }
+}
+
 }
 
 function drawTextLabels() {
 	spacing = 20;
-	var headers = ['Ens Min', 'Ens Mean', 'Ens Max'];
-	var labels = ['SBCAPE', 'MLCAPE', 'MUCAPE', '0-1km Shear', '0-1km SRH', '0-3km Shear', '0-3km SRH',
-	              '0-6km Shear', '0-6km SRH', 'STP (fixed)',
-	              'Bunkers Dir', 'Bunkers Spd'];
+	var headers = ['Values', '', 'Values'];
+	var labels = ['EL', 'EL (mixed)', 'LFC', 'LFC (mixed)', 'LCL', 'LCL (mixed)', 'SBCAPE', 'MLCAPE', 'CIN', 'MLCIN', 'BRN', 'BRN Shear', 'Shear 6km', 'LI', 'LI (mixed)', 'KI', 'TT', 'SWEAT', 'CCL', 'Tc', 'Thickness', 'Wet-Bulb 0˚', 'Freezing Lvl', 'PW'];
     
     svgtext.selectAll("labels")
-      .data(labels).enter().append("text")
+     .data(labels.slice(0,18)).enter().append("text")
         .attr('x', 70)
+        .attr('y', function(d,i) { return spacing*i; })
+    	.attr('class', 'index header')
+    	.attr('text-anchor', 'end')
+    	.text(function(d) { return d; });
+    	
+    svgtext.selectAll("labels2")
+     .data(labels.slice(18,34)).enter().append("text")
+        .attr('x', 220)
         .attr('y', function(d,i) { return spacing*i; })
     	.attr('class', 'index header')
     	.attr('text-anchor', 'end')
@@ -363,61 +1079,1194 @@ function drawTextLabels() {
     	.attr('text-anchor', 'middle')
     	.text(function(d) { return d; });
     	
-    //svgtext.selectAll("barline")
-	//  .data(labels).enter().append("line")
-    //	.attr('x1', 65)
-    //	.attr('x2', 275)
-    //	.attr('y1', function(d,i) { return spacing*(i+1)-4.5; })
-    //	.attr('y2', function(d,i) { return spacing*(i+1)-4.5; })
-    //	.attr('class', 'barline');
-     	
-    //svgtext.selectAll("keys")
-    //  .data([0,0,0,0,0,0,0]).enter().append("text")
-    //    .attr('x', 0)
-    //    .attr('y', function(d,i) { return spacing*(i+1)+10; })
-    //	.attr('class', 'key')
-    //	.attr('text-anchor', 'start')
-    //	.text(function(d) { return d; });
-     	
-    //svgtext.selectAll("keys2")
-    //  .data([5000,5000,5000,100,100,100,10]).enter().append("text")
-    //    .attr('x', 300)
-    //    .attr('y', function(d,i) { return spacing*(i+1)+10; })
-    //	.attr('class', 'key')
-    //	.attr('text-anchor', 'end')
-    //	.text(function(d) { return d; });
-    	
-    //svgtext.selectAll("rect")
-    //  .data([20,50,100,50,100,150,75]).enter().append("rect")
-    // 	.attr('x', function(d,i) { return d; })
-    // 	.attr('y', function(d,i) { return spacing*(i+1)+4; })
-    // 	.attr('height', 6)
-    // 	.attr('width', function(d,i) { return d/2; })
-    // 	.attr('class', 'rectline');
 }
 
-function updateData(i) {
-        // update data for lines, barbs, dots, stats
-        tlines.data(tlinetest[i]).attr("d", line);
-        tdlines.data(tlinetest[i]).attr("d", line2);
-        allbarbs.data(barbstest[i][10])
-        	.attr("xlink:href", function (d) { return "#barb"+d.wspdround; })
-    		.attr("transform", function(d,i) { return "translate("+w+","+y(d.press)+") rotate("+(d.wdir+180)+")"; });
-        holines.data(hodobarbstest[i]).attr("d", hodoline);
-        hododots.data(flattened.slice(i*55,i*55 + 55))
-            .attr("cx", function(d) { return r(d.wspd * Math.sin((180+d.wdir)*deg2rad)); })
-    	    .attr("cy", function(d) { return -r(d.wspd * Math.cos((180+d.wdir)*deg2rad)); });
-        means.data(indices[i].mean).text(function(d,i) { return d+units[i]});
-        mins.data(indices[i].min).text(function(d,i) { return d+units[i]});
-    	maxs.data(indices[i].max).text(function(d,i) { return d+units[i]});
-    	lcl.data([indices[i]])
-    	   .attr('y', function(d,i) { return y(d.min[12])})
-    	   .attr('height', function(d,i) { return y(d.max[12]) - y(d.min[12]); });
-    	lclmean.data([indices[i]]).attr('y', function(d,i) { return y(d.mean[12])});
-    	lcltext.data([indices[i]])
-    	   .attr('y', function(d,i) { return y(d.mean[12])})
-    	   .text(function(d,i) { return d.mean[13] + " m"; });
-    	mouseoverdata = tlinetest[i][10].slice(0).reverse();
+function interpVal (pres, p_lo, p_hi, lo_val, hi_val) {
+	range = (lo_val - hi_val);
+	fraction = (p_hi - pres)/(p_hi - p_lo);
+	interp = (fraction * range) + hi_val;
+	mean = (interp + hi_val) / 2;
+	return mean;
+}
+
+function calcWetbulb (press, t, dp) // From Interactive Skew-T FLA
+{
+// Calculates the wetbulb given the pressure (mb), temperature (c), and dewpoint (c)
+// This algorithm differs from the one used in the Gary Skaggs program by using a binary-search type approximation
+// instead of a brute-force approach. You get a more accurate answer more quickly.
+// In an interpreted (slow) language like Javascript, the more efficient the algorithm the better.
+
+	var tmin=dp;
+	var vpdp=calcVaporPressure(dp);
+	var vpcur;
+	var peq;
+	var diff;
+	var tmax=t;
+	var tcur;
+
+	//while (true)
+	for(i=0;i<100;i++)
+	{
+		//trace(i);
+		tcur=(tmax+tmin)/2;
+		vpcur=calcVaporPressure(tcur);
+		peq=0.000660*(1+0.00155*tcur)*press*(t-tcur);
+		diff=peq-vpcur+vpdp;
+		if (Math.abs(diff) < 0.01)
+			break;
+
+		if (diff < 0)
+			tmax=tcur;
+		else
+			tmin=tcur;
+	}
+	return Math.round(tcur*10)/10;
+}
+
+function calcVaporPressure( temp )
+{
+	vp = 6.11 * Math.exp(5423 * (1/273 - 1/(temp+273)));
+	return vp;
+}
+
+function calcWetbulbZero() // From Interactive Skew-T FLA
+{
+	var wb0 = 99;
+	var wb1 = 99;
+	//from the bottom-up, search for the first wb < 0
+	for(i=0; i<tlinetest[0][0].length-1; i++){
+		wb0 = tlinetest[0][0][i].twc;
+		if(wb0 <= 0){
+			wb0_index = i;
+			break;
+		}else{
+			wb1 = wb0;
+		}
+	}
+	//establish the range from level to level
+	range_fraction = Math.abs(wb0/(wb1 - wb0));
+	log_lop = log10(tlinetest[0][0][wb0_index].press);
+	if (wb0_index == 0) {
+		log_hip = log10(tlinetest[0][0][wb0_index].press);
+	} else {
+		log_hip = log10(tlinetest[0][0][wb0_index-1].press);
+	}
+	logp_wb0 = (range_fraction * (log_hip - log_lop)) + log_lop;
+	return Math.round(Math.pow(10, logp_wb0));
+}
+
+function calcMixingRatio (vapor, press)
+{
+	return (((0.622*vapor)/(press-vapor))*1000.0);
+}
+
+function calcRelHumidity (ambient, satur)
+{
+	return Math.round( ambient/satur * 1000)/10;
+}
+
+function calcSpecHumidity (vapor, pressure )
+{
+	return Math.round(100000*0.622*vapor/pressure)/100;
+}
+
+function log10(x) {
+	return (Math.log(x) / Math.log(10));	
+}
+
+function calcLCL(pres, t, dp)
+{
+//http://www.shodor.org/os411/courses/_master/tools/calculators/lcl/lcl3calc.html
+	var P = parseFloat(pres);
+	var TK = parseFloat(t) + 273.16;
+	var TDK = parseFloat(dp) + 273.16;
+	A = 1 / (TDK - 56);
+	B = Math.log (TK/TDK)/800;
+	TCK = 1 / (A+B) + 56;
+	var lcl_t = Math.round((TCK-273.15)*10)/10;
+	var lcl_p = Math.round(P * Math.pow(TCK / TK, 3.5037));
+
+	for (i=0; i<tlinetest[0][0].length-1; i++) {
+		if (tlinetest[0][0][i].press < lcl_p) {
+			p_lo = tlinetest[0][0][i].press;	
+			h_lo = tlinetest[0][0][i].hghtagl;	
+			break;
+		} else if (lcl_p == tlinetest[0][0][i].press) {
+			return [lcl_p, lcl_t, tlinetest[0][0][i].hghtagl];
+		} else {
+			p_hi = tlinetest[0][0][i].press;	
+			h_hi = tlinetest[0][0][i].hghtagl;	
+		}
+	}
+	
+	var lcl_z = interpVal(lcl_p, p_lo, p_hi, h_lo, h_hi);
+	return [lcl_p, lcl_t, lcl_z];
+}
+
+function calcCCL()
+{
+	//calculate the vapor pressure for the parcel
+	var vp_pcl = calcVaporPressure(td_pcl100); //parcel vapor pres
+
+	//use that to compute the parcel mixing ratio
+	var mr_pcl = calcMixingRatio(vp_pcl, p_pcl100); //parcel mix ratio
+
+	//now, start climbing the temp profile, computing saturation mr at each step.
+	//continue until mr_sat is less than mr_pcl.
+	//also keep track of previous step
+	var smr0 = -1; //current sat mr 
+	var smr1 = -1; //previous sat mr
+
+	//loop from bottom up of sounding
+	for(i=1; i<tlinetest[0][0].length-1; i++){
+		if(p_pcl100 > tlinetest[0][0][i].press){
+			var svp0 = calcVaporPressure(tlinetest[0][0][i].temp);
+			var smr0 = calcMixingRatio(svp0,tlinetest[0][0][i].press) ;
+
+			//calc cat mr along sounding, then compare to pcl mr
+			if(smr0 < mr_pcl){
+				if(smr1 == -1){//if first calc of sat mr is less than pcl, 
+					//then assume that parcel pres is ccl
+					pccl = p_pcl100
+					tccl = t_pcl100
+				}else{
+					//otherwise need to interpolate to obtain ccl pressure and temp
+					pccl = tlinetest[0][0][i-1].press - ((tlinetest[0][0][i-1].press - tlinetest[0][0][i].press) * (smr1 - mr_pcl)/(smr1 - smr0)); 
+					tccl = tlinetest[0][0][i-1].temp - ((tlinetest[0][0][i-1].temp - tlinetest[0][0][i].temp) * (smr1 - mr_pcl)/(smr1 - smr0)); 
+				}	
+				break;
+			}else{
+				smr1 = smr0;
+			}
+		}
+	}
+	return Math.round(pccl);
+}
+
+function calcConvTemp()
+{
+	theta_ccl = calcTheta(pccl, tccl);
+	sfc_p = tlinetest[0][0][0].press;
+	ctK = theta_ccl / Math.pow(1000/sfc_p ,0.2854*(1-0.00028*tlinetest[0][0][0].mr));
+	ct = ctK - 273.15;
+	return Math.round(ct*10)/10;
+}
+
+function calcVirtualtemperature(Tc,mixr)
+{
+	return Math.round(10 * (Tc + (mixr/6)))/10; 
+}
+
+function calcPrecipWater()
+{
+	var pw = 0;
+	var sh0 = 0;	//current sh
+	var p0 = 0;	//current p
+	var q0 = 0;	//current q
+	var p1 = 0;	//previous p
+	var q1 = 0;	//previous q	
+	
+	for(i=0; i<tlinetest[0][0].length-1; i++){
+		dp0 = 273.15 + tlinetest[0][0][i].dwpt;//T=dyntext field
+		p0 = tlinetest[0][0][i].press;
+		eee = Math.exp(33.09376 - 0.0091379024 * dp0 - 6106.3960 / dp0);
+		q0= eee/(p0 - 0.00066771703 * eee);
+		q0 = q0 / 1000;//convert to kg/kg
+		p0=p0*100;//convert to Pa
+		if(i > 0){
+			pw += 0.5 * (q0 + q1) * (p1 - p0) * (1/(g * 1000));
+		}
+		p1=p0;
+		q1=q0
+	}
+	return Math.round(pw * 1000/25.4 *100)/100;
+}
+
+function calcSWEAT()
+{
+	ttdiff = tlinetest[0][0][0].TT - 49;
+	if (ttdiff < 0){ttdiff = 0}
+
+	delta_d = wd500 - wd850;
+	if (delta_d < 0) {delta_d = 0}
+
+	wind_term = 125*(Math.sin(delta_d * 0.017453293)+0.2);
+
+	if (wd850 >= 130 && wd850 <= 250) {
+		wind_term = 0;
+	}
+	if (wd500 >= 210 && wd500 <= 310) {
+		wind_term = 0;
+	}
+	if (delta_d > 0) {
+		wind_term = 0;
+	}
+	if (ws850 < 15 && ws500 < 15) {
+		wind_term = 0;
+	}
+
+
+	if (td850 < 0) {
+		term1 = 0;
+	} else {
+		term1 = 12*td850;
+	}
+
+	num = term1 + (20*ttdiff) + (2*ws850) + ws500 + wind_term;
+	return Math.round(num);
+}
+
+function calcKI()
+{
+	return Math.round(t850 + td850 - t500 - t700 + td700);
+}
+
+function calcTT()
+{
+	return Math.round(t850 + td850 - (2*t500));
+}
+
+function calcFreezeLevel()
+{
+	var temp0;
+	var temp1;
+	var temp_frz_t_arr = new Array();
+	var logp_temp0_arr = new Array();
+	var j = 0;
+	for(i=0; i<tlinetest[0][0].length-1; i++){
+		temp0 = tlinetest[0][0][i].temp;
+		if(temp0 <= 0){
+			if (i > 0) {
+				if (tlinetest[0][0][i-1].temp > 0) {
+					temp_frz_t_arr[j] = [temp0, tlinetest[0][0][i-1].temp, tlinetest[0][0][i].press];
+					j++;
+				}
+			} else {
+				temp_frz_t_arr[j] = [temp0,temp0,tlinetest[0][0][i].press];
+				j++;
+			}
+		}
+	}
+	for (k=0; k<=temp_frz_t_arr.length-1; k++) {
+		//establish the range from level to level
+		if (temp_frz_t_arr[k][0] != temp_frz_t_arr[k][1]) {
+			range_fraction = Math.abs(temp_frz_t_arr[k][0])/(temp_frz_t_arr[k][1] - temp_frz_t_arr[k][0]);
+		} else {
+			range_fraction = 1;
+		}
+		log_lop = log10(temp_frz_t_arr[k][2]);
+		log_hip = log10(temp_frz_t_arr[k][2]);
+		logp_temp0 = (range_fraction * (log_hip - log_lop)) + log_lop;
+		logp_temp0_arr.push(Math.round(Math.pow(10, logp_temp0)));
+	}
+	return logp_temp0_arr;
+}
+
+function deg2rad(degrees)
+{
+	return(degrees * 2 * Math.PI / 360);
+}
+
+//this function returns BRN and BRNshear
+//based on code by Keith Brewster found at this URL:
+//http://www.caps.ou.edu/ARPS/arps5Beta8Browser/arps5.0Beta8browser/html_code/adas/thermo3d.f90.html
+function getBRN(cape)
+{
+	var shear_sum=0;
+	var thk_sum=0;
+	var sumu=0;
+	var sumv=0;
+	var sump=0;
+	var sumz=0;
+	var layerz=0;
+	var rholo=0;
+	var u_lo=0;
+	var v_lo=0;
+	//init and calc u and v at the top (lo refers to the density or pressure, not z)
+	var d_hi = deg2rad(tlinetest[0][0][0].wdir);
+	var u_hi = tlinetest[0][0][0].wspd * Math.sin(d_hi);
+	var v_hi = tlinetest[0][0][0].wspd * Math.cos(d_hi);
+
+	//init and calc rhohi at the lowest elevation
+	rho_index = 0;
+	var rhohi = (tlinetest[0][0][rho_index].press * 100) / (tlinetest[0][0][rho_index].temp + 273.15); //init this at the lowest elevation
+
+	//iterate from the bottom up.
+	for(i=0; i<=tlinetest[0][0].length-1; i++){
+	  //calc the thickness of the layer
+		//first, find the mean temp
+		var t1 = getTv(tlinetest[0][0][i].temp, tlinetest[0][0][i].dwpt, tlinetest[0][0][i].press);
+		var t2 = getTv(tlinetest[0][0][i+1].temp, tlinetest[0][0][i+1].dwpt, tlinetest[0][0][i+1].press);
+		var Tbar = 273.15 + (t1+t2)/2;
+		//second, retrieve the pressure at this level (i) and the next one up (i+1)
+		var p1 = tlinetest[0][0][i].press;
+		var p2 = tlinetest[0][0][i+1].press;
+		//last, calculate the layer thickness
+		layerz = ((R * Tbar) / g) * Math.log(p1/p2);
+	  //piggy-back the 1000:500 thickness here
+	  if( tlinetest[0][0][i].press == 500){
+			getThickness(thk_sum);
+	  }
+	  //check to see if we're at the 500m level.
+	  //if so, get the u and v 500m
+		if(sumz < 500 && (sumz + layerz) > 500){
+			//go into interpolation routine
+			//calc the fraction for interpolation
+			var fraction = (500 - sumz)/layerz;
+			var dp = ((p1-p2)*fraction);
+			//now determine the u and v components for the topmost layer, ending at 6 km
+			//first get the u and v at the top, above 6 km
+			var dtop = deg2rad(tlinetest[0][0][i+1].wdir);
+			var utop = tlinetest[0][0][i+1].wspd * Math.sin(dtop);
+			var vtop = tlinetest[0][0][i+1].wspd * Math.cos(dtop);
+			//next, determine the u and v at 6 km, 
+			u_lo = ((utop - u_hi) * fraction) + u_hi;
+			v_lo = ((vtop - v_hi) * fraction) + v_hi;
+			//next, determine the density at the top of the layer
+			var rho500 = ((dp + p1) * 100) / (t2 + 273.15); //rho = p in Pa / T in Kelvin
+			var sumu500 = sumu + (dp * ((rholo * u_lo)+(rhohi * u_hi)) / (rholo + rhohi));
+			var sumv500 = sumv + (dp * ((rholo * v_lo)+(rhohi * v_hi)) / (rholo + rhohi));
+			//add delta p to the running pressure total
+			var sump500 = sump + dp;
+			var u500m = 0.514444444 * sumu500/sump500;//calc and convert from kt to m/s
+			var v500m = 0.514444444 * sumv500/sump500;
+		}//end 500m wind calc
+	  //check to see if we're above 6000m
+		if((sumz + layerz) > 6000){
+			//go into interpolation routine
+			//calc the fraction for interpolation
+			var fraction = (6000 - sumz)/layerz;
+			var dp = ((p1-p2)*fraction);
+			//now determine the u and v components for the topmost layer, ending at 6 km
+			//first get the u and v at the top, above 6 km
+			var dtop = deg2rad(tlinetest[0][0][i+1].wdir);
+			var utop = tlinetest[0][0][i+1].wspd * Math.sin(dtop);
+			var vtop = tlinetest[0][0][i+1].wspd * Math.cos(dtop);
+			//next, determine the u and v at 6 km, 
+			u_lo = ((utop - u_hi) * fraction) + u_hi;
+			v_lo = ((vtop - v_hi) * fraction) + v_hi;
+			//next, determine the density at the top of the layer
+			rholo = ((dp + p1) * 100) / (t2 + 273.15); //rho = p in Pa / T in Kelvin
+			sumu += dp * ((rholo * u_lo)+(rhohi * u_hi)) / (rholo + rhohi);
+			sumv += dp * ((rholo * v_lo)+(rhohi * v_hi)) / (rholo + rhohi);
+			shear_sum += Math.sqrt(((v_lo-v_hi)*(v_lo-v_hi)) + ((u_lo-u_hi)*(u_lo-u_hi)));
+			//add delta p to the running pressure total
+			sump += dp;
+			temp = 1000 - sump;
+			//we're done, so break out of the for loop
+			break;
+		}else{
+			sumz += layerz;
+			if(tlinetest[0][0][i].press <= 1000){
+				thk_sum += layerz;
+			}
+			dp = tlinetest[0][0][i].press - tlinetest[0][0][i+1].press;
+			sump += dp;
+			//first get the u and v at the top (lo refers to the density or pressure, not z)
+			var d_lo = deg2rad(tlinetest[0][0][i+1].wdir);
+			var u_lo = tlinetest[0][0][i+1].wspd * Math.sin(d_lo);
+			var v_lo = tlinetest[0][0][i+1].wspd * Math.cos(d_lo); 
+			//determine the density at the top of the layer
+			rholo = (p2 * 100) / (t2 + 273.15); //rho = p in Pa / T in Kelvin
+			//with the top and bottom rho, u, and v
+			//determine the density weighted component of u and v
+			//and add it to the running total
+			sumu += dp * ((rholo * u_lo)+(rhohi * u_hi)) / (rholo + rhohi);
+			sumv += dp * ((rholo * v_lo)+(rhohi * v_hi)) / (rholo + rhohi); 
+			shear_sum += Math.sqrt((v_lo-v_hi)*(v_lo-v_hi) + (u_lo-u_hi)*(u_lo-u_hi));
+			//take those values calculated for the upper level (lower p and rho) 
+			//and assign them to the lower level (higher p and rho)
+			rhohi = rholo;
+			u_hi = u_lo;
+			v_hi = v_lo;
+		} //end if/then for 6km or not
+	}//end for loop
+	u6km = 0.514444444*sumu/sump //calc and convert to m/s
+	v6km = 0.514444444*sumv/sump
+	brnu = (((u6km-u500m)*(u6km-u500m)) + ((v6km-v500m)*(v6km-v500m))) / 2;
+	brnu = Math.round(brnu);
+	brn = Math.round(cape / brnu);
+	shear6km = Math.round(shear_sum);
+	return [Math.round(brn), brnu, shear6km];;
+}
+
+function getCAPE(capeType, useTv)
+{
+var el_index = 999;
+var lfc_index = 999;
+var cape = 0;
+
+if (capeType == "ML") {
+	var press_EL = tlinetest[0][0][0].elPmix;
+	var press_LFC = tlinetest[0][0][0].lfcPmix;
+	var press_LCL = tlinetest[0][0][0].lclPmix;
+	var temp_LCL = tlinetest[0][0][0].lclTmix;
+} else if (capeType == "SB") {
+	var press_EL = tlinetest[0][0][0].elP;
+	var press_LFC = tlinetest[0][0][0].lfcP;
+	var press_LCL = tlinetest[0][0][0].lclP;
+	var temp_LCL = tlinetest[0][0][0].lclT;
+} else {
+	var press_EL = tlinetest[0][0][0].elP;
+	var press_LFC = tlinetest[0][0][0].lfcP;
+	var press_LCL = tlinetest[0][0][0].lclP;
+	var temp_LCL = tlinetest[0][0][0].lclT;
+}
+
+//if(tlinetest[0][0][0].elP != 0){	
+	//let's start by wiping the parcel_temp_array
+	for(i in parcel_temp_array){
+		parcel_temp_array[i] = null;	
+	}
+	//and reinitializing
+	var sumCAPE = 0;
+	//starting from the top down
+	//find the first obs level below the EL
+	for(i=tlinetest[0][0].length-1; i>0; i--){
+		if(tlinetest[0][0][i].press > press_EL){
+			el_index = i;
+			break;
+		}
+	}
+	//starting from the bottom up
+	//find the first obs level above the LFC
+	for(i=0; i<tlinetest[0][0].length-1; i++){
+		if(tlinetest[0][0][i].press < press_LFC){
+			lfc_index = i;
+			break;
+		}
+	}
+	//starting from the bottom up
+	//find the first obs level above the LCL
+	for(i=0; i<tlinetest[0][0].length-1; i++){
+		if(tlinetest[0][0][i].press < press_LCL){
+			lcl_index = i;
+			break;
+		}
+	}
+
+	//let's populate an array with tempC's along the moist adiabat
+	for(i=tlinetest[0][0].length-1; i>=0; i--){
+		if (i < lcl_index) {
+			theta_lcl = calcTheta(press_LCL,temp_LCL);
+			parcel_temp_array[i] = theta2C(theta_lcl, tlinetest[0][0][i].press)
+		} else {
+			//get the parcel temperature at the current level
+			thetae_lcl=calcThetaE(press_LCL, temp_LCL, temp_LCL);
+			temp_t = findTC(thetae_lcl, tlinetest[0][0][i].press);
+			//drop it into an array
+			parcel_temp_array[i] = temp_t;
+		}
+
+		if(i==el_index){//starting at the EL and working down
+			//mean obs temp of the layer
+			mean_t = (tlinetest[0][0][el_index].temp + temp_t) / 2;
+			//thickness of the layer
+			if (!press_EL) {
+			} else {
+				dz = calcThickness(tlinetest[0][0][i].press, press_EL, mean_t);
+				//dt is the diff between pcl temp and obs temp (C) used to compute area
+				dt = (temp_t - tlinetest[0][0][i].temp) / 2;//it's a triangle, so divide dt by 2 to get the proper area
+				sumCAPE += (dz * dt) / (mean_t + 273.15);
+			}
+		}else if (i==lfc_index){//now check to see if we're at the LFC
+			tlfc = findTC(thetae_lcl, press_LFC);//get temp at LFC
+			mean_t = (tlfc + temp_t) / 2; //get layer mean temp
+			dz = calcThickness(press_LFC, tlinetest[0][0][i].press, mean_t);//get layer thickness
+			dt = (temp_t - tlinetest[0][0][i].temp) / 2;//get pcl/obs temp diff
+			sumCAPE += (dz * dt) / (mean_t + 273.15); //add to sum
+		}else if (i<el_index && i>lfc_index) { //in the middle, between the EL and LFC
+			mean_t = (tlinetest[0][0][i].temp + tlinetest[0][0][i-1].temp) / 2;
+			dz = calcThickness(tlinetest[0][0][i].press, tlinetest[0][0][i+1].press, mean_t);
+			dt0 = parcel_temp_array[i] - tlinetest[0][0][i].temp;// pcl temp - obs temp at current level
+			dt1 = temp_t - tlinetest[0][0][i+1].temp;// pcl temp - obs temp at level above
+			mean_dt = (dt0 + dt1) / 2; //avg of 2 dt's
+			sumCAPE += (dz * mean_dt) / (mean_t + 273.15);// add to sum
+		} else {
+		}
+	}
+	var cape = g * sumCAPE; //multiply time g to get cape
+//}
+
+	if(cape <= 0){
+		cape = 0;//if cape<0, then set it to 0
+	}
+	cinArray = getCIN(parcel_temp_array, capeType);
+	cin = cinArray[0];
+	brn_arr = getBRN(cape); //calculate BRN
+
+	return [Math.round(cape), parcel_temp_array, cin, brn_arr]; //return a value - gets posted in parameters
+
+}
+/**********************************************************************/
+function calcTheta(P,T)
+{
+	//trace("calcTheta")
+//	num = (T + 273.15) * Math.pow(1000/P ,0.2854*(1-0.00028*tlinetest[0][0][0].mr));
+	num = (T + 273.15) * Math.pow(1000/P ,0.286);
+	return Math.round(num*10)/10;
+}
+
+function theta2C(thetaK,P)
+/*
+based on function TDA at http://wahiduddin.net/calc/density_algorithms.htm
+RETURNS THE TEMPERATURE TDA (CELSIUS) ON A DRY ADIABAT
+AT PRESSURE P (MILLIBARS). THE DRY ADIABAT IS GIVEN BY
+POTENTIAL TEMPERATURE O (CELSIUS).
+*/
+{
+	//var thetaK= theta+273.15;
+	//var TDAK= thetaK*((P*.001)**.286);
+	var TDAK= thetaK * Math.pow(P*.001,0.286)
+	var TDA= TDAK-273.15;
+	return Math.round(TDA*10)/10;
+}
+/**********************************************************************/
+
+function getCIN(t_arr, flag)
+{
+	console.log("------------------------");
+	console.log(flag);
+	lfc_index = 0;
+	//first off, let's see if the lfc lies within our BL
+	//if so, then cin = 0, so we return 0, which concludes the function.
+	if (flag == "ML") {
+		if(tlinetest[0][0][0].lfcPmix >= tlinetest[0][0][0].mixParcelP - bl_depth/2 || tlinetest[0][0][0].lfcPmix == -1){
+			cin = 0;
+			return [cin];
+		}
+		lfc_press = tlinetest[0][0][0].lfcPmix;
+		lfc_temp = tlinetest[0][0][0].lfcTmix;
+		lcl_press = tlinetest[0][0][0].lclPmix;
+		lcl_temp = tlinetest[0][0][0].lclTmix;
+
+		//now let's find the first level above the top of the mixed layer
+		for(i=0; i<tlinetest[0][0].length-1; i++){
+			if(tlinetest[0][0][i].press <= tlinetest[0][0][0].mixParcelP - bl_depth/2){
+				pcl_index = i;
+				break;
+			}
+		}
+	
+	} else {
+		lfc_press = tlinetest[0][0][0].lfcP;
+		lfc_temp = tlinetest[0][0][0].lfcT;
+		lcl_press = tlinetest[0][0][0].lclP;
+		lcl_temp = tlinetest[0][0][0].lclT;
+		pcl_index = 0;
+	}
+	//and reinitializing
+	var sumCIN = 0;
+
+	//starting from the top down
+	//find the first obs level below the LFC
+	for(i=tlinetest[0][0].length-1; i>0; i--){
+		if(tlinetest[0][0][i].press > lfc_press){
+			lfc_index = i;
+			break;
+		}
+	}
+	for(i=tlinetest[0][0].length-1; i>0; i--){
+		if(tlinetest[0][0][i].press > lcl_press){
+			lcl_index = i;
+			break;
+		}
+	}
+	//let's populate an array with parcel tempC's 
+	//along the moist adiabat above the LCL
+	//along a dry adiabat below the LCL
+
+	console.log(sumCIN, lfc_index, lcl_index);
+	
+	//now start the computation...
+	//first, a little short hand
+	if (flag =="ML") {
+		var pcl_press = tlinetest[0][0][pcl_index].press; //pressure at the pcl_index
+		var pblt = tlinetest[0][0][0].mixParcelP - bl_depth/2; //pressure at the top of the boundary layer = 
+	} else {
+		var pcl_press = tlinetest[0][0][0].press;
+		var pblt = tlinetest[0][0][0].mixParcelP - bl_depth/2; //pressure at the top of the boundary layer = 
+	}
+
+	//first we see if there is any cin between the pcl_index level, where we will start our calculation
+//	if (flag == "ML") {
+		if(pcl_press < pblt){
+			//first we need the obs t and pcl t at the top of the boundary layer
+			//get this through interpolation
+			//first the obs temp
+			pHi = tlinetest[0][0][pcl_index-1].press; //(base of layer)
+			pLo = pcl_press;//pressure at pcl_index (top of layer)
+			tHi = tlinetest[0][0][pcl_index-1].temp; 
+			tLo = tlinetest[0][0][pcl_index].temp;
+			fraction = (pHi-pblt) / (pHi-pLo); 
+			tblt_obs =  tHi - (fraction * (tHi - tLo));//obs t at BL top
+			//now the pcl temp
+			//first, we have to establish where the lcl is relative to the top of the BL (or BLT)
+			if(lcl_press < pcl_press || lcl_press >= ppcl){
+				pHi = tlinetest[0][0][0].press; //pressure at BL center
+				pLo = tlinetest[0][0][lcl_index].press;//pressure at pcl_index
+				tHi = tlinetest[0][0][0].temp; //temp at BL center
+				tLo = tlinetest[0][0][lcl_index].temp; // temp at pcl_index level
+			}else if(pcl_press <= lcl_press && lcl_press <= pblt){
+				pHi = tlinetest[0][0][0].press; //pressure at BL center (base of layer)
+				pLo = lcl_press; //pressure at lcl
+				tHi = tlinetest[0][0][0].temp; //temp at BL center
+				tLo = lcl_temp; // temp at lcl
+			}else if(pcl_press <= pblt && pblt <= lcl_press){
+				pHi = lcl_press;//pressure at lcl
+				pLo = pcl_press;//pressure at pcl_index (top of layer)
+				tHi = lcl_temp; //temp at lcl
+				tLo = t_arr[pcl_index];// temp at pcl_index level
+			}
+			fraction = (pHi-pblt) / (pHi-pLo); 
+			tblt_pcl =  tHi - (fraction * (tHi - tLo));//obs t at BL top
+	
+			//now we're prepared to calculate cin for this layer
+			//first check whether plfc >pcl_press 
+			//if so, use plfc as the top, else use pcl_press as the top
+			if(lfc_press > pcl_press){
+				mean_t = (lfc_temp + tblt_obs) / 2;
+				dz = calcThickness(pblt, lfc_press, mean_t);
+				dt0 = 0;// pcl temp - obs temp at level above
+				dt1 = tblt_pcl - tblt_obs;// // pcl temp - obs temp at present level
+				mean_dt = (dt0 + dt1) / 2; //avg of 2 dt's
+				sumCIN += (dz * mean_dt) / (mean_t + 273.15);// add to sum
+				console.log("Returning: " + sumCIN);
+				//since we just computed from the blt to the lfc, we're done.
+				//finish computation and return value
+				var cin = g * sumCIN; //multiply time g to get cape
+				return Math.round(cin); //return a value - gets posted in parameters
+			}else{
+				mean_t = (tlinetest[0][0][pcl_index].temp + tblt_obs) / 2;
+				dz = calcThickness(pblt, pcl_press, mean_t);
+				dt0 = t_arr[pcl_index+1] - tlinetest[0][0][pcl_index+1].temp;// pcl temp - obs temp at level above
+				dt1 = tblt_pcl - tblt_obs;// // pcl temp - obs temp at present level
+				mean_dt = (dt0 + dt1) / 2; //avg of 2 dt's
+				sumCIN += (dz * mean_dt) / (mean_t + 273.15);// add to sum
+				console.log("else 1: " + sumCIN);
+			}
+		}	
+//	}
+	//next we integrate from the pcl_index up to just short of the triangle topped by the lfc, which we will treat seperately at the end
+	for(i=0; i<lfc_index; i++){
+		//case 1 - entire layer either above or below lcl
+		if(tlinetest[0][0][i+1].press > lcl_press || tlinetest[0][0][i].press < lcl_press){
+			mean_t = (tlinetest[0][0][i].temp + tlinetest[0][0][i+1].temp) / 2;//need tlcl_obs
+			dz = calcThickness(tlinetest[0][0][i].press,tlinetest[0][0][i+1].press, mean_t);
+			dt0 = t_arr[i+1] - tlinetest[0][0][i+1].temp;// pcl temp - obs temp at level above
+			dt1 = t_arr[i] - tlinetest[0][0][i].temp;// // pcl temp - obs temp at present level
+			mean_dt = (dt0 + dt1) / 2; //avg of 2 dt's
+			sumCIN += (dz * mean_dt) / (mean_t + 273.15);// add to sum
+			console.log("if 2: " + sumCIN);
+
+		} else { //layer straddles the lcl
+			//first find the observed temp at the lcl
+			pHi = tlinetest[0][0][i].press;
+			pLo = tlinetest[0][0][i+1].press;
+			tHi = tlinetest[0][0][i].temp;
+			tLo = tlinetest[0][0][i+1].temp;
+			fraction = (pHi-lcl_press) / (pHi-pLo);
+			tlcl_obs =  tHi - (fraction * (tHi - tLo))//obs t at LCL
+			//now compute from the base of the layer up to the lcl
+			mean_t = (tHi + tlcl_obs) / 2;
+			dz = calcThickness(pHi, lcl_press, mean_t);
+			dt0 = lcl_temp - tlcl_obs;// pcl temp - obs temp at LCL
+			dt1 = t_arr[i] - tlinetest[0][0][i].temp;// // pcl temp - obs temp at present level
+			mean_dt = (dt0 + dt1) / 2; //avg of 2 dt's
+			sumCIN += (dz * mean_dt) / (mean_t + 273.15);// add to sum
+			//now compute from the lcl to the top of the layer
+			mean_t = (tLo + tlcl_obs) / 2;
+			dz = calcThickness(lcl_press, pLo, mean_t);
+			dt0 = lcl_temp - tlcl_obs;// pcl temp - obs temp at LCL
+			dt1 = t_arr[i+1] - tlinetest[0][0][i+1].temp;// // pcl temp - obs temp at level above present level
+			mean_dt = (dt0 + dt1) / 2; //avg of 2 dt's
+			sumCIN += (dz * mean_dt) / (mean_t + 273.15);// add to sum
+			console.log("else 2: " + sumCIN);
+		}
+	}
+
+	//now, the last bit up to the lfc
+	mean_t = (lfc_temp + tlinetest[0][0][lfc_index].temp) / 2; //need tlcl_obs
+	dz = calcThickness(tlinetest[0][0][lfc_index].press, lfc_press, mean_t);
+	dt0 = 0;// pcl temp = obs temp at lfc, so dt0=0
+	dt1 = t_arr[lfc_index] - tlinetest[0][0][lfc_index].temp;// // pcl temp - obs temp at present level
+	mean_dt = (dt0 + dt1) / 2; //avg of 2 dt's
+	sumCIN += (dz * mean_dt) / (mean_t + 273.15);// add to sum
+	console.log("Last bit: " + sumCIN);
+	lfc_cin = g*(dz * mean_dt) / (mean_t + 273.15);
+	//finish up...
+	var cin = g * sumCIN; //multiply time g to get cin
+	if(cin > 0 || cin === undefined || isNaN(cin)) {
+		cin = 0;
+	}
+
+	return [Math.round(cin)]; //return a value - gets posted in parameters
+}
+/***************************************************************/
+function calcThickness(p1, p2, t)
+{
+	//the crux of this is finding the mean temp for the layer
+	//otherwise, the calculation is pretty simple: z2-z1 = (R*T/g)*ln(p2/p1);
+	Tbar = 273.15 + t;
+	delta_z = ((R * Tbar) / g) * Math.log(p1/p2);
+	return Math.round(delta_z);
+}
+
+function calcThick()
+{
+	//the crux of this is finding the mean temp for the layer
+	//otherwise, the calculation is pretty simple: z2-z1 = (R*T/g)*ln(p2/p1);
+	var sum_t = 0;
+	var sum_p = 0;
+	var p1 = 1000;
+	var p2 = 500;
+	var index_1000;
+	for(i=0; i<tlinetest[0][0].length-1; i++){
+		if (tlinetest[0][0][i].press < 1000 && index_1000 == undefined) {
+			index_1000 = i;
+		}
+		if(tlinetest[0][0][i].press == 1000){
+			index_1000 = i;
+		}else if(tlinetest[0][0][i].press < 500){
+			index_500 = i;
+		}
+	}
+	
+	for(i=index_1000; i<index_500; i++){
+		layer_t = (tlinetest[0][0][i].temp + tlinetest[0][0][i+1].temp) / 2;
+		delta_p = tlinetest[0][0][i+1].press - tlinetest[0][0][i].press;
+		sum_t += layer_t * delta_p;
+		sum_p += delta_p;
+	}
+	Tbar = 273.15 + (sum_t / sum_p);
+	delta_z = ((R * Tbar) / g) * Math.log(p1/p2);
+	return Math.round(delta_z);
+}
+
+//this function assigns values for ppcl, tpcl, and tdpcl
+function getParcelVals()
+{
+	//initialize vars
+	var delta_p = 0;
+	var fraction = 0;
+	
+	var mean_t = 0;
+	var weighted_mean_t = 0;
+	var t_range = 0;
+	var t_interp = 0;
+	
+	var mean_td = 0;
+	var weighted_mean_td = 0;
+	var td_range = 0;
+	var td_interp = 0;
+			
+	//start by getting the values at the lowest level
+	var hi_p = tlinetest[0][0][0].press;
+	//var temp0 = _parent.obs_array[_parent.obs_array.length-1].t;
+	//var td0 = _parent.obs_array[_parent.obs_array.length-1].td;
+	
+	//now search upward and grab values for the next 100 mb up.
+	//interpolate if necessary
+	for(i=1; i<tlinetest[0][0].length; i++){
+		if(hi_p - tlinetest[0][0][i].press <= 100){
+			delta_p = tlinetest[0][0][i-1].press - tlinetest[0][0][i].press;
+			mean_t = (tlinetest[0][0][i-1].temp + tlinetest[0][0][i].temp) / 2;
+			weighted_mean_t += mean_t * delta_p;
+			//same for dewpoint
+			mean_td = (tlinetest[0][0][i-1].dwpt + tlinetest[0][0][i].dwpt) / 2;
+			weighted_mean_td += mean_td * delta_p;
+			//if we fall right on 100, then break out of for loop
+// Maybe == isn't what is needed here... //
+			if(hi_p - tlinetest[0][0][i].press == 100){
+				break;	
+			}
+		}else{
+			//interpolate the temp 100 mb above sfc
+			fraction = (tlinetest[0][0][i-1].press - hi_p + 100) / (tlinetest[0][0][i-1].press - tlinetest[0][0][i].press);
+			delta_p = tlinetest[0][0][i-1].press - (hi_p - 100);
+			//interpolate temp
+			t_range = (tlinetest[0][0][i].temp - tlinetest[0][0][i-1].temp);
+			t_interp = (fraction * t_range) + tlinetest[0][0][i-1].temp;
+			mean_t = (t_interp + tlinetest[0][0][i-1].temp) / 2;
+			weighted_mean_t += mean_t * delta_p;
+			//same for dewpoint
+			td_range = (tlinetest[0][0][i].dwpt - tlinetest[0][0][i-1].dwpt);
+			td_interp = (fraction * td_range) + tlinetest[0][0][i-1].dwpt;
+			mean_td = (td_interp + tlinetest[0][0][i-1].dwpt) / 2;
+			weighted_mean_td += mean_td * delta_p;
+	//next 3 lines are obviously wrong...what are they for?		
+			//_parent.p_pcl = _parent.obs_array[i].p
+			//_parent.t_pcl = fraction;
+			//_parent.td_pcl = delta_p;
+			
+			//break out of for loop
+			break;
+		}
+	}
+	ppcl = hi_p-bl_depth/2;
+	tpcl = weighted_mean_t / bl_depth;
+	tdpcl = weighted_mean_td / bl_depth;
+
+	return [ppcl, tpcl, tdpcl];
+}
+
+function findLFCandEL(flag)
+{
+	if (flag == "ML") {
+		thetae_lcl=calcThetaE(tlinetest[0][0][0].lclPmix, tlinetest[0][0][0].lclTmix, tlinetest[0][0][0].lclTmix);
+		tlinetest[0][0][0].thetaE_LCLmix = thetae_lcl;
+		theta_lcl = calcTheta(tlinetest[0][0][0].lclPmix,tlinetest[0][0][0].lclTmix);
+		tlinetest[0][0][0].theta_LCLmix = theta_lcl;
+		lcl_press = tlinetest[0][0][0].lclPmix;
+	} else {
+		thetae_lcl=calcThetaE(tlinetest[0][0][0].lclP, tlinetest[0][0][0].lclT, tlinetest[0][0][0].lclT);
+		tlinetest[0][0][0].thetaE_LCL = thetae_lcl;
+		theta_lcl = calcTheta(tlinetest[0][0][0].lclP,tlinetest[0][0][0].lclT);
+		tlinetest[0][0][0].theta_LCL = theta_lcl;
+		lcl_press = tlinetest[0][0][0].lclP;
+	}
+	//now find the observed temp at LCL by interpolation
+	for(i=1; i<tlinetest[0][0].length; i++){
+	//working from the bottom up, look for place where pressure is less than pressure at lcl
+		p_lo = tlinetest[0][0][i].press;
+		p_hi = tlinetest[0][0][i-1].press
+		if (tlinetest[0][0][i].press < lcl_press){
+			t_lo = tlinetest[0][0][i].temp;
+			t_hi = tlinetest[0][0][i-1].temp;
+			if (flag == "ML") {
+				lcl_press = tlinetest[0][0][0].lclPmix;
+				lcl_temp = tlinetest[0][0][0].lclTmix;
+			} else {
+				lcl_press = tlinetest[0][0][0].lclP;
+				lcl_temp = tlinetest[0][0][0].lclT;
+			}
+			var start_index = i;
+			break;
+		}
+	}
+
+
+	var lfc_index = 999;
+
+	//now interpolate to find the observed temp at the lcl
+	fraction = (p_hi - lcl_press)/(p_hi - p_lo);
+	obs_tlcl = t_hi - (fraction * (t_hi - t_lo));// + t_hi;
+	//check if tlcl is greater than observed temp.
+	//if so, lfc = lcl
+	if(lcl_temp >= obs_tlcl){
+		plfc = lcl_press;
+		zlfc = tlinetest[0][0][0].lclZ;
+		tlfc = Math.round(lcl_temp*10)/10;
+		lfc_index = i;
+	//otherwise start moving up the sounding from the lcl.
+	//determine the parcel temp at each obs point, 
+	//and check if parcel is greater than the obs temp.
+	}else{
+		var tempP_hi = tlinetest[0][0][start_index].press;
+		var obsT_hi = tlinetest[0][0][start_index].temp;
+		var obsZ_hi = tlinetest[0][0][start_index].hghtagl;
+		var pclT_hi = findTC(thetae_lcl, tempP_hi);
+		for (i=start_index; i<tlinetest[0][0].length-1; i++){
+			tempP_lo = tlinetest[0][0][i].press;
+			obsT_lo = tlinetest[0][0][i].temp;
+			obsZ_lo = tlinetest[0][0][i].hghtagl;
+			pclT_lo = findTC(thetae_lcl, tempP_lo);
+			if (pclT_lo > obsT_lo) { 
+				//NEW WAY: force to small number (0.1) if isothermal layer:
+				if(obsT_hi - obsT_lo != 0){
+					m_obs = (tempP_hi - tempP_lo) / (obsT_hi - obsT_lo);
+				}else{
+					m_obs = (tempP_hi - tempP_lo) / (0.1);
+				}
+				if(pclT_hi - pclT_lo != 0){
+					m_pcl = (tempP_hi - tempP_lo) / (pclT_hi - pclT_lo);
+				}else{
+					m_pcl = (tempP_hi - tempP_lo) / (0.1);
+				}
+				if (m_obs == 0 &&  m_pcl == 0) {
+					plfc = lcl_press;
+					tlfc = lcl_temp;
+					break;
+				} 
+				//now set up obs lines as ax + by = c
+				a = m_obs;
+				b = 1;
+				c = (m_obs * obsT_hi) - tempP_hi;
+				//set up parcel line as dx + ey = f
+				d = m_pcl;
+				e = 1;
+				f = (m_pcl * pclT_hi) - tempP_hi;
+				//now some linear algebra
+				//find 3 determinates of matrices
+				det1 = (a*e)-(b*d);
+				det2 = (c*e)-(b*f);
+				det3 = (a*f)-(c*d);
+				//finally solve for plfc and tlfc
+				tlfc = Math.round(det2/det1*10)/10;
+				plfc = Math.round(-1*det3/det1);//not sure why the negative sign here, but it appears to work...
+				zlfc = interpVal(plfc, tempP_lo, tempP_hi, obsZ_lo, obsZ_hi);
+				break;
+			}else{
+				tempP_hi = tempP_lo;
+				obsT_hi = obsT_lo;
+				pclT_hi = pclT_lo;
+				//what if there is NO LFC???
+				if (i==1){
+					plfc = -1;
+				}
+			}			
+		}
+		lfc_index = i;
+	}
+	//now find the EL by searching from the top down
+	//determine the parcel temp at each obs point, 
+	//and check if pcl t is greater than the obs t.
+	var tempP_lo = 0;
+	var obsT_lo = 0;
+	var pclT_lo = 0;
+	for (i=tlinetest[0][0].length-1; i>lfc_index; i--){
+		tempP_hi = tlinetest[0][0][i].press;
+		obsT_hi = tlinetest[0][0][i].temp;
+		obsZ_hi = tlinetest[0][0][i].hghtagl;
+		pclT_hi = findTC(thetae_lcl, tempP_hi);
+		if(pclT_hi > obsT_hi){ 
+			obsZ_lo = tlinetest[0][0][i].hghtagl;
+			if(i==1){
+				//not really any EL, so we assign the pel to the p at the top of the sounding
+				pel = tempP_hi;
+				tel = pclT_hi
+			}else{
+				//interpolate the pressure/temperature at the EL
+				//slope m = rise over run
+				if(obsT_hi - obsT_lo != 0){
+					m_obs = (tempP_hi - tempP_lo) / (obsT_hi - obsT_lo);
+				}else{
+					m_obs = (tempP_hi - tempP_lo) / (0.1);
+				}
+				m_pcl = (tempP_hi - tempP_lo) / (pclT_hi - pclT_lo);
+				//now set up obs lines as ax + by = c
+				a = m_obs;
+				b = 1;
+				c = (m_obs * obsT_hi) - tempP_hi;
+				//set up parcel line as dx + ey = f
+				d = m_pcl;
+				e = 1;
+				f = (m_pcl * pclT_hi) - tempP_hi;
+				//now some linear algebra
+				//find 3 determinates of matrices
+				det1 = (a*e)-(b*d);
+				det2 = (c*e)-(b*f);
+				det3 = (a*f)-(c*d);
+				//finally solve for pel and tel
+				tel = Math.round(det2/det1*10)/10;
+				pel = Math.round(-1*det3/det1);//not sure why the negative sign here, but it appears to work...
+				zel = interpVal(pel, tempP_lo, tempP_hi, obsZ_lo, obsZ_hi);
+			}
+			return [plfc, tlfc, zlfc, pel, tel, zel];
+			break;
+		}else{
+			if(i==tlinetest[0][0].length){
+				pel = 0;//never found an equil level
+			}else{
+				tempP_lo = tempP_hi;
+				obsT_lo = obsT_hi;
+				pclT_lo = pclT_hi;
+			}
+		}
+	}
+
+	return [plfc, tlfc, zlfc, pel, tel, zel];
+}
+
+function findTC(thetae, xp)
+{
+	//this function returns tempC for a given P and theta-e
+	//it's used to find lfc, el, and cape
+	var crit = 0.1;//criteria
+	var eq0 = thetae;
+	var eq1 = 0;
+	var tlev = 10 - ((1000-xp)/10);
+	//calc thetae for tlev and p
+	for(k=0; k<100; k++){
+		eq1 = calcThetaE(xp, tlev, tlev);
+		diff = Math.abs(eq0-eq1);
+		if(diff < 0.1){//close enough
+			break;
+		}else if(eq1>eq0){//our try (eq1) is larger than the obs theta-e (eq0)
+			tlev = tlev - (diff/10);//so we subtract half the difference from tlev and try again
+		}else{//otherwise, we add the difference 
+			tlev = tlev + (diff/10);	
+		}
+	}
+	return tlev;
+}
+
+function calcThetaE(P,t,dp)
+{
+	vp=calcVaporPressure(dp);//ambient vapor pressure
+	w=calcMixingRatio(vp, P);
+	tlclk = tlinetest[0][0][0].lclT+273.15;
+	PT = (t + 273.15) * Math.pow(1000/P, 0.2854*(1-(0.00028*w)));
+	EPTK = PT * Math.exp(((3.376/tlclk)-0.00254)*w*(1+(0.00081*w)));
+	return Math.round(EPTK*10)/10;
+}
+
+function calcVaporPressure( temp )
+{
+	vp = 6.11 * Math.exp(5423 * (1/273 - 1/(temp+273)));
+	return vp;
+}
+
+function calcLI(t_parc_arr, t_obs_arr)
+{
+	for(i=0; i<t_parc_arr.length-1; i++) {
+		if (tlinetest[0][0][i].press == 500) {
+			var calc_li = t_obs_arr[i] - t_parc_arr[i];
+			return Math.round(calc_li * 10)/10;
+		} else if (tlinetest[0][0][i].press < 500) {
+			var calc_li = t500 - interpVal(500, tlinetest[0][0][i].press, tlinetest[0][0][i-1].press, t_parc_arr[i], t_parc_arr[i-1]);
+			return Math.round(calc_li * 10)/10;
+		}
+	}
+}
+
+//I developed this function to calc CAPE, and reuse it here.
+// It was modified from an algo written by eric smith at csu,\
+//I found it in a paper online by schlatter
+
+function calcThetaE(P,t,dp)
+{
+	//var SP = parseFloat(P) * 1000.0;
+	var ST = parseFloat(t) + 273.16;
+	var SDP = parseFloat(dp) + 273.16;
+	
+	vp=calcVaporPressure(dp);//ambient vapor pressure
+	w=calcMixingRatio(vp, P);
+	//trace("w="+w+" at "+P+"mb");
+	Tlcl = (1/(1/(SDP - 56) + Math.log (ST/SDP)/800)) + 56;//calc the temp at LCL
+	PT = ST * Math.pow(1000/P, 0.2854*(1-(0.00028*w)));
+	EPTK = PT * Math.exp((3.376/Tlcl-0.00254)*w*(1 + 0.00081 * w));
+	return Math.round(EPTK*10)/10;
+}
+
+function calcZ(pres)
+{
+	//base = pres / 1013;
+	//exp = 287 * .0065 / 9.8;
+	base = pres / P0;
+	exp = R * .0065 / g;
+	temp_z = T0 / .0065 * (1 - Math.pow(base, exp));
+	return Math.round(temp_z)
+}
+
+function getThickness(z){
+	var psfc = tlinetest[0][0][0].press //p at sfc
+	if(psfc >= 1000){
+		thickness = Math.round(z);
+	}else if(psfc < 1000){//sfc pressure is less than 1000, 
+	//so extrapolate downward to 1000 mb using std atm lapse rate, 
+	//but start at the first point above the sfc rather than the actual sfc.
+	//first we actually have to subtract the thickness from the first to second points in the sounding
+		sfc_index = 1;
+		var t1 = getTv(tlinetest[0][0][sfc_index].temp, tlinetest[0][0][sfc_index].dwpt, tlinetest[0][0][sfc_index].press);
+		var t2 = getTv(tlinetest[0][0][sfc_index+1].temp, tlinetest[0][0][sfc_index+1].dwpt, tlinetest[0][0][sfc_index+1].press);
+		var Tbar = 273.15 + (t1+t2)/2;
+		//second, retrieve the pressure at this level (i) and the next one up (i+1)
+		var p1 = tlinetest[0][0][sfc_index].press;
+		var p2 = tlinetest[0][0][sfc_index+1].press;
+		//last, calculate the layer thickness
+		layerz = ((R * Tbar) / g) * Math.log(p1/p2);
+		z -= layerz;//subtract layer thickness from current sum (z)
+	//now we have to get the thickness from the point above the sfc (t2, p2) down to 1000 mb
+	//assume a lapse rate of 0.056 degrees / mb (=std atm from 900-1000 mb)
+		var deltap = 1000 - p2;//delta-P from point above the sfc to 1000 mb
+		var tvbark = t2 + (deltap * 0.056 / 2) + 273.15; //layer mean Tv (K),.056 degrees/mb from lapse rate of std atm at 900-1000 mb
+		//calculate the layer thickness, add it to z
+		layerz = ((R * tvbark) / g) * Math.log(1000/tlinetest[0][0][sfc_index+1].press);
+		z += layerz;
+		thickness = Math.round(z);
+	}//station p greater than 1000, already handled in getBRN
+}
+
+function getTv(Tc,Tdc,p)
+{
+	vp = 6.11 * Math.exp(5423 * (1/273 - 1/(Tdc+273)));
+	mr = ((0.622*vp)/(p-vp))*1000.0;
+	tv = Tc + (mr/6);
+	return tv;
+}
+
+function convertFiletoJSON(data) {
+	sdata = [];
+	title_start = data.indexOf("<H2>");
+	if (title_start == -1) {
+		title_start = data.indexOf("<h2>");
+	}
+	title_start = title_start+4;
+	title_end = data.indexOf("</H2>");
+	if (title_end == -1) {
+		title_end = data.indexOf("</h2>");
+	}
+	title = data.slice(title_start, title_end);
+
+	start = data.indexOf("----------------------");
+	start = data.indexOf("----------------------", start+77);
+	end = data.indexOf("</PRE>");
+	if (end == -1) {
+		end = data.indexOf("</pre>");
+	}
+
+	data = data.substring(start+78, end);
+
+	data_arr = data.split("\n");
+
+	var n = 0;
+	var obj = {};
+
+	for (i=0; i < data_arr.length-1; i++) {
+		if (data_arr[i].slice(0,7).replace(/^\s+/, '').replace(/\s+$/, '') != '') {
+			obj.press = Number(data_arr[i].slice(0,7)); 
+		}
+		if (data_arr[i].slice(7,14).replace(/^\s+/, '').replace(/\s+$/, '') != '') {
+			obj.hght = Number(data_arr[i].slice(7,14)); 
+		}
+		if (data_arr[i].slice(14,21).replace(/^\s+/, '').replace(/\s+$/, '') != '') {
+			obj.temp = Number(data_arr[i].slice(14,21)); 
+		}
+		if (data_arr[i].slice(21,28).replace(/^\s+/, '').replace(/\s+$/, '') != '') {
+			obj.dwpt = Number(data_arr[i].slice(21,28)); 
+		}
+		if (data_arr[i].slice(42,49).replace(/^\s+/, '').replace(/\s+$/, '') != '') {
+			obj.wdir = Number(data_arr[i].slice(42,49)); 
+		}
+		if (data_arr[i].slice(49,56).replace(/^\s+/, '').replace(/\s+$/, '') != '') {
+			obj.wspd = Number(data_arr[i].slice(49,56)); 
+			obj.wspdround = Math.round(Number(data_arr[i].slice(49,56))/5) * 5;
+		}
+		sdata.push(obj); 
+		obj = {};
+	}
+
+	return sdata;
+}
+
+function getLapseRate(tempArr, hghtArr, btmI, btmZ, dZ) {
+	var sumLR = 0;
+	var n=0;
+	for (i=btmI; i<tempArr.length; i++) { 
+		if (hghtArr[i]>hghtArr[btmI]+dZ) {
+			break;
+		}
+		t_hi = tempArr[i];
+		z_hi = hghtArr[i];
+		t_lo = tempArr[i+1];
+		z_lo = hghtArr[i+1];
+		lr = (t_hi - t_lo) / ((z_hi - z_lo)/1000);
+		sumLR += lr;
+		n++;
+	}
+	var lapseRate = -sumLR/n;
+	return lapseRate;
 }
 
 </script>

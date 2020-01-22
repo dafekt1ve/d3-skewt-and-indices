@@ -9,34 +9,48 @@ var dryline = d3.svg.line()
     .x(function(d,i) { return x( ( 273.15 + d ) / Math.pow( (1000/pp[i]), 0.286) -273.15) + (y(basep)-y(pp[i]))/tan;})
     .y(function(d,i) { return y(pp[i])} );
 
+//var moistline = d3.svg.line()
+//    .interpolate("linear")
+//    .x(function(d,i) { return x( ( 273.15 + d ) / Math.pow( (1000/pp[i]), 0.286) -273.15) + (y(basep)-y(pp[i]))/tan;})
+//    .y(function(d,i) { return y(pp[i])} );
+
+//var mrline = d3.svg.line()
+//    .interpolate("linear")
+//    .x(function(d,i) { return x( ( 273.15 + d ) / Math.pow( (1000/pp[i]), 0.074) -273.15)/2 + (y(basep)-y(pp[i]))/tan;})
+//    .y(function(d,i) { return y(pp[i])} );
+
+//var mrline = d3.svg.line()
+//    .interpolate("linear")
+//    .x(function(d,i) { return x(Math.pow( 1027, .0267));})
+//    .y(function(d,i) { return y(pp[i])} );
+
+
 // Add clipping path
   svg.append("clipPath")
     .attr("id", "clipper")
     .append("rect")
     .attr("x", 0)
     .attr("y", 0)
-    .attr("width", w)
-    .attr("height", h);
+    .attr("width", width)
+    .attr("height", height);
     
 // Skewed temperature lines
   svg.selectAll("gline")
     .data(d3.range(-100,45,10))
    .enter().append("line")
      .attr("x1", function(d) { return x(d)-0.5 + (y(basep)-y(100))/tan; })
-     //.attr("x1", function(d) { return x(d)-0.5; })
      .attr("x2", function(d) { return x(d)-0.5; })
      .attr("y1", 0)
-     .attr("y2", h)
-     .attr("class", function(d) { if (d == 0) { return "tempzero"; } else { return "gridline"}})
+     .attr("y2", height)
+     .attr("class", function(d) { if (d == 0) { return "tempzero"; } else if (d == -20 || d == -10) { return "dendrite" }else { return "gridline"}})
      .attr("clip-path", "url(#clipper)");
-     //.attr("transform", "translate(0," + h + ") skewX(-30)");
      
 // Logarithmic pressure lines
  	svg.selectAll("gline2")
     	.data(plines)
    	.enter().append("line")
      	.attr("x1", 0)
-     	.attr("x2", w)
+     	.attr("x2", width)
      	.attr("y1", function(d) { return y(d); })
      	.attr("y2", function(d) { return y(d); })
      	.attr("class", "gridline");
@@ -56,15 +70,34 @@ svg.selectAll(".dryline")
     .data(all)
 .enter().append("path")
     .attr("class", "gridline")
+    .attr("class", "dryline")
     .attr("clip-path", "url(#clipper)")
     .attr("d", dryline);
     
+// Draw moist adiabats
+//svg.selectAll(".moistline")
+//    .data(all)
+//.enter().append("path")
+//    .attr("class", "gridline")
+//    .attr("class", "moistline")
+//    .attr("clip-path", "url(#clipper)")
+//    .attr("d", moistline);
+
+// Draw mixing ratio lines
+//svg.selectAll(".mrline")
+//    .data(all)
+//.enter().append("path")
+//    .attr("class", "gridline")
+//    .attr("class", "mrline")
+//    .attr("clip-path", "url(#clipper)")
+//    .attr("d", mrline);
+
 // Line along right edge of plot
   svg.append("line")
-     .attr("x1", w-0.5)
-     .attr("x2", w-0.5)
+     .attr("x1", width-0.5)
+     .attr("x2", width-0.5)
      .attr("y1", 0)
-     .attr("y2", h)
+     .attr("y2", height)
      .attr("class", "gridline");
     
     // draw hodograph background
@@ -85,7 +118,7 @@ svg.selectAll(".dryline")
     	.text(function(d) { return d+'kts'; });
        
        	// Add axes
-    svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + (h-0.5) + ")").call(xAxis);
+    svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + (height-0.5) + ")").call(xAxis);
     svg.append("g").attr("class", "y axis").attr("transform", "translate(-0.5,0)").call(yAxis);
     svg.append("g").attr("class", "y axis ticks").attr("transform", "translate(-0.5,0)").call(yAxis2);
     //svg.append("g").attr("class", "y axis hght").attr("transform", "translate(0,0)").call(yAxis2);
