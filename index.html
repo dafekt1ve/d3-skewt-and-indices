@@ -5,7 +5,7 @@
 <body>
 <div id="container">
 <div id="mainbox">
-	<p>Moist Adiabats</p>
+	<p id="debug"></p>
 	<div>
 	 <label id="fileUpload" for="input-file">Specify a file:</label><br>
 	 <input type="file" id="input-file">
@@ -198,8 +198,10 @@ var svgtext = d3.select("div#hodobox").append("svg").attr("class", "indices").at
 
 
 makeBarbTemplates();
-drawBackground();
+var allmoist = drawBackground();
 drawTextLabels();
+
+console.log(allmoist);
 
 var skewtgroup = svg.append("g").attr("class", "skewt"); // put skewt lines in this group
 var barbgroup  = svg.append("g").attr("class", "windbarb"); // put barbs in this group
@@ -684,6 +686,27 @@ function drawSkew() {
 		          .attr("clip-path", "url(#clipper)")
 		          .attr("d", line6);
     	}
+
+//	console.log(line6);
+
+//	moistAdiabatsArray = getCAPE("Moist Adiabats", 0);//Moist Adiabats
+//	ma_t_arr = moistAdiabatsArray[1];
+//	console.log(ma_t_arr);
+//    	var line7 = d3.svg.line()
+//        	.interpolate("linear")
+//        	.x(function(d,i) { return x(d.ma_t_arr) + (y(basep)-y(d.press))/tan; })
+//        	.y(function(d,i) { return y(d.press); });
+
+//	console.log(line7);
+
+//    	moistlines = skewtgroup.selectAll("moistlines")
+//        	.data(ma_t_arr).enter().append("path")
+//        	.attr("class", "moistline")
+//        	.attr("clip-path", "url(#clipper)")
+//        	.attr("d", line7);
+
+	
+
 //    var line5 = d3.svg.line()
 //        .interpolate("linear")
 //        .x(function(d,i) { return x(d.thetaC) + (y(basep)-y(d.press))/tan; })
@@ -1507,6 +1530,11 @@ if (capeType == "ML") {
 	var press_LFC = tlinetest[0][0][0].lfcP;
 	var press_LCL = tlinetest[0][0][0].lclP;
 	var temp_LCL = tlinetest[0][0][0].lclT;
+} else if (capeType == "Moist Adiabats") {
+	var press_EL = 100;
+	var press_LFC = 1000;
+	var press_LCL = 1000;
+	var temp_LCL = 10;
 } else {
 	var press_EL = tlinetest[0][0][0].elP;
 	var press_LFC = tlinetest[0][0][0].lfcP;

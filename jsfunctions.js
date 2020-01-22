@@ -1,4 +1,3 @@
-
 function drawBackground() {
 
 var svghodo = d3.select("div#hodobox svg g").append("g").attr("class", "hodobg");
@@ -9,21 +8,11 @@ var dryline = d3.svg.line()
     .x(function(d,i) { return x( ( 273.15 + d ) / Math.pow( (1000/pp[i]), 0.286) -273.15) + (y(basep)-y(pp[i]))/tan;})
     .y(function(d,i) { return y(pp[i])} );
 
-//var moistline = d3.svg.line()
-//    .interpolate("linear")
+var moistline = d3.svg.line()
+    .interpolate("linear")
 //    .x(function(d,i) { return x( ( 273.15 + d ) / Math.pow( (1000/pp[i]), 0.286) -273.15) + (y(basep)-y(pp[i]))/tan;})
-//    .y(function(d,i) { return y(pp[i])} );
-
-//var mrline = d3.svg.line()
-//    .interpolate("linear")
-//    .x(function(d,i) { return x( ( 273.15 + d ) / Math.pow( (1000/pp[i]), 0.074) -273.15)/2 + (y(basep)-y(pp[i]))/tan;})
-//    .y(function(d,i) { return y(pp[i])} );
-
-//var mrline = d3.svg.line()
-//    .interpolate("linear")
-//    .x(function(d,i) { return x(Math.pow( 1027, .0267));})
-//    .y(function(d,i) { return y(pp[i])} );
-
+    .x(function(d,i) { return x(d) + (y(basep)-y(pp[i]))/tan;})
+    .y(function(d,i) { return y(pp[i])} );
 
 // Add clipping path
   svg.append("clipPath")
@@ -65,6 +54,17 @@ for (i=0; i<dryad.length; i++) {
     all.push(z);
 }
 
+var allmoist = [];
+var moistad = d3.range(-20,40,4);
+for (i=0; i<moistad.length; i++) { 
+    var a = [];
+    for (j=0; j<pp.length; j++) { 
+	a.push( findTC( calcThetaE(basep, moistad[i], moistad[i]), pp[j])) 
+    }
+    allmoist.push(a);
+}
+//    document.getElementById('debug').innerHTML = allmoist;
+
 // Draw dry adiabats
 svg.selectAll(".dryline")
     .data(all)
@@ -75,13 +75,13 @@ svg.selectAll(".dryline")
     .attr("d", dryline);
     
 // Draw moist adiabats
-//svg.selectAll(".moistline")
-//    .data(all)
-//.enter().append("path")
-//    .attr("class", "gridline")
-//    .attr("class", "moistline")
-//    .attr("clip-path", "url(#clipper)")
-//    .attr("d", moistline);
+svg.selectAll(".moistline")
+    .data(allmoist)
+.enter().append("path")
+    .attr("class", "gridline")
+    .attr("class", "moistline")
+    .attr("clip-path", "url(#clipper)")
+    .attr("d", moistline);
 
 // Draw mixing ratio lines
 //svg.selectAll(".mrline")
@@ -122,4 +122,6 @@ svg.selectAll(".dryline")
     svg.append("g").attr("class", "y axis").attr("transform", "translate(-0.5,0)").call(yAxis);
     svg.append("g").attr("class", "y axis ticks").attr("transform", "translate(-0.5,0)").call(yAxis2);
     //svg.append("g").attr("class", "y axis hght").attr("transform", "translate(0,0)").call(yAxis2);
+
+   return (allmoist);
 }
