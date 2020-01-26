@@ -197,10 +197,8 @@ var svgtext = d3.select("div#hodobox").append("svg").attr("class", "indices").at
 
 
 makeBarbTemplates();
-var allmoist = drawBackground();
+drawBackground();
 drawTextLabels();
-
-console.log(allmoist);
 
 var skewtgroup = svg.append("g").attr("class", "skewt"); // put skewt lines in this group
 var barbgroup  = svg.append("g").attr("class", "windbarb"); // put barbs in this group
@@ -628,14 +626,12 @@ function drawSkew() {
         .data(tlinetest[0]).enter().append("path")
           .attr("class", function(d,i) { return (i<10) ? "temp member" : "temp mean" })
           .attr("clip-path", "url(#clipper)")
-//	  .style("display","none")
           .attr("d", line);
           
     tdlines = skewtgroup.selectAll("tdlines")
         .data(tlinetest[0]).enter().append("path")
           .attr("class", function(d,i) { return (i<10) ? "dwpt member" : "dwpt mean" })
           .attr("clip-path", "url(#clipper)")
-//	  .style("display","none")
           .attr("d", line2);
 
     var line3 = d3.svg.line()
@@ -647,7 +643,6 @@ function drawSkew() {
         .data(tlinetest[0]).enter().append("path")
           .attr("class", function(d,i) { return (i<10) ? "twc member" : "twc mean" })
           .attr("clip-path", "url(#clipper)")
-//	  .style("display","none")
           .attr("d", line3);
 
     var line4 = d3.svg.line()
@@ -659,7 +654,6 @@ function drawSkew() {
         .data(tlinetest[0]).enter().append("path")
           .attr("class", function(d,i) { return (i<10) ? "tvc member" : "tvc mean" })
           .attr("clip-path", "url(#clipper)")
-//	  .style("display","none")
           .attr("d", line4);
     
 	if (parcel_flag == 1) {
@@ -685,27 +679,6 @@ function drawSkew() {
 		          .attr("clip-path", "url(#clipper)")
 		          .attr("d", line6);
     	}
-//    var line5 = d3.svg.line()
-//        .interpolate("linear")
-//        .x(function(d,i) { return x(d.thetaC) + (y(basep)-y(d.press))/tan; })
-//        .y(function(d,i) { return y(d.press); });
-//        
-//    thetaClines = skewtgroup.selectAll("thetaClines")
-//        .data(tlinetest[0]).enter().append("path")
-//          .attr("class", function(d,i) { return (i<10) ? "thetaC member" : "thetaC mean" })
-//          .attr("clip-path", "url(#clipper)")
-//          .attr("d", line5);
-//    
-//    var line6 = d3.svg.line()
-//        .interpolate("linear")
-//        .x(function(d,i) { return x(d.thetaEC) + (y(basep)-y(d.press))/tan; })
-//        .y(function(d,i) { return y(d.press); });
-//        
-//    thetaEClines = skewtgroup.selectAll("thetaEClines")
-//        .data(tlinetest[0]).enter().append("path")
-//          .attr("class", function(d,i) { return (i<10) ? "thetaEC member" : "thetaEC mean" })
-//          .attr("clip-path", "url(#clipper)")
-//          .attr("d", line6);
     
     holines = hodogroup.selectAll("hodolines")
         .data(hodobarbstest[0]).enter().append("path")
@@ -1055,41 +1028,6 @@ if (parcel_flag=1) {
       focus7.select("text").text(d.wspd+` @`+d.wdir+"˚");
   }
 
-} else {
-
-  svg.append("rect")
-      .attr("class", "overlay")
-      .attr("width", width)
-      .attr("height", height)
-      .on("mouseover", function() { focus.style("display", null); focus2.style("display", null); focus3.style("display", null); focus4.style("display", null); focus6.style("display", null); focus6b.style("display", null); focus7.style("display", null);})
-      .on("mouseout", function() { focus.style("display", "none"); focus2.style("display", "none"); focus3.style("display", "none"); focus4.style("display", "none"); focus6.style("display", "none"); focus6b.style("display", "none"); focus7.style("display","none");})
-      .on("mousemove", mousemove);
-
-  function mousemove() {
-      var y0 = y.invert(d3.mouse(this)[1]); // get y value of mouse pointer in pressure space
-      var i = bisectTemp(mouseoverdata, y0, 1, mouseoverdata.length-1);
-      var d0 = mouseoverdata[i - 1];
-      var d1 = mouseoverdata[i];
-      var d = y0 - d0.press > d1.press - y0 ? d1 : d0;
-
-      focus.attr("transform", "translate(" + (x(d.temp) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
-      focus2.attr("transform", "translate(" + (x(d.dwpt) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
-      focus3.attr("transform", "translate(" + (x(d.twc) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
-      focus4.attr("transform", "translate(" + (x(d.tv) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
-      focus6.attr("transform", "translate(0," + y(d.press) + ")");
-      focus6b.attr("transform", "translate(0," + y(d.press) + ")");
-      focus7.attr("transform", "translate(" + width + "," + y(d.press) + ")");
-
-      focus.select("text").text(Math.round(d.temp)+"°C");
-      focus2.select("text").text(Math.round(d.dwpt)+"°C");
-      focus3.select("text").text(Math.round(d.twc)+"°C");
-      focus4.select("text").text(Math.round(d.tv)+"°C");
-      focus6.select("text").text("--"+(Math.round(d.hghtagl/100)/10)+"km");
-      focus6b.select("text").text("--"+d.press+"mb");
-      focus7.select("text").text(d.wspd+` @`+d.wdir+"˚");
-  }
-}
-
 }
 
 }
@@ -1169,7 +1107,8 @@ function calcWetbulb (press, t, dp) // From Interactive Skew-T FLA
 
 function calcVaporPressure( temp )
 {
-	vp = 6.11 * Math.exp(5423 * (1/273 - 1/(temp+273)));
+//	vp = 6.11 * Math.exp(5423 * (1/273 - 1/(temp+273)));
+	vp = 6.11 * Math.exp(5321 * (1/273 - 1/(temp+273)));
 	return vp;
 }
 
@@ -1201,8 +1140,9 @@ function calcWetbulbZero() // From Interactive Skew-T FLA
 
 function calcMixingRatio (vapor, press)
 {
-	return (((0.622*vapor)/(press-vapor))*1000.0);
+	return (((0.62197*vapor)/(press-vapor))*1000.0);
 }
+
 
 function calcRelHumidity (ambient, satur)
 {
@@ -1635,7 +1575,6 @@ if (capeType == "ML") {
 		}
 	}
 	var cape = g * sumCAPE; //multiply time g to get cape
-//}
 
 	if(cape <= 0){
 		cape = 0;//if cape<0, then set it to 0
@@ -1651,7 +1590,6 @@ if (capeType == "ML") {
 function calcTheta(P,T)
 {
 	//trace("calcTheta")
-//	num = (T + 273.15) * Math.pow(1000/P ,0.2854*(1-0.00028*tlinetest[0][0][0].mr));
 	num = (T + 273.15) * Math.pow(1000/P ,0.286);
 	return Math.round(num*10)/10;
 }
@@ -1674,8 +1612,6 @@ POTENTIAL TEMPERATURE O (CELSIUS).
 
 function getCIN(t_arr, flag)
 {
-	console.log("------------------------");
-	console.log(flag);
 	lfc_index = 0;
 	//first off, let's see if the lfc lies within our BL
 	//if so, then cin = 0, so we return 0, which concludes the function.
@@ -1725,8 +1661,6 @@ function getCIN(t_arr, flag)
 	//along the moist adiabat above the LCL
 	//along a dry adiabat below the LCL
 
-	console.log(sumCIN, lfc_index, lcl_index);
-	
 	//now start the computation...
 	//first, a little short hand
 	if (flag =="ML") {
@@ -1738,7 +1672,6 @@ function getCIN(t_arr, flag)
 	}
 
 	//first we see if there is any cin between the pcl_index level, where we will start our calculation
-//	if (flag == "ML") {
 		if(pcl_press < pblt){
 			//first we need the obs t and pcl t at the top of the boundary layer
 			//get this through interpolation
@@ -1792,10 +1725,8 @@ function getCIN(t_arr, flag)
 				dt1 = tblt_pcl - tblt_obs;// // pcl temp - obs temp at present level
 				mean_dt = (dt0 + dt1) / 2; //avg of 2 dt's
 				sumCIN += (dz * mean_dt) / (mean_t + 273.15);// add to sum
-				console.log("else 1: " + sumCIN);
 			}
 		}	
-//	}
 	//next we integrate from the pcl_index up to just short of the triangle topped by the lfc, which we will treat seperately at the end
 	for(i=0; i<lfc_index; i++){
 		//case 1 - entire layer either above or below lcl
@@ -1806,7 +1737,6 @@ function getCIN(t_arr, flag)
 			dt1 = t_arr[i] - tlinetest[0][0][i].temp;// // pcl temp - obs temp at present level
 			mean_dt = (dt0 + dt1) / 2; //avg of 2 dt's
 			sumCIN += (dz * mean_dt) / (mean_t + 273.15);// add to sum
-			console.log("if 2: " + sumCIN);
 
 		} else { //layer straddles the lcl
 			//first find the observed temp at the lcl
@@ -1830,7 +1760,6 @@ function getCIN(t_arr, flag)
 			dt1 = t_arr[i+1] - tlinetest[0][0][i+1].temp;// // pcl temp - obs temp at level above present level
 			mean_dt = (dt0 + dt1) / 2; //avg of 2 dt's
 			sumCIN += (dz * mean_dt) / (mean_t + 273.15);// add to sum
-			console.log("else 2: " + sumCIN);
 		}
 	}
 
@@ -1841,7 +1770,6 @@ function getCIN(t_arr, flag)
 	dt1 = t_arr[lfc_index] - tlinetest[0][0][lfc_index].temp;// // pcl temp - obs temp at present level
 	mean_dt = (dt0 + dt1) / 2; //avg of 2 dt's
 	sumCIN += (dz * mean_dt) / (mean_t + 273.15);// add to sum
-	console.log("Last bit: " + sumCIN);
 	lfc_cin = g*(dz * mean_dt) / (mean_t + 273.15);
 	//finish up...
 	var cin = g * sumCIN; //multiply time g to get cin

@@ -95,25 +95,25 @@ textarea {
 
 .dryline {
    stroke: #FFC300;
-   stroke-width: 0.75px;
+   stroke-width: 1.25px;
    fill: none;
-   opacity: .5;
+   opacity: .65;
 }
 
 .moistline {
    stroke: #33AAAA;
-   stroke-width: 0.75px;
+   stroke-width: 1.25px;
    fill: none;
-   opacity: .5;
+   opacity: .65;
    stroke-dasharray: 15,15;
 }
 
 .mrline {
-   stroke: #D1B687;
-   stroke-width: 0.75px;
+   stroke: #0BD63D;
+   stroke-width: 1.25px;
    fill: none;
-   opacity: .5;
-   stroke-dasharray: 20,20;
+   opacity: .65;
+   stroke-dasharray: 2,4;
 }
 
 .tempzero { stroke: #aaa; stroke-width: 1.5px; }

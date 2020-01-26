@@ -8,21 +8,55 @@ var dryline = d3.svg.line()
     .x(function(d,i) { return x( ( 273.15 + d ) / Math.pow( (1000/pp[i]), 0.286) -273.15) + (y(basep)-y(pp[i]))/tan;})
     .y(function(d,i) { return y(pp[i])} );
 
-//var mrline = d3.svg.line()
-//    .interpolate("linear")
-//    .x(function(d,i) { return x( ( 273.15 + d ) / Math.pow( (1000/pp[i]), 0.074) -273.15)/2 + (y(basep)-y(pp[i]))/tan;})
-//    .y(function(d,i) { return y(pp[i])} );
-
-//var mrline = d3.svg.line()
-//    .interpolate("linear")
-//    .x(function(d,i) { return x(Math.pow( 1027, .0267));})
-//    .y(function(d,i) { return y(pp[i])} );
-
 var moistline = d3.svg.line()
     .interpolate("linear")
-//    .x(function(d,i) { return x( ( 273.15 + d ) / Math.pow( (1000/pp[i]), 0.286) -273.15) + (y(basep)-y(pp[i]))/tan;})
     .x(function(d,i) { return x(d) + (y(basep)-y(pp[i]))/tan;})
     .y(function(d,i) { return y(pp[i])} );
+
+var vp = 0;
+e_array = [];
+t_array = [];
+for (t=-50; t<=50; t+=.01) {
+        vp=calcVaporPressure(t);
+        e_array.push(vp);
+        t_array.push(t);
+}
+
+var mixra1, mixra2;
+var allmixr1000 = [];
+var allmixr500 = [];
+var Ttuple = [];
+var allT = [];
+var mixr_lims = [.4,.7,1,2,3,5,8,12,16,20];
+mixr_lims.forEach(function (item) {  
+        for (i=0; i<=e_array.length; i++) {
+                var mixraf1 = 0;
+                var mixraf2 = 0;
+		var Ttuple = [];
+                mixra1 = calcMixingRatio(e_array[i],1000);
+                if (mixra1 >= item) {
+                        allmixr1000.push(mixra1);
+                        Ttuple.push(t_array[i]);
+                        break;
+                }
+        }
+        for (j=0; j<=e_array.length; j++) {
+                mixra2 = calcMixingRatio(e_array[j],500);
+                if (mixra2 >= item) {
+                        allmixr500.push(mixra2);
+                        Ttuple.push(t_array[j]);
+                        break;
+                }
+        }
+	allT.push(Ttuple);
+});
+
+var mrline = d3.svg.line()
+    .interpolate("linear")
+//    .x(function(d,i) { return x(d) + (y(basep)-y(i%2 ? 1000:500))/tan;})
+    .x(function(d,i) { return x(d)-2.0 + (y(151))/tan;})
+//    .x(function(d,i) { return x(d) })
+    .y(function(d,i) { return i % 2 ? y(1000) : y(500)} );
 
 // Add clipping path
   svg.append("clipPath")
@@ -73,7 +107,6 @@ for (i=0; i<moistad.length; i++) {
     }
     allmoist.push(a);
 }
-//    document.getElementById('debug').innerHTML = allmoist;
 
 // Draw dry adiabats
 svg.selectAll(".dryline")
@@ -94,13 +127,13 @@ svg.selectAll(".moistline")
     .attr("d", moistline);
 
 // Draw mixing ratio lines
-//svg.selectAll(".mrline")
-//    .data(all)
-//.enter().append("path")
-//    .attr("class", "gridline")
-//    .attr("class", "mrline")
-//    .attr("clip-path", "url(#clipper)")
-//    .attr("d", mrline);
+svg.selectAll(".mrline")
+    .data(allT)
+.enter().append("path")
+    .attr("class", "gridline")
+    .attr("class", "mrline")
+    .attr("clip-path", "url(#clipper)")
+    .attr("d", mrline);
 
 // Line along right edge of plot
   svg.append("line")
@@ -133,5 +166,4 @@ svg.selectAll(".moistline")
     svg.append("g").attr("class", "y axis ticks").attr("transform", "translate(-0.5,0)").call(yAxis2);
     //svg.append("g").attr("class", "y axis hght").attr("transform", "translate(0,0)").call(yAxis2);
 
-   return (allmoist);
 }
