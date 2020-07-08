@@ -5,30 +5,139 @@
 <body>
 <div id="container">
 <div id="mainbox">
-	<div>
-	 <label id="fileUpload" for="input-file">Specify a file:</label><br>
-	 <input type="file" id="input-file">
-	</div>
-
-	<div id="checks">
-		<label for="parcel_check"><input id="parcel_check" type="checkbox" checked="checked">Parcel Temperature</input></label>
-		<label for="parcelmix_check"><input id="parcelmix_check" type="checkbox" checked="checked">Mixed Parcel Temperature</input></label>
-		<label for="tvc_check"><input id="tvc_check" type="checkbox" checked="checked">Virtual Temperature</input></label>
-		<label for="twc_check"><input id="twc_check" type="checkbox" checked="checked">Wet Bulb Temperature</input></label>
+	<div id="checks_wrapper">
+		<div id="checks">
+			<label for="parcel_check"><input id="parcel_check" type="checkbox" checked="checked">Parcel Temperature</input></label>
+			<label for="parcelmix_check"><input id="parcelmix_check" type="checkbox" checked="checked">Mixed Parcel Temperature</input></label>
+			<label for="tvc_check"><input id="tvc_check" type="checkbox" checked="checked">Virtual Temperature</input></label>
+			<label for="twc_check"><input id="twc_check" type="checkbox" checked="checked">Wet Bulb Temperature</input></label>
+		</div>
+		<div id="upload_wrapper">
+			<label id="fileUpload" for="input-file">Upload File:</label>
+			<input type="file" id="input-file">
+		</div>
+		<div id="editData">
+			<button id="editButton" onClick="tableVis()">Show Data Table</button>
+		</div>
+		<div id="resets">
+			<p>Preset Soundings:
+				<select id="allstar_sounding">
+					<option disabled>&#9473; Defaults &#9473;</option>
+					<option value="data_TOP.json" default>Default Sounding</option>
+					<option value="data_SkewT.json">Flash Sounding</option>
+					<option disabled>&#9473; Thunderstorms & Tornadoes &#9473;</option>
+						<option value="./All-Star-Soundings/BMX_2011427_18.html">Tornado Outbreak (BMX)</option>
+						<option value="./All-Star-Soundings/BMX_2011428_00.html">Tornado Outbreak (BMX)</option>
+						<option value='./All-Star-Soundings/TOP_200354_12.html'>Tornado Outbreak (TOP)</option>
+						<option value='./All-Star-Soundings/TOP_200354_18.html'>Tornado Outbreak (TOP)</option>
+						<option value='./All-Star-Soundings/TOP_200355_00.html'>Tornado Outbreak -- Post Dryline (TOP)</option>
+						<option value='./All-Star-Soundings/OUN_200358_12.html'>Moore, OK Tornado (OUN)</option>
+						<option value='./All-Star-Soundings/OUN_200358_18.html'>Moore, OK Tornado (OUN)</option>
+						<option value='./All-Star-Soundings/OUN_200359_00.html'>Moore, OK Tornado (OUN)</option>
+						<option value='./All-Star-Soundings/TOP_2004530_00.html'>NE/KS/OK Tornadoes (TOP)</option>
+						<option value='./All-Star-Soundings/OUN_2004530_00.html'>NE/KS/OK Tornadoes (OUN)</option>
+						<option value='./All-Star-Soundings/BMX_2011427_18.html'>Severe Weather Outbreak (BMX)</option>
+						<option value='./All-Star-Soundings/BMX_2011428_00.html'>Severe Weather Outbreak (BMX)</option>
+						<option value='./All-Star-Soundings/JAN_2011427_18.html'>Severe Weather Outbreak (JAN)</option>
+						<option value='./All-Star-Soundings/OUN_2011524_12.html'>Severe Weather Outbreak (OUN)</option>
+						<option value='./All-Star-Soundings/OUN_2011524_18.html'>Severe Weather Outbreak (OUN)</option>
+						<option value='./All-Star-Soundings/OUN_2013520_12.html'>Moore, OK EF5 Tornado (OUN)</option>
+						<option value='./All-Star-Soundings/OUN_2013520_18.html'>Moore, OK EF5 Tornado (OUN)</option>
+						<option value='./All-Star-Soundings/OUN_2013531_12.html'>El Reno, OK EF3 Tornado (OUN)</option>
+						<option value='./All-Star-Soundings/FGZ_2017820_00.html'>Dry Microburst (FGZ)</option>
+						<option value='./All-Star-Soundings/OUN_2015615_00.html'>Wet Microburst (OUN)</option>
+						<option value='./All-Star-Soundings/IAD_2012630_00.html'>Derecho (IAD)</option>
+					<option disabled>&#9473; Hurricanes &#9473;</option>
+						<option value='./All-Star-Soundings/EYW_2004813_00.html'>Hurricane Charley (EYW)</option>
+						<option value='./All-Star-Soundings/EYW_2004813_12.html'>Hurricane Charley (EYW)</option>
+						<option value='./All-Star-Soundings/TBW_2004813_18.html'>Hurricane Charley (TBW)</option>
+						<option value='./All-Star-Soundings/TBW_2004814_00.html'>Hurricane Charley (TBW)</option>
+						<option value='./All-Star-Soundings/CRP_2003716_00.html'>Hurricane Claudette (Near Landfall; CRP)</option>
+						<option value='./All-Star-Soundings/DRT_2003716_00.html'>Hurricane Claudette (Inland Dry Environment; DRT)</option>
+						<option value='./All-Star-Soundings/DRT_2003716_06.html'>Hurricane Claudette (Inland Moistening Environment; DRT)</option>
+						<option value='./All-Star-Soundings/DRT_2003716_12.html'>Hurricane Claudette (Inland over DRT; DRT)</option>
+						<option value='./All-Star-Soundings/76595_2002923_12.html'>Hurricane Isidore (76595)</option>
+						<option value='./All-Star-Soundings/MMMD_2002922_12.html'>Hurricane Isidore (MMMD)</option>
+						<option value='./All-Star-Soundings/LIX_2005827_06.html'>Hurricane Katrina (LIX)</option>
+						<option value='./All-Star-Soundings/LZK_2005830_00.html'>Remnants of Hurricane Katrina (LZK)</option>
+						<option value='./All-Star-Soundings/TXKF_20141018_12.html'>Hurricane Gonzalo (direct hit on Bermuda; TXKF)</option>
+						<option value='./All-Star-Soundings/JAX_2016108_00.json'>Hurricane Matthew (JAX)</option>
+						<option value='./All-Star-Soundings/CRP_2017826_00.html'>Hurricane Harvey (Near Landfall; CRP)</option>
+						<option value='./All-Star-Soundings/EYW_2017910_00.html'>Hurricane Irma (12 hrs prior to landfall; EYW))</option>
+						<option value='./All-Star-Soundings/TBW_2017911_00.html'>Hurricane Irma (12 hrs post landfalll TBW)</option>
+					<option disabled>&#9473; Heavy Snow &#9473;</option>
+						<option value="./All-Star-Soundings/ABR_20051129_00.html">Heavy Snow (ABR)</option>
+						<option value='./All-Star-Soundings/BUF_20011224_12.html'>Heavy Lake Effect Snow (BUF)</option>
+						<option value='./All-Star-Soundings/BUF_20011225_00.html'>Heavy Lake Effect Snow (BUF)</option>
+						<option value='./All-Star-Soundings/OUN_20021223_18.html'>Heavy Snow/Thundersnow</option>
+						<option value='./All-Star-Soundings/FWD_2004213_12.html'>Heavy Snow</option>
+						<option value='./All-Star-Soundings/FWD_2004214_00.html'>Heavy Snow</option>
+						<option value='./All-Star-Soundings/FWD_2004214_12.html'>Heavy Snow</option>
+						<option value='./All-Star-Soundings/FWD_2004215_00.html'>Heavy Snow</option>
+						<option value='./All-Star-Soundings/ABR_20051129_00.html'>Winter Storm</option>
+						<option value='./All-Star-Soundings/OKX_2006212_06.html'>Historic Blizzard</option>
+						<option value='./All-Star-Soundings/CHH_2006212_06.html'>Historic Blizzard</option>
+						<option value='./All-Star-Soundings/LBF_2006321_00.html'>Great Plains Snowstorm</option>
+						<option value='./All-Star-Soundings/OAX_2006321_00.html'>Great Plains Snowstorm</option>
+						<option value='./All-Star-Soundings/BUF_20131212_00.html'>Heavy Lake Effect Snow</option>
+						<option value='./All-Star-Soundings/CHH_2015127_12.html'>Boston Blizzard</option>
+						<option value='./All-Star-Soundings/BUF_20141119_00.html'>Heavy Lake Effect Snow</option>
+						<option value='./All-Star-Soundings/GYX_2015128_00.html'>Blizzard</option>
+						<option value='./All-Star-Soundings/TFX_2019929_12.html'>4 Feet of Snow</option>
+					<option disabled>&#9473; Heavy Rain/Flooding &#9473;</option>
+						<option value='./All-Star-Soundings/FWD_2004728_00.html'>Heavy Rain</option>
+						<option value='./All-Star-Soundings/FWD_2004728_12.html'>Heavy Rain</option>
+						<option value='./All-Star-Soundings/FWD_2004729_00.html'>Heavy Rain</option>
+						<option value='./All-Star-Soundings/FFC_2009920_12.html'>Atlanta Flash Flood</option>
+						<option value='./All-Star-Soundings/OUN_2010614_00.html'>Oklahoma City Flash Flood</option>
+						<option value='./All-Star-Soundings/OUN_2010614_12.html'>Oklahoma City Flash Flood</option>
+						<option value='./All-Star-Soundings/OKX_2014813_12.html'>Historic Flooding on Long Island</option>
+						<option value='./All-Star-Soundings/DNR_2013912_12.html'>Historic Flooding along Front Range of Colorado</option>
+						<option value='./All-Star-Soundings/DNR_2013913_12.html'>Historic Flooding along Front Range of Colorado</option>
+					<option disabled>&#9473; Precipitation Typing &#9473;</option>
+						<option value='./All-Star-Soundings/FWD_20001213_12.html'>Freezing Rain/Ice Pellets</option>
+						<option value='./All-Star-Soundings/OUN_20001213_12.html'>Freezing Rain/Ice Pellets</option>
+						<option value='./All-Star-Soundings/FWD_20001226_00.html'>Rain/Freezing Rain/Ice Pellets</option>
+						<option value='./All-Star-Soundings/OUN_20001226_00.html'>Rain/Freezing Rain/Ice Pellets</option>
+						<option value='./All-Star-Soundings/GSO_200821_12.html'>Cold Air Damming</option>
+					<option disabled>&#9473; Heat Wave &#9473;</option>
+						<option value='./All-Star-Soundings/OUN_2003721_00.html'>Heat Wave</option>
+						<option value='./All-Star-Soundings/OUN_201183_00.html'>Heat Wave</option>
+						<option value='./All-Star-Soundings/FWD_201183_00.html'>Heat Wave</option>
+						<option value='./All-Star-Soundings/DVN_1995714_00.html'>Heat Wave</option>
+						<option value='./All-Star-Soundings/ILX_1995714_00.html'>Heat Wave</option>
+						<option value='./All-Star-Soundings/NKX_201877_00.html'>Heat Wave</option>
+					<option disabled>&#9473; Cold Wave &#9473;</option>
+						<option value='./All-Star-Soundings/PABR_2002110_00.html'>Large Inversion/Low Tropopause</option>
+						<option value='./All-Star-Soundings/OAX_201417_12.html'>Arctic Cold Blast (Record-setting Surface High)</option>
+						<option value='./All-Star-Soundings/UIL_201427_12.html'>Seattle Record Cold</option>
+						<option value='./All-Star-Soundings/MPX_199622_12.html'>Frigid Cold</option>
+						<option value='./All-Star-Soundings/ABR_201416_00.json'>Brutal Cold</option>
+					<option disabled>&#9473; Wildfire &#9473;</option>
+						<option value='./All-Star-Soundings/MFR_2018727_00.html'>Carr Wildfire</option>		
+				</select>
+			<button id="default" onClick="loadSounding()" value="default">Load Sounding</button>
+			</p>
+		</div>
 	</div>
 </div>
 <div id="hodobox"></div>
-</div>
-<div class="result">
-<p></p>
+<div id="editTableWrap"></div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="jsfunctions.js"></script>
 <script type="text/javascript">
 
 $(document).ready( function() {
+	$(window).keydown(function(event){
+		if(event.keyCode == 13) {
+		event.preventDefault();
+		return false;
+		}
+  	});
+
 	$("input:checkbox").on("change", function() {
 		var checkbox_id = $(this).prop("id");
 		var className = checkbox_id.split("_",1).toString();
@@ -36,28 +145,218 @@ $(document).ready( function() {
 		$("." + className + ".focus").css('visibility', $('.' +className + '.focus').css('visibility') == 'hidden' ? 'visible' : 'hidden');
 		if(className == "twc") {
 			$(".wbztext, .wbz_rectline").css('visibility', $(".wbztext, .wbz_rectline").css('visibility') == 'hidden' ? 'visible' : 'hidden');
+			drawSkew();
+			drawText();
+			tabulate();
 		} else if (className == "tvc") {
+			drawSkew();
+			drawText();
+			tabulate();
 		} else if (className == "parcel") {
 			$(".lcltext, .lcl, .lfctext, .lfc, .eltext, .el").css('visibility', $(".lcltext, .lcl, .lfctext, .lfc, .eltext, .el").css('visibility') == 'hidden' ? 'visible' : 'hidden');
+			drawSkew();
+			drawText();
+			tabulate();
 		} else if (className == "parcelmix") {
 			$(".lclmixtext, .lclmix, .lfcmixtext, .lfcmix, .elmixtext, .elmix").css('visibility', $(".lclmixtext, .lclmix, .lfcmixtext, .lfcmix, .elmixtext, .elmix").css('visibility') == 'hidden' ? 'visible' : 'hidden');
+			drawSkew();
+			drawText();
+			tabulate();
 		} else {
 		}
 	})
 
-	$("#input-file").on("click", function () {
-		$("#parcel_check, #parcelmix_check, #tvc_check, #twc_check").prop("checked",true);
+});
+
+var lat, long;
+var columns = ['press', 'temp', 'dwpt', 'wdir', 'wspd'];
+
+function tableVis () {
+	$("#editTableWrap").toggle();
+	if ($("#editTableWrap").is(":visible")) {
+		$("#editButton").text("Hide Data Table");
+	} else {
+		$("#editButton").text("Show Data Table");
+	}
+	tabulate();
+}
+
+function tabulate() {
+	d3.select("#editTableWrap").html("");
+	var table = d3.select('#editTableWrap').append('table').attr("id","editTable");
+	var thead = table.append('thead');
+	var	tbody = table.append('tbody');
+
+	// append the header row
+	thead.append('tr')
+	  .selectAll('th')
+	  .data(columns).enter()
+	  .append('th')
+	    .text(function (column) { return column; });
+
+	// create a row for each object in the data
+	var rows = tbody.selectAll('tr')
+	  .data(tlinetest[0][0])
+	  .enter()
+	  .append('tr');
+
+	// create a cell in each row for each column
+	var cells = rows.selectAll('td')
+	  .data(function (row) {
+	    return columns.map(function (column) {
+	      return {column: column, value: row[column]};
+	    });
+	  })
+	  .enter()
+	  .append('td')
+		  .attr("contenteditable", "true")
+		  .attr("class", "edit")
+		  .text(function (d) { return d.value; });
+
+	rows.selectAll(":first-child").attr("contenteditable", "false");
+
+	$("[contenteditable=true]").on("input", function() {
+		var row = $(this).parent().children();
+		var i = $("tr:not(:first)").index($(this).parent());
+		var j = $(this).parent().children("td").index(this);
+   		update(row, i, j);
 	});
 
-});
+  return table;
+}
+
+function update(r, i, j) {
+	var here = $("#editTable tr:not(:first)").eq(i).children("td").eq(j);
+	console.log(here);
+	console.log(i,j);
+
+	var inputText = r.eq(j).text().trim();
+
+	var signs = /^[-+.]?[.]?$/;
+	var numbers = /^[-+]?[0-9]*\.?[0-9]+$/;
+
+	if (j%4 == 1 || j%4 == 2) {
+		if (inputText.match(signs)) {
+			console.log("Matching signs");
+			return false
+		}
+	}
+
+	if (inputText == "") {
+		console.log("Matching no text");
+		here.addClass("blank");
+		return false
+	} else if (inputText.match(numbers)) {
+		console.log("Matching numbers");
+		if (j == 1) {
+			tlinetest[0][0][i].temp = parseFloat(inputText);
+			if (tlinetest[0][0][i].temp < tlinetest[0][0][i].dwpt) {
+				console.log("Testing: temp is less than dewpoint");
+				console.log("Temp: " + tlinetest[0][0][i].temp);
+				console.log("Dewpoint: " + tlinetest[0][0][i].dwpt);
+				// Send error message to user to correct temp and dwpt
+				here.addClass("blank");
+				here.next().addClass("blank");
+				return false
+			} else {
+				console.log("Testing: temp is greater than dewpoint");
+				console.log("Temp: " + tlinetest[0][0][i].temp);
+				console.log("Dewpoint: " + tlinetest[0][0][i].dwpt);
+				here.removeClass("blank");
+				here.next().removeClass("blank");
+			}
+		} else if (j == 2) {
+			tlinetest[0][0][i].dwpt = parseFloat(inputText);
+			if (tlinetest[0][0][i].dwpt > tlinetest[0][0][i].temp) {
+				// Send error message to user to correct temp and dwpt
+				console.log("Testing: dewpoint temp is greater than temp");
+				console.log("Temp: " + tlinetest[0][0][i].temp);
+				console.log("Dewpoint: " + tlinetest[0][0][i].dwpt);
+				here.addClass("blank");
+				here.prev().addClass("blank");
+				return false
+			} else {
+				console.log("Testing: dewpoint temp is less than temp");
+				console.log("Temp: " + tlinetest[0][0][i].temp);
+				console.log("Dewpoint: " + tlinetest[0][0][i].dwpt);
+				here.removeClass("blank");
+				here.prev().removeClass("blank");
+			}
+		} else if (j == 3) {
+			if (inputText.match(/^\d*\.?\d+$/)) {
+				if (parseFloat(inputText) > 360 || parseFloat(inputText) < 0 ) {
+					var howLarge = parseFloat(inputText)/360;
+					if (howLarge < 1 && howLarge > 0) {
+						var direct = parseFloat(inputText);
+					} else if (howLarge < 0 && howLarge > -1) {
+						var direct = parseFloat(inputText) + 360;
+					} else if (Math.abs(howLarge) >= 1) {
+						var multiplier = Math.floor(howLarge);
+						var direct = parseFloat(inputText) - 360*multiplier;
+					}
+					here.text(direct);
+				}
+				tlinetest[0][0][i].wdir = parseFloat(inputText);
+			} else {
+				here.text(tlinetest[0][0][i].wdir);
+				return false;
+			}
+		} else if (j == 4) {
+			if (inputText.match(/^\d*\.?\d+$/)) {
+				tlinetest[0][0][i].wspd = parseFloat(inputText);
+				tlinetest[0][0][i].wspdround = Math.round((parseFloat(inputText)/5))*5;
+			} else {
+				here.text(tlinetest[0][0][i].wspd);
+				return false;
+			}
+
+		}
+	} else {
+		console.log("Matching else");
+		if (j == 1) {
+			here.text(tlinetest[0][0][i].temp);
+		} else if (j == 2) {
+			here.text(tlinetest[0][0][i].dwpt);
+		} else if (j == 3) {
+			here.text(tlinetest[0][0][i].wdir);
+		} else if (j == 4) {
+			here.text(tlinetest[0][0][i].wspd);	
+		}
+		return false;
+	}
+	here.removeClass("blank");
+	drawSkew();
+	drawText();
+}
+
+function loadSounding () {
+	var soundingFile = $('#allstar_sounding').children('option:selected').val();
+	$(".focusgroup").empty();
+	title = "";
+	if (soundingFile.includes(".html")) {
+		getHTMLSounding(soundingFile);
+	} else if (soundingFile.includes(".json")) {
+		dataParse(soundingFile);
+	}
+	
+}
 
 var sounding = '';
 
 $("input[type='file']").on("change", function () {
 	const reader = new FileReader();
 	reader.readAsText(document.querySelector('input[type="file"]').files[0]);
+	console.log(reader.result);
 	reader.onload = () => storeResults(reader.result);
 });
+
+function getHTMLSounding(filename) {
+	var dataRead = fetch(filename)
+		.then(response => response.blob())
+		.then(function(myBlob) {
+			myBlob.text().then(text => storeResults(text));
+		});
+}
 
 function storeResults(result) {
 	sounding = result;
@@ -84,6 +383,7 @@ var sdata = new Array();
 var data_arr = [];
 var filtered = [];
 var title = '';
+var labels = [];
 
 var ppcl = 0;//pressure for parcel to be lifted
 var tpcl = 0;//temp for parcel to be lifted (C)
@@ -140,12 +440,13 @@ var m = [30, 40, 20, 35],
     height = 700 - m[0] - m[2];
 
 var d2r = (Math.PI/180);
-var tan = Math.tan(55*d2r),
+var tempSkew = 55;
+var tan = Math.tan(tempSkew*d2r),
     basep = 1050,
     topp = 100,
     plines = [1000,925,850,700,600,500,400,300,200,100]
     pticks = [950,900,800,750,650,600,550,450,400,350,250,150];
-    barbsize = 25;
+	barbsize = 25;
 
 // Scales and axes. Note the inverted domain for the y-scale: bigger is up!
 var x = d3.scale.linear().range([0, width]).domain([-45,50]),
@@ -155,8 +456,7 @@ var x = d3.scale.linear().range([0, width]).domain([-45,50]),
     xAxis = d3.svg.axis().scale(x).tickSize(0,0).ticks(10).orient("bottom"),
     yAxis = d3.svg.axis().scale(y).tickSize(0,0).tickValues(plines)
               .tickFormat(d3.format(".0d")).orient("left")
-    yAxis2 = d3.svg.axis().scale(y).tickSize(5,0).tickValues(pticks).orient("right"); // just for ticks
-    //yAxis2 = d3.svg.axis().scale(y2).orient("right").tickSize(3,0).tickFormat(d3.format(".0d"));
+	yAxis2 = d3.svg.axis().scale(y).tickSize(5,0).tickValues(pticks).orient("right"); // just for ticks
 
 // various path generators
 var line = d3.svg.line()
@@ -171,17 +471,18 @@ var line2 = d3.svg.line()
 
 var hodoline = d3.svg.line.radial()
     .radius(function(d) { return r(d.wspd); })
-    .angle(function(d) { return (d.wdir+180)*(Math.PI/180); });
+	.angle(function(d) { return (d.wdir+180)*(Math.PI/180); });
     
 // bisector function for tooltips    
 var bisectTemp = d3.bisector(function(d) { return d.press; }).left;
 
 // create svg container for sounding
-var svg = d3.select("div#mainbox").append("svg")
+var svg = d3.select("div#mainbox").insert("svg", ":first-child")
       .attr("width", width + m[1] + m[3])
-      .attr("height", height + m[0] + m[2])      
+	  .attr("height", height + m[0] + m[2])
+	  .attr("id","box")
     .append("g")
-      .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+		  .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
     
 var titleText = d3.select("div#mainbox svg").append("svg").attr("class", "title").attr("width", 700).attr("height", 40).append("text").attr("class", "titleText");      
 
@@ -189,8 +490,28 @@ var titleText = d3.select("div#mainbox svg").append("svg").attr("class", "title"
 var svghodo = d3.select("div#hodobox").append("svg")
       .attr("width", 360)
       .attr("height", 300)
-    .append("g")
-      .attr("transform", "translate(150,150)");
+	  .append("g")
+	  .attr("class","hodosvg")
+	  .attr("transform", "translate(150,150)");
+	  
+	hodofocus = svghodo.append("g")
+		.attr("class","hodogroup")
+		.append("line")
+		.attr("class","focus hodarrow")
+		.attr("x1", "0")
+		.attr("y1", "0")
+		.attr("stroke-width","2")
+		.attr("marker-end","url(#arrowhead)")
+		.style("display","none");
+
+	d3.select(".hodogroup")
+		.append("circle")
+		.attr("r", "6px")
+		.attr("fill", "cyan")
+		.attr("stroke", "black")
+		.attr("opacity",".6")
+		.style("display", "none")
+		.attr("class", "focus hod");
       
 var svgtext = d3.select("div#hodobox").append("svg").attr("class", "indices").attr("width", 360).attr("height", 400)
 			.append("g").attr("transform", "translate(0,50)");      
@@ -203,8 +524,11 @@ drawTextLabels();
 var skewtgroup = svg.append("g").attr("class", "skewt"); // put skewt lines in this group
 var barbgroup  = svg.append("g").attr("class", "windbarb"); // put barbs in this group
 var hodogroup = svghodo.append("g").attr("class", "hodo"); // put hodo stuff in this group
+var membergroup = skewtgroup.append("g").attr("class", "membergroup"); // put member lines in this group
+var labelgroup = skewtgroup.append("g").attr("class", "labelgroup"); // put labels in this group
+var focusgroup = skewtgroup.append("g").attr("class", "focusgroup"); // put focus dots in this group
 
-drawToolTips();
+var hodobarbstest = [];
 
 dataParse('data_TOP.json'); // 2003 Jun 24 00Z
 //dataParse('data_LBF.json'); // 2003 Jun 23 00Z
@@ -222,7 +546,7 @@ function dataParse(fileName) {
 	
 	if (fileName) {	
 		d3.json(fileName, function(err, json) {
-	    		parseDataNew(json);
+				parseDataNew(json);
 	
 	       		parsedCSV = alldata[mem][hr].filter(function(d) { return (d.temp > -1000 && d.dwpt > -1000); });
 	       		barbs = parsedCSV.filter(function(d) { return (d.wdir >= 0 && d.wspd >= 0 && d.press >= topp); });
@@ -238,10 +562,12 @@ function dataParse(fileName) {
 	        	barbstest.push(temp3);
 	
 		    // need this for dots for some reason
-		        mouseoverdata = tlinetest[0][0].slice(0).reverse();
+		    mouseoverdata = tlinetest[0][0].slice(0).reverse();
 			flattened = interpdots.reduce(function(a,b) { return a.concat(b); });
 			drawSkew();
 			drawText();
+			drawToolTips();
+			tabulate();
 		});
 	} else {
 		alldata=[[sdata]];
@@ -289,13 +615,16 @@ function dataParse(fileName) {
 			tlinetest[0][0][i].hghtagl = tlinetest[0][0][i].hght - height0;
 		}
 
-		d3.selectAll("g.skewt > *").remove();
+		d3.selectAll("g.focusgroup > *").remove();
+		d3.selectAll("g.membergroup > *").remove();
+		d3.selectAll("g.labelgroup > *").remove();
 		d3.selectAll("g.windbarb > *").remove();
 		d3.selectAll("g.hodo > *").remove();
 		makeBarbTemplates();
-		drawToolTips();
 		drawSkew();
 		drawText();
+		drawToolTips();
+		tabulate();
 	}
 }
 
@@ -306,14 +635,14 @@ function parseDataNew(json) {
     	return c.map(function(d,i) {
         	var obj = d.map(function(e,j) {
     	    	return {
-    	    	     press: +json.pres[k][i][j],
-    		     hght: +json.hght[k][i][j],
-    	             temp: +json.tmpc[k][i][j],
-    	             dwpt: +json.dwpt[k][i][j],
-    	             wdir: +json.wdir[k][i][j],
-    	             wspd: +json.wspd[k][i][j],
-    	             hghtagl: +json.hght[k][i][j] - +json.hght[k][i][0],
-    	             wspdround: Math.round((json.wspd[k][i][j])/5) * 5
+    	    	    press: +json.pres[k][i][j],
+    		     	hght: +json.hght[k][i][j],
+    	            temp: +json.tmpc[k][i][j],
+    	            dwpt: +json.dwpt[k][i][j],
+    	            wdir: +json.wdir[k][i][j],
+    	            wspd: +json.wspd[k][i][j],
+    	            hghtagl: +json.hght[k][i][j] - +json.hght[k][i][0],
+    	            wspdround: Math.round((json.wspd[k][i][j])/5) * 5
 		     }
         	});
         	
@@ -337,7 +666,18 @@ function parseDataNew(json) {
        
 function makeBarbTemplates() {
     var speeds = d3.range(5,205,5);
-    barbdef = svg.append('defs')
+	barbdef = svg.append('defs')
+
+/*	barbdef.append("g")
+		.attr("id","rotateRect")
+	
+	d3.select("#rotateRect")
+		.append("rect").attr("width", "35").attr("height", "15");
+	d3.select("#rotateRect")
+		.append("line").attr("x1", "0").attr("x2", "10").attr("y1", "7.5").attr("y2","7.5").attr("transform","translate(35,0)");
+	d3.select("#rotateRect")
+		.append("circle").attr("r","4").attr("transform","translate(45,7.5)"); */
+
     speeds.forEach(function(d) {
     	var thisbarb = barbdef.append('g').attr('id', 'barb'+d);
     	
@@ -374,32 +714,43 @@ function makeBarbTemplates() {
      		    .attr("y2", px+2)
      		px -= 3;
      	}
-    });
+	});
+	
+	var arrows = barbdef.append("marker")
+		.attr("id","arrowhead")
+		.attr("markerWidth","5")
+		.attr("markerHeight","5")
+		.attr("refX","5")
+		.attr("refY","2.5")
+		.attr("orient","auto")
+		.append("polygon")
+		.attr("points","0 0, 5 2.5, 0 5")
+		.attr("fill","#777");
 }
 
 function drawSkew() {
+	$(".member, .hododot, .hodoline, .titleText, .windbarb > *, .label").remove();
     for (var i=0; i<tlinetest[0][0].length; i+=1) {
-         var tw = calcWetbulb(tlinetest[0][0][i].press, tlinetest[0][0][i].temp, tlinetest[0][0][i].dwpt);
-	 tlinetest[0][0][i].twc = tw;
-         var svp = calcVaporPressure(tlinetest[0][0][i].temp);
-	 tlinetest[0][0][i].es = svp;
-         var vp = calcVaporPressure(tlinetest[0][0][i].dwpt);
-	 tlinetest[0][0][i].e = vp;
-         var mixr = calcMixingRatio(tlinetest[0][0][i].e, tlinetest[0][0][i].press);
-	 tlinetest[0][0][i].mr = mixr;
-	 rh=calcRelHumidity(tlinetest[0][0][i].e, tlinetest[0][0][i].es);
-	 tlinetest[0][0][i].relh = rh;
-	 tv=calcVirtualtemperature(tlinetest[0][0][i].temp,tlinetest[0][0][i].mr);
-	 tlinetest[0][0][i].tv = tv;
-	 sh=calcSpecHumidity(tlinetest[0][0][i].e, tlinetest[0][0][i].press);
-	 tlinetest[0][0][0].sh = sh;
-	 pT=calcTheta(tlinetest[0][0][i].press, tlinetest[0][0][i].temp);
-	 tlinetest[0][0][0].theta = pT;
-	 epT=calcThetaE(tlinetest[0][0][i].press, tlinetest[0][0][i].temp, tlinetest[0][0][i].dwpt );
-	 tlinetest[0][0][0].thetaE = epT;
-	 z = calcZ(tlinetest[0][0][i].press);
-	 tlinetest[0][0][0].Z = z;
-
+        var tw = calcWetbulb(tlinetest[0][0][i].press, tlinetest[0][0][i].temp, tlinetest[0][0][i].dwpt);
+	 	tlinetest[0][0][i].twc = tw;
+        var svp = calcVaporPressure(tlinetest[0][0][i].temp);
+	 	tlinetest[0][0][i].es = svp;
+        var vp = calcVaporPressure(tlinetest[0][0][i].dwpt);
+	 	tlinetest[0][0][i].e = vp;
+        var mixr = calcMixingRatio(tlinetest[0][0][i].e, tlinetest[0][0][i].press);
+	 	tlinetest[0][0][i].mr = mixr;
+	 	rh=calcRelHumidity(tlinetest[0][0][i].e, tlinetest[0][0][i].es);
+	 	tlinetest[0][0][i].relh = rh;
+	 	tv=calcVirtualtemperature(tlinetest[0][0][i].temp,tlinetest[0][0][i].mr);
+	 	tlinetest[0][0][i].tv = tv;
+	 	sh=calcSpecHumidity(tlinetest[0][0][i].e, tlinetest[0][0][i].press);
+	 	tlinetest[0][0][i].sh = sh;
+	 	pT=calcTheta(tlinetest[0][0][i].press, tlinetest[0][0][i].temp);
+	 	tlinetest[0][0][i].theta = pT;
+	 	epT=calcThetaE(tlinetest[0][0][i].press, tlinetest[0][0][i].temp, tlinetest[0][0][i].dwpt );
+	 	tlinetest[0][0][i].thetaE = epT;
+	 	z = calcZ(tlinetest[0][0][i].press);
+	 	tlinetest[0][0][i].Z = z;
     }
 
 	var pw_total = calcPrecipWater();
@@ -622,88 +973,104 @@ function drawSkew() {
 	tlinetest[0][0][0].LR_lfc_el = getLapseRate(obs_t_arr, obs_hght_arr, lfc_index, tlinetest[0][0][0].lfcZ, tlinetest[0][0][0].elZ-tlinetest[0][0][0].lfcZ);
 
     // draw initial set of lines
-    tlines = skewtgroup.selectAll("tlines")
-        .data(tlinetest[0]).enter().append("path")
-          .attr("class", function(d,i) { return (i<10) ? "temp member" : "temp mean" })
+    tlines = membergroup.selectAll("tlines") // Temperature
+        .data(tlinetest[0]).enter().insert("path",":first-child")
+          .attr("class", function(d,i) { return "temp member" })
           .attr("clip-path", "url(#clipper)")
-          .attr("d", line);
+		  .attr("d", line);
           
-    tdlines = skewtgroup.selectAll("tdlines")
-        .data(tlinetest[0]).enter().append("path")
-          .attr("class", function(d,i) { return (i<10) ? "dwpt member" : "dwpt mean" })
+    tdlines = membergroup.selectAll("tdlines") // Dewpoint Temperature
+        .data(tlinetest[0]).enter().insert("path",":first-child")
+          .attr("class", function(d,i) { return "dwpt member" })
           .attr("clip-path", "url(#clipper)")
           .attr("d", line2);
 
-    var line3 = d3.svg.line()
+    var line3 = d3.svg.line() // Wet-bulb Temp
         .interpolate("linear")
         .x(function(d,i) { return x(d.twc) + (y(basep)-y(d.press))/tan; })
         .y(function(d,i) { return y(d.press); });
-        
-    twlines = skewtgroup.selectAll("twlines")
-        .data(tlinetest[0]).enter().append("path")
-          .attr("class", function(d,i) { return (i<10) ? "twc member" : "twc mean" })
-          .attr("clip-path", "url(#clipper)")
-          .attr("d", line3);
 
-    var line4 = d3.svg.line()
+	if ($("#twc_check").prop("checked")) {
+		twlines = membergroup.selectAll("twlines")
+			.data(tlinetest[0]).enter().insert("path",":first-child")
+			.attr("class", function(d,i) { return "twc member" })
+			.attr("clip-path", "url(#clipper)")
+			.attr("d", line3);
+	}
+
+    var line4 = d3.svg.line() // Virtual Temp
         .interpolate("linear")
         .x(function(d,i) { return x(d.tv) + (y(basep)-y(d.press))/tan; })
         .y(function(d,i) { return y(d.press); });
-        
-    tvlines = skewtgroup.selectAll("tvlines")
-        .data(tlinetest[0]).enter().append("path")
-          .attr("class", function(d,i) { return (i<10) ? "tvc member" : "tvc mean" })
-          .attr("clip-path", "url(#clipper)")
-          .attr("d", line4);
-    
-	if (parcel_flag == 1) {
-		    var line5 = d3.svg.line()
-		        .interpolate("linear")
-		        .x(function(d,i) { return x(d.parcelT) + (y(basep)-y(d.press))/tan; })
-		        .y(function(d,i) { return y(d.press); });
-		        
-		    parlines = skewtgroup.selectAll("parcellines")
-		        .data(tlinetest[0]).enter().append("path")
-		          .attr("class", function(d,i) { return (i<10) ? "parcel member" : "parcel mean" })
-		          .attr("clip-path", "url(#clipper)")
-		          .attr("d", line5);
 
-		    var line6 = d3.svg.line()
-		        .interpolate("linear")
-		        .x(function(d,i) { return x(d.parcelTmix) + (y(basep)-y(d.press))/tan; })
-		        .y(function(d,i) { return y(d.press); });
-		        
-		    parlines = skewtgroup.selectAll("parcellines")
-		        .data(tlinetest[0]).enter().append("path")
-		          .attr("class", function(d,i) { return (i<10) ? "parcelmix member" : "parcelmix mean" })
-		          .attr("clip-path", "url(#clipper)")
-		          .attr("d", line6);
-    	}
-    
+	if ($("#tvc_check").prop("checked")) {		
+		tvlines = membergroup.selectAll("tvlines")
+			.data(tlinetest[0]).enter().insert("path",":first-child")
+			.attr("class", function(d,i) { return "tvc member" })
+			.attr("clip-path", "url(#clipper)")
+			.attr("d", line4);
+	}
+
+//	if (parcel_flag == 1) {
+	var line5 = d3.svg.line() // Parcel Temp
+		.interpolate("linear")
+		.x(function(d,i) { return x(d.parcelT) + (y(basep)-y(d.press))/tan; })
+		.y(function(d,i) { return y(d.press); });
+				
+	if ($("#parcel_check").prop("checked")) {
+		parlines = membergroup.selectAll("parcellines")
+			.data(tlinetest[0]).enter().insert("path",":first-child")
+			.attr("class", function(d,i) { return "parcel member" })
+			.attr("clip-path", "url(#clipper)")
+			.attr("d", line5);
+	}
+
+	var line6 = d3.svg.line() // Mixed Parcel Temp
+		.interpolate("linear")
+		.x(function(d,i) { return x(d.parcelTmix) + (y(basep)-y(d.press))/tan; })
+		.y(function(d,i) { return y(d.press); });
+				
+	if ($("#parcelmix_check").prop("checked")) {
+		parlines = membergroup.selectAll("parcellines")
+			.data(tlinetest[0]).enter().insert("path",":first-child")
+			.attr("class", function(d,i) { return "parcelmix member" })
+			.attr("clip-path", "url(#clipper)")
+			.attr("d", line6);
+    }
+
     holines = hodogroup.selectAll("hodolines")
         .data(hodobarbstest[0]).enter().append("path")
-    	.attr("class", function(d,i) { return (i<10) ? "hodoline member" : "hodoline mean" })
-    	.attr("d", hodoline);
-
+    	.attr("class", function(d,i) { return "hodoline member" })
+		.attr("d", hodoline);
           
     hododots = hodogroup.selectAll('hododots')
     	.data(flattened.slice(0,55)).enter().append("circle")
-    	.attr("r", function(d, i) { return (i<50) ? 2 : 4 })
+    	.attr("r", function(d, i) { return (i<50) ? 4 : 8 })
     	.attr("cx", function(d, i) { return r(d.wspd * Math.sin((180+d.wdir)*d2r)); })
     	.attr("cy", function(d, i) { return -r(d.wspd * Math.cos((180+d.wdir)*d2r)); })
-    	.attr("class", function(d,i) { return "hododot hgt"+(d.hghtagl/1000) });
-    
-    allbarbs = barbgroup.selectAll("barbs")
-        .data(barbstest[0][0]).enter().append("use")
+		.attr("class", function(d,i) { return "hododot hgt"+(d.hghtagl/1000) });
+	
+	if (lat < 0) {
+		barbdata = barbgroup.selectAll("barbs")
+		.data(barbstest[0][0]).enter().append("g").attr("class","inactiveBarb")
+		.attr("transform", function(d,i) { return "translate("+width+","+y(d.press)+") rotate("+(d.wdir-90)+") scale(1,-1)" });
+	} else {
+		barbdata = barbgroup.selectAll("barbs")
+		.data(barbstest[0][0]).enter().append("g").attr("class","inactiveBarb")
+		.attr("transform", function(d,i) { return "translate("+width+","+y(d.press)+") rotate("+(d.wdir-90)+")"; });
+	}
+
+    allbarbs = barbdata.append("use")
     	.attr("xlink:href", function (d) { return "#barb"+d.wspdround; })
-    	.attr("transform", function(d,i) { return "translate("+width+","+y(d.press)+") rotate("+(d.wdir+180)+")"; });
+		.attr("transform", function(d,i) { return "rotate(270)"; });
 
 }
 
 function drawText() {
+	$(".label").remove();
 	d3.selectAll("text.titleText > *").remove();
 	d3.selectAll("text.indexVal").remove();
-    units = [' mb', ' mb', ' mb', ' mb', ' mb', ' mb', ' J/kg', 'J/kg', ' J/kg', ' J/kg', '', ' m2/s2', ' kts', '', '', '', '', '', ' mb', ' ˚C', ' m', ' mb', ' mb', ' in'];
+    units = [' mb', ' mb', ' mb', ' mb', ' mb', ' mb', ' J/kg', ' J/kg', ' J/kg', ' J/kg', '', ' m2/s2', ' kts', '', '', '', '', '', ' mb', ' ˚C', ' m', ' mb', ' mb', ' in', " %", " g/kg", " hPa", " g/kg", " K", " K"];
 	indices = [];
 	indices.push(tlinetest[0][0][0].elP);
 	indices.push(tlinetest[0][0][0].elPmix);
@@ -731,311 +1098,531 @@ function drawText() {
 	indices.push(tlinetest[0][0][0].frzl);
 	indices.push(tlinetest[0][0][0].pw);
 
+	indices.push(tlinetest[0][0][0].relh);
+	indices.push(tlinetest[0][0][0].mr.toPrecision(4));
+	indices.push(tlinetest[0][0][0].e.toPrecision(4));
+	indices.push(tlinetest[0][0][0].sh);
+	indices.push(tlinetest[0][0][0].theta);
+	indices.push(tlinetest[0][0][0].thetaE);
+
     mins = svgtext.selectAll("mins")
-	  .data(indices.slice(0,18)).enter().append("text")
+	  .data(indices.slice(0,18)).enter().insert("text", ":first-child")
 	    .attr('x', 110)
         .attr('y', function(d,i) { return spacing*i; })
-    	.attr('class', 'indexVal')
+		.attr('class', function(d,i) { return 'indexVal ' + labels[i].replace(/\s/g, '').replace(/\(/g, '').replace(/\)/g, ''); })
     	.attr('text-anchor', 'middle')
     	.text(function(d,i) { return d+units[i]});
     	
     maxs = svgtext.selectAll("maxs")
-	  .data(indices.slice(18,33)).enter().append("text")
+	  .data(indices.slice(18,33)).enter().insert("text", ":first-child")
 	    .attr('x', 270)
         .attr('y', function(d,i) { return spacing*i; })
-    	.attr('class', 'indexVal')
-    	.attr('text-anchor', 'middle')
+		.attr('class', function(d,i) { return 'indexVal ' + labels[i+18].replace(/\s/g, '').replace(/˚/g, '').replace(/-/g, ''); })
+		.attr('text-anchor', 'middle')
     	.text(function(d,i) { return d+units[i+18]});
     
     if (tlinetest[0][0][0].wbz > 100) {
-	    wb0 = skewtgroup.selectAll("wbz")
-		  .data([wb0_pres]).enter().append("rect")
-	    	.attr('x', width-70)
-	    	.attr('y', function(d,i) { return y(d)})
-	    	.attr('width', 20)
-	    	.attr('height', 2)
-	    	.attr('class', 'wbz_rectline');
-	
-	    wb0text = skewtgroup.selectAll("wbztext")
-		  .data([wb0_pres]).enter().append("text")
-	    	.attr('x', width-72)
-	    	.attr('y', function(d,i) { return y(d)})
-	    	.attr('dy', '0.4em')
-	    	.attr('text-anchor', 'end')
-	    	.attr('class', 'wbztext')
-	    	.text(function(d,i) { return d + " mb"; });
+		if ($("#twc_check").prop("checked")) {
+			wb0 = labelgroup.selectAll("wbz")
+			.data([wb0_pres]).enter().insert("rect",":first-child")
+				.attr('x', width-70)
+				.attr('y', function(d,i) { return y(d)})
+				.attr('width', 20)
+				.attr('height', 2)
+				.attr('class', 'wbz_rectline label');
+		
+			wb0text = labelgroup.selectAll("wbztext")
+			.data([wb0_pres]).enter().insert("text",":first-child")
+				.attr('x', width-72)
+				.attr('y', function(d,i) { return y(d)})
+				.attr('dy', '0.4em')
+				.attr('text-anchor', 'end')
+				.attr('class', 'wbztext label')
+				.text(function(d,i) { return d + " mb"; });
+		}
     }
 
     if (tlinetest[0][0][0].frzl > 100) {
 	for(j=0; j<=tlinetest[0][0][0].frzl.length-1; j++) {
-	    frzl = skewtgroup.selectAll("frzl")
-		  .data([tlinetest[0][0][0].frzl]).enter().append("rect")
+	    frzl = labelgroup.selectAll("frzl")
+		  .data([tlinetest[0][0][0].frzl]).enter().insert("rect",":first-child")
 	    	.attr('x', width-70)
 	    	.attr('y', function(d,i) { return y(d[j])})
 	    	.attr('width', 20)
 	    	.attr('height', 2)
-	    	.attr('class', 'frzl_rectline');
+			.attr('class', 'frzl_rectline label');
 	
-	    frzltext = skewtgroup.selectAll("frzltext")
-		  .data([tlinetest[0][0][0].frzl]).enter().append("text")
+	    frzltext = labelgroup.selectAll("frzltext")
+		  .data([tlinetest[0][0][0].frzl]).enter().insert("text",":first-child")
 	    	.attr('x', width-72)
 	    	.attr('y', function(d,i) { return y(d[j])})
 	    	.attr('dy', '0.4em')
 	    	.attr('text-anchor', 'end')
-	    	.attr('class', 'frzltext')
+			.attr('class', 'frzltext label')
 	    	.text(function(d,i) { return d[j] + " mb"; });
 	}
     }
 
     if (tlinetest[0][0][0].lclP > 100) {
-	    lcl = skewtgroup.selectAll("lcl")
-		  .data([tlinetest[0][0][0].lclP]).enter().append("rect")
-	    	.attr('x', width-70)
-	    	.attr('y', function(d,i) { return y(tlinetest[0][0][0].lclP)})
-	    	.attr('width', 20)
-	    	.attr('height', 2)
-	    	.attr('class', 'lcl rectline');
-	    	
-	    lcltext = skewtgroup.selectAll("lcltext")
-		  .data([tlinetest[0][0][0].lclP]).enter().append("text")
-	    	.attr('x', width-72)
-	    	.attr('y', function(d,i) { return y(tlinetest[0][0][0].lclP)})
-	    	.attr('dy', '0.4em')
-	    	.attr('text-anchor', 'end')
-	    	.attr('class', 'lcltext')
-	    	.text(function(d,i) { return tlinetest[0][0][0].lclP + " mb"; });
+		if ($("#parcel_check").prop("checked")) {
+			lcl = labelgroup.selectAll("lcl")
+			.data([tlinetest[0][0][0].lclP]).enter().insert("rect",":first-child")
+				.attr('x', width-70)
+				.attr('y', function(d,i) { return y(tlinetest[0][0][0].lclP)})
+				.attr('width', 20)
+				.attr('height', 2)
+				.attr('class', 'lcl rectline label');
+				
+			lcltext = labelgroup.selectAll("lcltext")
+			.data([tlinetest[0][0][0].lclP]).enter().insert("text",":first-child")
+				.attr('x', width-72)
+				.attr('y', function(d,i) { return y(tlinetest[0][0][0].lclP)})
+				.attr('dy', '0.4em')
+				.attr('text-anchor', 'end')
+				.attr('class', 'lcltext label')
+				.text(function(d,i) { return tlinetest[0][0][0].lclP + " mb"; });
+		}
     }
 
     if (tlinetest[0][0][0].lclPmix > 100) {
-	    lcl = skewtgroup.selectAll("lcl")
-		  .data([tlinetest[0][0][0].lclPmix]).enter().append("rect")
-	    	.attr('x', width-70)
-	    	.attr('y', function(d,i) { return y(tlinetest[0][0][0].lclPmix)})
-	    	.attr('width', 20)
-	    	.attr('height', 2)
-	    	.attr('class', 'lclmix rectline');
-	    	
-	    lcltext = skewtgroup.selectAll("lcltext")
-		  .data([tlinetest[0][0][0].lclPmix]).enter().append("text")
-	    	.attr('x', width-72)
-	    	.attr('y', function(d,i) { return y(tlinetest[0][0][0].lclPmix)})
-	    	.attr('dy', '0.4em')
-	    	.attr('text-anchor', 'end')
-	    	.attr('class', 'lclmixtext')
-	    	.text(function(d,i) { return tlinetest[0][0][0].lclPmix + " mb (mix)"; });
+		if ($("#parcelmix_check").prop("checked")) {
+			lcl = labelgroup.selectAll("lcl")
+			.data([tlinetest[0][0][0].lclPmix]).enter().insert("rect",":first-child")
+				.attr('x', width-70)
+				.attr('y', function(d,i) { return y(tlinetest[0][0][0].lclPmix)})
+				.attr('width', 20)
+				.attr('height', 2)
+				.attr('class', 'lclmix rectline label');
+				
+			lcltext = labelgroup.selectAll("lcltext")
+			.data([tlinetest[0][0][0].lclPmix]).enter().insert("text",":first-child")
+				.attr('x', width-72)
+				.attr('y', function(d,i) { return y(tlinetest[0][0][0].lclPmix)})
+				.attr('dy', '0.4em')
+				.attr('text-anchor', 'end')
+				.attr('class', 'lclmixtext label')
+				.text(function(d,i) { return tlinetest[0][0][0].lclPmix + " mb (mix)"; });
+		}
     }
 
     if (tlinetest[0][0][0].lfcP > 100) {
-	    lfc = skewtgroup.selectAll("lfc")
-		  .data([tlinetest[0][0][0].lfcP]).enter().append("rect")
-	    	.attr('x', width-70)
-	    	.attr('y', function(d,i) { return y(tlinetest[0][0][0].lfcP)})
-	    	.attr('width', 20)
-	    	.attr('height', 2)
-	    	.attr('class', 'lfc rectline');
-	    	
-	    lfctext = skewtgroup.selectAll("lfctext")
-		  .data([tlinetest[0][0][0].lfcP]).enter().append("text")
-	    	.attr('x', width-72)
-	    	.attr('y', function(d,i) { return y(tlinetest[0][0][0].lfcP)})
-	    	.attr('dy', '0.4em')
-	    	.attr('text-anchor', 'end')
-	    	.attr('class', 'lfctext')
-	    	.text(function(d,i) { return tlinetest[0][0][0].lfcP + " mb"; });
+		if ($("#parcel_check").prop("checked")) {
+			lfc = labelgroup.selectAll("lfc")
+			.data([tlinetest[0][0][0].lfcP]).enter().insert("rect",":first-child")
+				.attr('x', width-70)
+				.attr('y', function(d,i) { return y(tlinetest[0][0][0].lfcP)})
+				.attr('width', 20)
+				.attr('height', 2)
+				.attr('class', 'lfc rectline label');
+				
+			lfctext = labelgroup.selectAll("lfctext")
+			.data([tlinetest[0][0][0].lfcP]).enter().insert("text",":first-child")
+				.attr('x', width-72)
+				.attr('y', function(d,i) { return y(tlinetest[0][0][0].lfcP)})
+				.attr('dy', '0.4em')
+				.attr('text-anchor', 'end')
+				.attr('class', 'lfctext label')
+				.text(function(d,i) { return tlinetest[0][0][0].lfcP + " mb"; });
+		}
     }
 
     if (tlinetest[0][0][0].elP > 100) {
-	    el = skewtgroup.selectAll("el")
-		  .data([tlinetest[0][0][0].elP]).enter().append("rect")
-	    	.attr('x', width-70)
-	    	.attr('y', function(d,i) { return y(tlinetest[0][0][0].elP)})
-	    	.attr('width', 20)
-	    	.attr('height', 2)
-	    	.attr('class', 'el rectline');
-	    	
-	    eltext = skewtgroup.selectAll("eltext")
-		  .data([tlinetest[0][0][0].elP]).enter().append("text")
-	    	.attr('x', width-72)
-	    	.attr('y', function(d,i) { return y(tlinetest[0][0][0].elP)})
-	    	.attr('dy', '0.4em')
-	    	.attr('text-anchor', 'end')
-	    	.attr('class', 'eltext')
-	    	.text(function(d,i) { return tlinetest[0][0][0].elP + " mb"; });
+		if ($("#parcel_check").prop("checked")) {
+			el = labelgroup.selectAll("el")
+			.data([tlinetest[0][0][0].elP]).enter().insert("rect",":first-child")
+				.attr('x', width-70)
+				.attr('y', function(d,i) { return y(tlinetest[0][0][0].elP)})
+				.attr('width', 20)
+				.attr('height', 2)
+				.attr('class', 'el rectline label');
+				
+			eltext = labelgroup.selectAll("eltext")
+			.data([tlinetest[0][0][0].elP]).enter().insert("text",":first-child")
+				.attr('x', width-72)
+				.attr('y', function(d,i) { return y(tlinetest[0][0][0].elP)})
+				.attr('dy', '0.4em')
+				.attr('text-anchor', 'end')
+				.attr('class', 'eltext label')
+				.text(function(d,i) { return tlinetest[0][0][0].elP + " mb"; });
+		}
     }
 
     if (tlinetest[0][0][0].lfcPmix > 100) {
-	    lfc = skewtgroup.selectAll("lfcmix")
-		  .data([tlinetest[0][0][0].lfcPmix]).enter().append("rect")
-	    	.attr('x', width-70)
-	    	.attr('y', function(d,i) { return y(tlinetest[0][0][0].lfcPmix)})
-	    	.attr('width', 20)
-	    	.attr('height', 2)
-	    	.attr('class', 'lfcmix rectline');
-	    	
-	    lfctext = skewtgroup.selectAll("lfcmixtext")
-		  .data([tlinetest[0][0][0].lfcPmix]).enter().append("text")
-	    	.attr('x', width-72)
-	    	.attr('y', function(d,i) { return y(tlinetest[0][0][0].lfcPmix)})
-	    	.attr('dy', '0.4em')
-	    	.attr('text-anchor', 'end')
-	    	.attr('class', 'lfcmixtext')
-	    	.text(function(d,i) { return tlinetest[0][0][0].lfcPmix + " mb (mix)"; });
+		if ($("#parcelmix_check").prop("checked")) {
+			lfc = labelgroup.selectAll("lfcmix")
+			.data([tlinetest[0][0][0].lfcPmix]).enter().insert("rect",":first-child")
+				.attr('x', width-70)
+				.attr('y', function(d,i) { return y(tlinetest[0][0][0].lfcPmix)})
+				.attr('width', 20)
+				.attr('height', 2)
+				.attr('class', 'lfcmix rectline label');
+				
+			lfctext = labelgroup.selectAll("lfcmixtext")
+			.data([tlinetest[0][0][0].lfcPmix]).enter().insert("text",":first-child")
+				.attr('x', width-72)
+				.attr('y', function(d,i) { return y(tlinetest[0][0][0].lfcPmix)})
+				.attr('dy', '0.4em')
+				.attr('text-anchor', 'end')
+				.attr('class', 'lfcmixtext label')
+				.text(function(d,i) { return tlinetest[0][0][0].lfcPmix + " mb (mix)"; });
+		}
     }
 
     if (tlinetest[0][0][0].elPmix > 100) {
-	    el = skewtgroup.selectAll("elmix")
-		  .data([tlinetest[0][0][0].elPmix]).enter().append("rect")
-	    	.attr('x', width-70)
-	    	.attr('y', function(d,i) { return y(tlinetest[0][0][0].elPmix)})
-	    	.attr('width', 20)
-	    	.attr('height', 2)
-	    	.attr('class', 'elmix rectline');
-	    	
-	    eltext = skewtgroup.selectAll("elmixtext")
-		  .data([tlinetest[0][0][0].elPmix]).enter().append("text")
-	    	.attr('x', width-72)
-	    	.attr('y', function(d,i) { return y(tlinetest[0][0][0].elPmix)})
-	    	.attr('dy', '0.4em')
-	    	.attr('text-anchor', 'end')
-	    	.attr('class', 'elmixtext')
-	    	.text(function(d,i) { return tlinetest[0][0][0].elPmix + " mb (mix)"; });
+		if ($("#parcelmix_check").prop("checked")) {
+			el = labelgroup.selectAll("elmix")
+			.data([tlinetest[0][0][0].elPmix]).enter().insert("rect",":first-child")
+				.attr('x', width-70)
+				.attr('y', function(d,i) { return y(tlinetest[0][0][0].elPmix)})
+				.attr('width', 20)
+				.attr('height', 2)
+				.attr('class', 'elmix rectline label');
+				
+			eltext = labelgroup.selectAll("elmixtext")
+			.data([tlinetest[0][0][0].elPmix]).enter().insert("text",":first-child")
+				.attr('x', width-72)
+				.attr('y', function(d,i) { return y(tlinetest[0][0][0].elPmix)})
+				.attr('dy', '0.4em')
+				.attr('text-anchor', 'end')
+				.attr('class', 'elmixtext label')
+				.text(function(d,i) { return tlinetest[0][0][0].elPmix + " mb (mix)"; });
+		}
     }
 
-    titleText = skewtgroup.selectAll("title")
-	  .data([title]).enter().append("text")
+    titleText = labelgroup.selectAll("title")
+	  .data([title]).enter().insert("text",":first-child")
         .attr('dy', '0.4em')
     	.attr('class', 'titleText')
     	.attr('text-anchor', 'left')
-	.attr("transform", "translate(0,-15)")
+		.attr("transform", "translate(0,-15)")
     	.text(title);
-
-	$(".result p").text("Variables for Hawk Migration: " + tlinetest[0][0][0].cape + ", " + tlinetest[0][0][0].mlcape + ", " + tlinetest[0][0][0].cin + ", " + tlinetest[0][0][0].mlcin + ", " + tlinetest[0][0][0].brn + ", " + tlinetest[0][0][0].brnu + ", " + tlinetest[0][0][0].shr6km + ", " + tlinetest[0][0][0].LI + ", " + tlinetest[0][0][0].LImix + ", " + tlinetest[0][0][0].lclP + ", " + tlinetest[0][0][0].lclPmix + ", " + tlinetest[0][0][0].lfcP + ", " + tlinetest[0][0][0].lfcPmix + ", NaN, " + tlinetest[0][0][0].LR_1km + ", " + tlinetest[0][0][0].LR_2km + ", " + tlinetest[0][0][0].LR_3km + ", " + tlinetest[0][0][0].LR_5km + ", " + tlinetest[0][0][0].LR_7km  + ", " + tlinetest[0][0][0].LR_9km + ", " + tlinetest[0][0][0].LR_10km + ", " + tlinetest[0][0][0].LR_EL + ", " + tlinetest[0][0][0].LR_lfc_1km + ", " + tlinetest[0][0][0].LR_lfc_2km + ", " + tlinetest[0][0][0].LR_lfc_3km + ", " + tlinetest[0][0][0].LR_lfc_5km + ", " + tlinetest[0][0][0].LR_lfc_7km + ", " + tlinetest[0][0][0].LR_lfc_9km + ", " + tlinetest[0][0][0].LR_lfc_10km + ", " + tlinetest[0][0][0].LR_lfc_el);
-
 }
 
 function drawToolTips() {
+	$(".overlay").remove();
+	focusgroup.insert("rect")
+	  .attr("class", "overlay") 
+
+	// Define drag beavior
+	var drag = d3.behavior.drag()
+		.on("dragstart", dragStart)
+		.on("touchstart", dragStart)
+		.on("drag", dragMove)
+		.on("touchmove", dragMove)
+		.on("dragend", dragEnd)
+		.on("touchend", dragEnd);
+
   // Draw T/Td tooltips
-  focus = skewtgroup.append("g").attr("class", "focus tmpc").style("display", "none");
-  focus.append("circle").attr("r", 4);
-  focus.append("text").attr("x", 9).attr("dy", ".35em");
-      
-  focus2 = skewtgroup.append("g").attr("class", "focus dwpc").style("display", "none");
-  focus2.append("circle").attr("r", 4);
-  focus2.append("text").attr("x", -9).attr("text-anchor", "end").attr("dy", ".35em");
-  
-  focus3 = skewtgroup.append("g").attr("class", "focus twc").style("display", "none");
+  focus3 = focusgroup.insert("g",":first-child").attr("class", "focus twc").style("display", "none");
   focus3.append("circle").attr("r", 4);
   focus3.append("text").attr("x", -9).attr("y",14).attr("text-anchor", "end").attr("dy", ".35em");
 
-  focus4 = skewtgroup.append("g").attr("class", "focus tvc").style("display", "none");
+  focus4 = focusgroup.insert("g",":first-child").attr("class", "focus tvc").style("display", "none");
   focus4.append("circle").attr("r", 4);
   focus4.append("text").attr("x", 9).attr("y",-14).attr("dy", ".35em");
 
 	if (parcel_flag=1) {
-	  focus5 = skewtgroup.append("g").attr("class", "focus parcel").style("display", "none");
+	  focus5 = focusgroup.insert("g",":first-child").attr("class", "focus parcel").style("display", "none");
 	  focus5.append("circle").attr("r", 4);
 	  focus5.append("text").attr("x", 9).attr("y", 14).attr("dy", ".35em");
 
-	  focus5b = skewtgroup.append("g").attr("class", "focus parcelmix").style("display", "none");
+	  focus5b = focusgroup.insert("g",":first-child").attr("class", "focus parcelmix").style("display", "none");
 	  focus5b.append("circle").attr("r", 4);
 	  focus5b.append("text").attr("x", 9).attr("y", -14).attr("dy", ".35em");
 	}
 
-  focus6 = skewtgroup.append("g").attr("class", "focus").style("display", "none");
+  focus6 = focusgroup.insert("g",":first-child").attr("class", "focus alt").style("display", "none");
   focus6.append("text").attr("x", 0).attr("text-anchor", "start").attr("dy", ".35em");
 
-  focus6b = skewtgroup.append("g").attr("class", "focus").style("display", "none");
+  focus6b = focusgroup.insert("g",":first-child").attr("class", "focus pres").style("display", "none");
   focus6b.append("text").attr("x", 11).attr("y", -14).attr("text-anchor", "start").attr("dy", ".35em");
 
-  focus7 = skewtgroup.append("g").attr("class", "focus windt").style("display", "none");
+  focus7 = focusgroup.append("g",":first-child").attr("class", "focus windt").style("display", "none").call(dragWind);
   focus7.append("circle").attr("r", 4);
   focus7.append("text").attr("x", -32).attr("text-anchor", "end").attr("dy", ".35em");
 
-if (parcel_flag=1) {
-  svg.append("rect")
-      .attr("class", "overlay")
-      .attr("width", width)
-      .attr("height", height)
-      .on("mouseover", function() { focus.style("display", null); focus2.style("display", null); focus3.style("display", null); focus4.style("display", null); focus5.style("display", null); focus5b.style("display", null); focus6.style("display", null); focus6b.style("display", null); focus7.style("display", null);})
-      .on("mouseout", function() { focus.style("display", "none"); focus2.style("display", "none"); focus3.style("display", "none"); focus4.style("display", "none"); focus5.style("display", "none"); focus5b.style("display", "none"); focus6.style("display", "none"); focus6b.style("display","none"); focus7.style("display","none");})
-      .on("mousemove", mousemove);
+  focus2 = focusgroup.append("g").attr("class", "focus dwpc draggable").attr("id","dragDew").style("display", "none").call(drag);
+  focus2.append("circle").attr("r", 6);
+  focus2.append("text").attr("x", -9).attr("text-anchor", "end").attr("dy", ".35em");
+  
+  focus = focusgroup.append("g").attr("class", "focus tmpc draggable").attr("id","dragTemp").style("display", "none").call(drag);
+  focus.append("circle").attr("r", 6);
+  focus.append("text").attr("x", 9).attr("dy", ".35em");
 
-  function mousemove() {
-      var y0 = y.invert(d3.mouse(this)[1]); // get y value of mouse pointer in pressure space
-      var i = bisectTemp(mouseoverdata, y0, 1, mouseoverdata.length-1);
-      var d0 = mouseoverdata[i - 1];
-      var d1 = mouseoverdata[i];
-      var d = y0 - d0.press > d1.press - y0 ? d1 : d0;
+  d3.selectAll(".overlay, .skewt")
+  	.attr("width", width)
+	.attr("height", height);
+}
 
-      focus.attr("transform", "translate(" + (x(d.temp) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
-      focus2.attr("transform", "translate(" + (x(d.dwpt) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
-      focus3.attr("transform", "translate(" + (x(d.twc) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
-      focus4.attr("transform", "translate(" + (x(d.tv) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
-      focus5.attr("transform", "translate(" + (x(d.parcelT) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
-      focus5b.attr("transform", "translate(" + (x(d.parcelTmix) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
-      focus6.attr("transform", "translate(0," + y(d.press) + ")");
-      focus6b.attr("transform", "translate(0," + y(d.press) + ")");
-      focus7.attr("transform", "translate(" + width + "," + y(d.press) + ")");
+d3.selectAll(".skewt, .windbarb")
+.on("mouseover", function() { $(".focus").show()})
+.on("mouseout", function() { $(".focus").hide(); $(".activeBarb").attr("class", "inactiveBarb")});
 
-      focus.select("text").text(Math.round(d.temp)+"°C");
-      focus2.select("text").text(Math.round(d.dwpt)+"°C");
-      focus3.select("text").text(Math.round(d.twc)+"°C");
-      focus4.select("text").text(Math.round(d.tv)+"°C");
-      focus5.select("text").text(Math.round(d.parcelT)+"°C");
-      focus5b.select("text").text(Math.round(d.parcelTmix)+"°C");
-      focus6.select("text").text("<-"+(Math.round(d.hghtagl/100)/10)+"km");
-      focus6b.select("text").text("  " + d.press+"mb");
-      focus7.select("text").text(d.wspd+` @`+d.wdir+"˚");
+d3.selectAll(".skewt, .windbarb")
+	.on("mousemove", mousemove);
+
+var ind = "";
+var idx = "";
+var mouseTemp = "";
+
+function mousemove() {
+	idx = "";
+	var y0 = y.invert(d3.mouse(this)[1]); // get y value of mouse pointer in pressure space
+	var i = bisectTemp(mouseoverdata, y0, 1, mouseoverdata.length-1);
+	var d0 = mouseoverdata[i - 1];
+	var d1 = mouseoverdata[i];
+	var d = y0 - d0.press > d1.press - y0 ? d1 : d0;
+	
+	focus.attr("transform", "translate(" + (x(d.temp) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
+	focus2.attr("transform", "translate(" + (x(d.dwpt) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
+	focus3.attr("transform", "translate(" + (x(d.twc) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
+	focus4.attr("transform", "translate(" + (x(d.tv) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
+	focus5.attr("transform", "translate(" + (x(d.parcelT) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
+	focus5b.attr("transform", "translate(" + (x(d.parcelTmix) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
+	focus6.attr("transform", "translate(0," + y(d.press) + ")");
+	focus6b.attr("transform", "translate(0," + y(d.press) + ")");
+	focus7.attr("transform", "translate(" + width + "," + y(d.press) + ")");
+
+	var currPress = $(".pres").find("text").text().trim().split("m");
+	currPress = currPress[0];
+
+	for (k=0; k < tlinetest[0][0].length; k++) {
+		var elem = tlinetest[0][0][k].press;
+		if (elem == currPress) {
+			idx = k;
+			break;
+		}
+	};
+
+	d3.select(".hodogroup circle")
+		.attr("cx", function () {return r(d.wspd * Math.sin((180+d.wdir)*d2r))})
+		.attr("cy", function () {return -r(d.wspd * Math.cos((180+d.wdir)*d2r))});
+	d3.select(".hodogroup line")
+		.attr("x2", function () {return r(d.wspd * Math.sin((180+d.wdir)*d2r))})
+		.attr("y2", function () {return -r(d.wspd * Math.cos((180+d.wdir)*d2r))});
+
+	$(".windbarb g").attr("class", "inactiveBarb");
+	$(".windbarb g:eq(" + idx + ")").attr("class", "activeBarb");
+	d3.selectAll(".activeBarb").call(dragWind);
+
+	focus.select("text").text(Math.round(d.temp)+"°C");
+	focus2.select("text").text(Math.round(d.dwpt)+"°C");
+	focus3.select("text").text(Math.round(d.twc)+"°C");
+	focus4.select("text").text(Math.round(d.tv)+"°C");
+	focus5.select("text").text(Math.round(d.parcelT)+"°C (SB)");
+	focus5b.select("text").text(Math.round(d.parcelTmix)+"°C (mix)");
+	focus6.select("text").text("<-"+(Math.round(d.hghtagl/100)/10)+"km");
+	focus6b.select("text").text("  " + d.press+"mb");
+	focus7.select("text").text(d.wspd+` @`+d.wdir+"˚");
+	$(".RH").text(d.relh + "%")
+	var mrText = d.mr.toFixed(2) + "\u00A0g/kg";
+	$(".MixingRatio").text(mrText)
+	var eText = d.e.toFixed(2) + "\u00A0hPa";
+	$(".VaporPressure").text(eText);
+	$(".SpecHum").text(d.sh + "\u00A0g/kg")
+	$(".Theta").text(d.theta + "\u00A0K")
+	$(".ThetaE").text(d.thetaE + "\u00A0K")
+
+}
+
+var dragWind = d3.behavior.drag()
+		.on("dragstart", dragWindStart)
+		.on("touchstart", dragWindStart)
+		.on("drag", dragWindMoveCircular)
+		.on("touchmove", dragWindMoveCircular)
+		.on("dragend", dragWindEnd)
+		.on("touchend", dragWindEnd);
+
+var dragLocX;
+
+function dragWindStart () {
+	$(".focus.twc, .focus.tvc, .focus.parcel, .focus.parcelmix, .focus.alt, .focus.pres, .focus.tmpc, .focus.dwpc, .focus.hod, .focus.hodarrow").css("display", "none");
+	dragLocX = d3.mouse(this);
+	dragLocX = dragLocX[0];
+	event.preventDefault();
+}
+		
+var coords;
+var prevCoords = 0;
+
+function rPosition(mouseX, mouseY) {
+  var offset = $('.windt circle').offset();
+  var x = mouseX - offset.left;
+  var y = mouseY - offset.top;
+  return [x, y];
+}
+
+function dragWindMoveCircular () {
+	$(".windbarb g:eq(" + idx + ")").attr("class", "activeBarb");
+	d3.selectAll(".skewt, .windbarb")
+		.on("mousemove", null)
+		.on("mouseover", null)
+		.on("mouseout", null);
+
+	var transform = $(this).attr("transform");
+	transform = transform.split(")");
+	translate = transform[0]
+	translate = translate.split(",")
+	translateX = translate[0].split("(");
+	translateX = parseFloat(translateX[1]);
+	translateY = parseFloat(translate[1]);
+
+	var X = $('body').offset().left;
+	var Y = $('body').offset().top;
+	mouseX = event.pageX - X;
+	mouseY = event.pageY - Y;
+
+	var rPos = rPosition(mouseX, mouseY);
+	var hypotenuse = Math.sqrt(rPos[0]**2 + rPos[1]**2);
+	var angle = Math.atan(rPos[0]/rPos[1])*180/Math.PI;
+
+	if (rPos[0] >= 0 && rPos[1] < 0) { // +x, -y (upper-right quadrant)
+		newRotate = -angle-90;
+	} else if (rPos[0] < 0 && rPos[1] < 0) { // -x, -y (upper-left quadrant) 
+		newRotate = -angle-90;
+	} else if (rPos[0] < 0 && rPos[1] >= 0) { // -x, +y (lower-left quadrant)
+		newRotate = -angle+90;
+	} else { // +x, +y (lower-right quadrant)
+		newRotate = -angle-270;
+	}
+
+	var currWind = $(".windt").children().text().split("@");
+	var currWindSpeed = currWind[0].trim();
+	var windDir = newRotate+90;
+
+	if (windDir > 360) {
+		windDir = windDir - 360;
+	}
+	if (windDir < 0) {
+		windDir = windDir + 360;
+	}
+
+	windDir = windDir.toFixed(0);
+	tlinetest[0][0][idx].wdir = parseFloat(windDir);
+	if (idx < hodobarbstest[0][0].length) {
+		hodobarbstest[0][0][idx].wdir = parseFloat(windDir);
+	}
+
+	$(".windt").children().text("" + currWindSpeed + " @" + windDir+ "˚");
+	d3.selectAll(".activeBarb").attr("transform","translate(" + translateX + ", " + translateY + ") rotate(" + newRotate + ")");
+	drawSkew();
+	drawText();
+	tabulate();
+}
+			
+function dragWindEnd () {
+	d3.selectAll(".skewt, .windbarb")
+		.on("mouseover", function() { $(".focus").show()})
+		.on("mouseout", function() { $(".focus").hide(); $(".activeBarb").attr("class", "inactiveBarb")})
+		.on("mousemove", mousemove);
+//	$(".activeBarb").children("use").eq(0).hide();
+	$(".focus.twc, .focus.tvc, .focus.parcel, .focus.parcelmix, .focus.alt, .focus.pres, .focus.tmpc, .focus.dwpc").css("display", "");
+}
+
+var yTrans = 0;
+
+function dragStart(d) {
+	event.preventDefault();
+	$(".focus.twc, .focus.tvc, .focus.parcel, .focus.parcelmix, .focus.alt, .focus.pres, .focus.windt").css("display", "none");
+	yTrans = d3.select(this).attr("transform");
+  	yTrans = yTrans.split(",");
+  	yTrans = yTrans[1].split(")");
+  	yTrans = yTrans[0];
+}
+
+function dragMove(d) {
+	var xLoc = d3.event.x;
+  $(".focus.twc, .focus.tvc, .focus.parcel, .focus.parcelmix, .focus.alt, .focus.pres, .focus.windt, .focus.hod, .focus.hodarrow").css("display", "none");
+
+  d3.selectAll(".skewt, .windbarb")
+  	.on("mousemove", null)
+	.on("mouseover", null)
+	.on("mouseout", null);
+
+  var pres = [];
+  for (k=0; k < tlinetest[0][0].length; k++) {
+	var elem = tlinetest[0][0][k].press;
+	pres.push(elem);
+  };
+
+  var currPress = $(".pres").find("text").text().trim().split("m");
+  currPress = currPress[0];
+  ind = pres.indexOf(parseFloat(currPress));
+  if (xLoc >= 0 && xLoc < 625) {
+	  d3.select(this).attr("transform", "translate(" + xLoc + "," + yTrans + ")");
+  } else {
+		return;
   }
 
-} else {
+  var elId = $(this).attr("id");
 
-  svg.append("rect")
-      .attr("class", "overlay")
-      .attr("width", width)
-      .attr("height", height)
-      .on("mouseover", function() { focus.style("display", null); focus2.style("display", null); focus3.style("display", null); focus4.style("display", null); focus6.style("display", null); focus6b.style("display", null); focus7.style("display", null);})
-      .on("mouseout", function() { focus.style("display", "none"); focus2.style("display", "none"); focus3.style("display", "none"); focus4.style("display", "none"); focus6.style("display", "none"); focus6b.style("display", "none"); focus7.style("display","none");})
-      .on("mousemove", mousemove);
+  if (elId == "dragDew") {
+		var otherXLoc = $("#dragTemp").attr("transform");
+		otherXLoc = otherXLoc.split(",");
+		otherXLoc = otherXLoc[0].split("(");
+		otherXLoc = otherXLoc[1];
+		
+		if (xLoc >= 0 && xLoc < 625) {
+			mouseTemp = x.invert(xLoc - (y(basep)-yTrans)/tan);
+			// Redraw label (truncated value)
+			$(this).find('text').text(Math.round(mouseTemp) + "˚C");
+			// Modify that element in line2[el] or tlinetest[0][0][el].dwpt
+			tlinetest[0][0][ind].dwpt = parseFloat(mouseTemp.toFixed(2));
+			if (otherXLoc <= xLoc) {
+				tlinetest[0][0][ind].temp = parseFloat(mouseTemp.toFixed(2));
+				d3.select("#dragTemp").attr("transform", "translate(" + xLoc + "," + yTrans + ")");
+			}
+		}
 
-  function mousemove() {
-      var y0 = y.invert(d3.mouse(this)[1]); // get y value of mouse pointer in pressure space
-      var i = bisectTemp(mouseoverdata, y0, 1, mouseoverdata.length-1);
-      var d0 = mouseoverdata[i - 1];
-      var d1 = mouseoverdata[i];
-      var d = y0 - d0.press > d1.press - y0 ? d1 : d0;
+  } else if (elId == "dragTemp") {
+	var otherXLoc = $("#dragDew").attr("transform");
+		otherXLoc = otherXLoc.split(",");
+		otherXLoc = otherXLoc[0].split("(");
+		otherXLoc = otherXLoc[1];
 
-      focus.attr("transform", "translate(" + (x(d.temp) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
-      focus2.attr("transform", "translate(" + (x(d.dwpt) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
-      focus3.attr("transform", "translate(" + (x(d.twc) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
-      focus4.attr("transform", "translate(" + (x(d.tv) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
-      focus5.attr("transform", "translate(" + (x(d.parcelT) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
-      focus5b.attr("transform", "translate(" + (x(d.parcelTmix) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
-      focus6.attr("transform", "translate(0," + y(d.press) + ")");
-      focus6b.attr("transform", "translate(0," + y(d.press) + ")");
-      focus7.attr("transform", "translate(" + width + "," + y(d.press) + ")");
+		if (xLoc >= 0 && xLoc < 625) {
+			mouseTemp = x.invert(xLoc - (y(basep)-yTrans)/tan);
+			// Redraw label (truncated value)
+			$(this).find('text').text(Math.round(mouseTemp) + "˚C");
+			// Modify the element in line[el] or tlinetest[0][0][el].temp
+			tlinetest[0][0][ind].temp = parseFloat(mouseTemp.toFixed(2));
+			if (otherXLoc >= xLoc) {
+				tlinetest[0][0][ind].dwpt = parseFloat(mouseTemp.toFixed(2));
+				d3.select("#dragDew").attr("transform", "translate(" + xLoc + "," + yTrans + ")");
+			}
+		}
 
-      focus.select("text").text(Math.round(d.temp)+"°C");
-      focus2.select("text").text(Math.round(d.dwpt)+"°C");
-      focus3.select("text").text(Math.round(d.twc)+"°C");
-      focus4.select("text").text(Math.round(d.tv)+"°C");
-      focus6.select("text").text("--"+(Math.round(d.hghtagl/100)/10)+"km");
-      focus6b.select("text").text("--"+d.press+"mb");
-      focus5.select("text").text(Math.round(d.parcelT)+"°C");
-      focus5b.select("text").text(Math.round(d.parcelTmix)+"°C");
-      focus6.select("text").text("<-"+(Math.round(d.hghtagl/100)/10)+"km");
-      focus6b.select("text").text("  " + d.press+"mb");
-      focus7.select("text").text(d.wspd+` @`+d.wdir+"˚");
+		
+  } else {
+	  	console.log("Didn't find that ID for dragging");
+  }
+  drawSkew();
+  drawText();
+  tabulate();
+
+  if (xLoc <= 0) {
+	  dragEnd();
+  } else if (xLoc > 625) {
+	  dragEnd();
   }
 
 }
+
+function dragEnd(d) {
+  d3.selectAll(".skewt, .windbarb").on("mousemove", mousemove);
+  $(".focus.twc, .focus.tvc, .focus.parcel, .focus.parcelmix, .focus.alt, .focus.pres, .focus.windt, .focus.hod, .focus.hodarrow").css("display", "");
+
+  d3.selectAll(".skewt, .windbarb")
+  	.on("mouseover", function() { $(".focus").show()})
+  	.on("mouseout", function() { $(".focus").hide(); $(".activeBarb").attr("class", "inactiveBarb")});
 
 }
 
 function drawTextLabels() {
+
 	spacing = 20;
 	var headers = ['Values', '', 'Values'];
-	var labels = ['EL', 'EL (mixed)', 'LFC', 'LFC (mixed)', 'LCL', 'LCL (mixed)', 'SBCAPE', 'MLCAPE', 'CIN', 'MLCIN', 'BRN', 'BRN Shear', 'Shear 6km', 'LI', 'LI (mixed)', 'KI', 'TT', 'SWEAT', 'CCL', 'Tc', 'Thickness', 'Wet-Bulb 0˚', 'Freezing Lvl', 'PW'];
+	labels = ['EL', 'EL (mixed)', 'LFC', 'LFC (mixed)', 'LCL', 'LCL (mixed)', 'SBCAPE', 'MLCAPE', 'CIN', 'MLCIN', 'BRN', 'BRN Shear', 'Shear 6km', 'LI', 'LI (mixed)', 'KI', 'TT', 'SWEAT', 'CCL', 'Tc', 'Thickness', 'Wet-Bulb 0˚', 'Freezing Lvl', 'PW', 'RH', 'Mixing Ratio', 'Vapor Pressure', 'Spec Hum', 'Theta', 'ThetaE'];
     
     svgtext.selectAll("labels")
      .data(labels.slice(0,18)).enter().append("text")
@@ -1713,7 +2300,6 @@ function getCIN(t_arr, flag)
 				dt1 = tblt_pcl - tblt_obs;// // pcl temp - obs temp at present level
 				mean_dt = (dt0 + dt1) / 2; //avg of 2 dt's
 				sumCIN += (dz * mean_dt) / (mean_t + 273.15);// add to sum
-				console.log("Returning: " + sumCIN);
 				//since we just computed from the blt to the lfc, we're done.
 				//finish computation and return value
 				var cin = g * sumCIN; //multiply time g to get cape
@@ -2193,6 +2779,7 @@ function convertFiletoJSON(data) {
 		end = data.indexOf("</pre>");
 	}
 
+	var info = data.substring(end);
 	data = data.substring(start+78, end);
 
 	data_arr = data.split("\n");
@@ -2224,6 +2811,16 @@ function convertFiletoJSON(data) {
 		obj = {};
 	}
 
+	lat_start = info.indexOf("latitude:");
+	lat_start = lat_start+10;
+	lat_end = lat_start+17;
+	lat = parseFloat(info.slice(lat_start, lat_end));
+	
+	long_start = info.indexOf("longitude:");
+	long_start = long_start+11;
+	long_end = long_start+18;
+	long = parseFloat(info.slice(long_start, long_end));
+
 	return sdata;
 }
 
@@ -2245,6 +2842,17 @@ function getLapseRate(tempArr, hghtArr, btmI, btmZ, dZ) {
 	var lapseRate = -sumLR/n;
 	return lapseRate;
 }
+
+$(".x .tick").each( function() {
+	var tickTran = $(this).attr("transform");
+	tickTranX = tickTran.split(",");
+	tickTranX = tickTranX[0].split("(");
+	tickTranX = tickTranX[1]-14;
+	tickTranY = tickTran.split(",");
+	tickTranY = tickTranY[1].split(")");
+	tickTranY = tickTranY[0]+8;
+	$(this).attr("transform", "translate(" + tickTranX + " " + tickTranY + ") rotate(-" + tempSkew + ")");
+});
 
 </script>
 
