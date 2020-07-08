@@ -1289,7 +1289,8 @@ function drawText() {
 		}
     }
 
-    titleText = labelgroup.selectAll("title")
+//    titleText = labelgroup.selectAll("title")
+	titleText = d3.select("#mainbox svg g g.skewtbg").selectAll("title")
 	  .data([title]).enter().insert("text",":first-child")
         .attr('dy', '0.4em')
     	.attr('class', 'titleText')
@@ -1306,11 +1307,8 @@ function drawToolTips() {
 	// Define drag beavior
 	var drag = d3.behavior.drag()
 		.on("dragstart", dragStart)
-		.on("touchstart", dragStart)
 		.on("drag", dragMove)
-		.on("touchmove", dragMove)
-		.on("dragend", dragEnd)
-		.on("touchend", dragEnd);
+		.on("dragend", dragEnd);
 
   // Draw T/Td tooltips
   focus3 = focusgroup.insert("g",":first-child").attr("class", "focus twc").style("display", "none");
@@ -1427,11 +1425,8 @@ function mousemove() {
 
 var dragWind = d3.behavior.drag()
 		.on("dragstart", dragWindStart)
-		.on("touchstart", dragWindStart)
 		.on("drag", dragWindMoveCircular)
-		.on("touchmove", dragWindMoveCircular)
-		.on("dragend", dragWindEnd)
-		.on("touchend", dragWindEnd);
+		.on("dragend", dragWindEnd);
 
 var dragLocX;
 
