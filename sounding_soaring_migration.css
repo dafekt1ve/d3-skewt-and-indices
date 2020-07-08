@@ -3,9 +3,7 @@ body {
   text-align: center;
 }
 #container { width: 1000px; margin: auto; }
-#mainbox, #hodobox { 
-  float: left; 
-}
+#mainbox, #hodobox { float: left; }
 #hodobox { width: 300px; }
 .result { clear: both; }
 
@@ -16,6 +14,8 @@ body {
   stroke-width: 1px;
   shape-rendering: crispEdges;
 }
+.x.axis path {  }
+.y.axis path {  }
 .axis { fill: #000; }
 .y.axis { font-size: 13px; }
 .y.axis.hght { font-size: 9px; fill: red;}
@@ -71,7 +71,6 @@ textarea {
 .parcelmix   { stroke-width: 2.5px; opacity: 1.0; stroke-dasharray: 4; };
 .mean     { stroke-width: 2.5px; }
 .hodoline { stroke: #aaa; fill: none; opacity: 1.0; }
-.hodarrow { stroke: #777; fill: none; opacity: 1.0; }
 .hodoline.mean { stroke: #000; opacity: 1.0; stroke-width: 3.5px;}
 .hododot {  stroke: #000; opacity: 0.8; }
 .hododot.hgt0 { fill: gray;    }
@@ -110,7 +109,6 @@ textarea {
 }
 
 .mrline {
-   stroke: #48cf6a;
    stroke: #0BD63D;
    stroke-width: 1.25px;
    fill: none;
@@ -135,16 +133,18 @@ textarea {
 .frzltext { font-size: 11px; color: #33DDFF; fill: #33DDFF; }
 .key { font-size: 10px; }
 
+.windbarb { stroke: #000; }
+.flag { fill: #000; }
+
 .overlay {
   fill: none;
   pointer-events: all;
 }
 
-circle.highlight { fill: black;}
-.focus.tmpc circle { fill: red;}
-.focus.tmpc { fill: red;}
-.focus.dwpc circle { fill: green;}
-.focus.dwpc { fill: green;}
+.focus.tmpc circle { fill: red;   stroke: none; }
+.focus.tmpc { fill: red; }
+.focus.dwpc circle { fill: green; stroke: none; }
+.focus.dwpc { fill: green; }
 .focus.twc circle { fill: blue; stroke: none; }
 .focus.twc { fill: blue; stroke: none; }
 .focus.tvc circle { fill: purple; stroke: none; }
@@ -153,56 +153,11 @@ circle.highlight { fill: black;}
 .focus.parcel { fill: gray; stroke: none;}
 .focus.parcelmix circle { fill: gray; stroke: none;}
 .focus.parcelmix { fill: gray; stroke: none;}
-.focus.windt circle { fill: orange; stroke: none; }
+.focus.windt circle { fill: black; stroke: none; }
 .focus text { font-size: 12px;}
-.focus.tmpc text { stroke: black; font-size: 14px; font-weight: 900}
-.focus.dwpc text { stroke: black; font-size: 14px; font-weight: 900}
-
-g.inactiveBarb {
-  fill: black;
-  stroke: black;
-}
-
-g.activeBarb {
-  fill: orange;
-  stroke: orange;
-  stroke-width: 2px;
-/*  filter: url(#glow); */
-  cursor: grab;
-}
-
-.focus .windt {
-  cursor: grab;
-}
-
-#rotateRect line, #rotateRect circle {
-  stroke: orange;
-  fill: orange;
-}
-
-#rotateRect rect {
-  stroke: orange;
-  fill: none;
-}
 
 div.rollover { padding: 15px 5px 15px 5px; display: inline; cursor: pointer;}
 div.rollover.selected { background-color: #EFEFEF; border-bottom: 2px solid gray;}
 
-.draggable {cursor: grab;}
-
-
-#checks {padding: 10px;}
-#upload_wrapper, #resets {padding: 10px; float: left;}
-#editData {padding: 10px; float: left}
-#resets {clear: both;}
-#checks_wrapper {margin: 10px; background-color: #e9e9e9}
-
-#editTableWrap { display: none };
-
-@keyframes blink {
-  50%   {border: 2px red solid;}
-}
-
-.blank {
-  border: 2px red solid;
-}
+.static {cursor: not-allowed;}
+.draggable {cursor: move;}

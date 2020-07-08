@@ -61,7 +61,7 @@
 						<option value='./All-Star-Soundings/LIX_2005827_06.html'>Hurricane Katrina (LIX)</option>
 						<option value='./All-Star-Soundings/LZK_2005830_00.html'>Remnants of Hurricane Katrina (LZK)</option>
 						<option value='./All-Star-Soundings/TXKF_20141018_12.html'>Hurricane Gonzalo (direct hit on Bermuda; TXKF)</option>
-						<option value='./All-Star-Soundings/JAX_2016108_00.json'>Hurricane Matthew (JAX)</option>
+						<option value='./All-Star-Soundings/JAX_2016108_00.html'>Hurricane Matthew (JAX)</option>
 						<option value='./All-Star-Soundings/CRP_2017826_00.html'>Hurricane Harvey (Near Landfall; CRP)</option>
 						<option value='./All-Star-Soundings/EYW_2017910_00.html'>Hurricane Irma (12 hrs prior to landfall; EYW))</option>
 						<option value='./All-Star-Soundings/TBW_2017911_00.html'>Hurricane Irma (12 hrs post landfalll TBW)</option>
@@ -112,7 +112,7 @@
 						<option value='./All-Star-Soundings/OAX_201417_12.html'>Arctic Cold Blast (Record-setting Surface High)</option>
 						<option value='./All-Star-Soundings/UIL_201427_12.html'>Seattle Record Cold</option>
 						<option value='./All-Star-Soundings/MPX_199622_12.html'>Frigid Cold</option>
-						<option value='./All-Star-Soundings/ABR_201416_00.json'>Brutal Cold</option>
+						<option value='./All-Star-Soundings/ABR_201416_00.html'>Brutal Cold</option>
 					<option disabled>&#9473; Wildfire &#9473;</option>
 						<option value='./All-Star-Soundings/MFR_2018727_00.html'>Carr Wildfire</option>		
 				</select>
@@ -131,13 +131,6 @@
 <script type="text/javascript">
 
 $(document).ready( function() {
-	$(window).keydown(function(event){
-		if(event.keyCode == 13) {
-		event.preventDefault();
-		return false;
-		}
-  	});
-
 	$("input:checkbox").on("change", function() {
 		var checkbox_id = $(this).prop("id");
 		var className = checkbox_id.split("_",1).toString();
@@ -217,114 +210,102 @@ function tabulate() {
 
 	$("[contenteditable=true]").on("input", function() {
 		var row = $(this).parent().children();
-		var i = $("tr:not(:first)").index($(this).parent());
-		var j = $(this).parent().children("td").index(this);
-   		update(row, i, j);
+   		update();
 	});
 
   return table;
 }
 
-function update(r, i, j) {
-	var here = $("#editTable tr:not(:first)").eq(i).children("td").eq(j);
-	console.log(here);
-	console.log(i,j);
+function update(r) {
+	$("#editTable tr:not(:first)").each(function (i) {
+		var signs = /^[-+.]?[.]?$/;
+		var numbers = /^[-+]?[0-9]*\.?[0-9]+$/;
 
-	var inputText = r.eq(j).text().trim();
-
-	var signs = /^[-+.]?[.]?$/;
-	var numbers = /^[-+]?[0-9]*\.?[0-9]+$/;
-
-	if (j%4 == 1 || j%4 == 2) {
-		if (inputText.match(signs)) {
-			console.log("Matching signs");
-			return false
-		}
-	}
-
-	if (inputText == "") {
-		console.log("Matching no text");
-		here.addClass("blank");
-		return false
-	} else if (inputText.match(numbers)) {
-		console.log("Matching numbers");
-		if (j == 1) {
-			tlinetest[0][0][i].temp = parseFloat(inputText);
-			if (tlinetest[0][0][i].temp < tlinetest[0][0][i].dwpt) {
-				console.log("Testing: temp is less than dewpoint");
-				console.log("Temp: " + tlinetest[0][0][i].temp);
-				console.log("Dewpoint: " + tlinetest[0][0][i].dwpt);
-				// Send error message to user to correct temp and dwpt
-				here.addClass("blank");
-				here.next().addClass("blank");
-				return false
-			} else {
-				console.log("Testing: temp is greater than dewpoint");
-				console.log("Temp: " + tlinetest[0][0][i].temp);
-				console.log("Dewpoint: " + tlinetest[0][0][i].dwpt);
-				here.removeClass("blank");
-				here.next().removeClass("blank");
-			}
-		} else if (j == 2) {
-			tlinetest[0][0][i].dwpt = parseFloat(inputText);
-			if (tlinetest[0][0][i].dwpt > tlinetest[0][0][i].temp) {
-				// Send error message to user to correct temp and dwpt
-				console.log("Testing: dewpoint temp is greater than temp");
-				console.log("Temp: " + tlinetest[0][0][i].temp);
-				console.log("Dewpoint: " + tlinetest[0][0][i].dwpt);
-				here.addClass("blank");
-				here.prev().addClass("blank");
-				return false
-			} else {
-				console.log("Testing: dewpoint temp is less than temp");
-				console.log("Temp: " + tlinetest[0][0][i].temp);
-				console.log("Dewpoint: " + tlinetest[0][0][i].dwpt);
-				here.removeClass("blank");
-				here.prev().removeClass("blank");
-			}
-		} else if (j == 3) {
-			if (inputText.match(/^\d*\.?\d+$/)) {
-				if (parseFloat(inputText) > 360 || parseFloat(inputText) < 0 ) {
-					var howLarge = parseFloat(inputText)/360;
-					if (howLarge < 1 && howLarge > 0) {
-						var direct = parseFloat(inputText);
-					} else if (howLarge < 0 && howLarge > -1) {
-						var direct = parseFloat(inputText) + 360;
-					} else if (Math.abs(howLarge) >= 1) {
-						var multiplier = Math.floor(howLarge);
-						var direct = parseFloat(inputText) - 360*multiplier;
-					}
-					here.text(direct);
+		$(this).children().each(function (j) {
+			var inputText = $(this).text().trim();
+			if (j%4 > 0) {
+				if (inputText.match(signs)) {
+					console.log("Matching signs");
+					return false
 				}
-				tlinetest[0][0][i].wdir = parseFloat(inputText);
-			} else {
-				here.text(tlinetest[0][0][i].wdir);
-				return false;
-			}
-		} else if (j == 4) {
-			if (inputText.match(/^\d*\.?\d+$/)) {
-				tlinetest[0][0][i].wspd = parseFloat(inputText);
-				tlinetest[0][0][i].wspdround = Math.round((parseFloat(inputText)/5))*5;
-			} else {
-				here.text(tlinetest[0][0][i].wspd);
-				return false;
 			}
 
-		}
-	} else {
-		console.log("Matching else");
-		if (j == 1) {
-			here.text(tlinetest[0][0][i].temp);
-		} else if (j == 2) {
-			here.text(tlinetest[0][0][i].dwpt);
-		} else if (j == 3) {
-			here.text(tlinetest[0][0][i].wdir);
-		} else if (j == 4) {
-			here.text(tlinetest[0][0][i].wspd);	
-		}
-		return false;
-	}
-	here.removeClass("blank");
+			if (inputText == "") {
+				console.log("Matching no text");
+				$(this).addClass("blank");
+				return false
+			} else if (inputText.match(numbers)) {
+				console.log("Matching numbers");
+				if (j == 1) {
+					tlinetest[0][0][i].temp = parseFloat($(this).text());
+					if (tlinetest[0][0][i].temp < tlinetest[0][0][i].dwpt) {
+						console.log("Testing: temp is less than dewpoint");
+						// Send error message to user to correct temp and dwpt
+						$(this).css("border", "2px red solid");
+						$(this).next().css("border", "2px red solid");
+						return false
+					} else {
+						console.log("Testing: temp is greater than dewpoint");
+						$(this).css("border", "1px solid transparent");
+						$(this).next().css("border", "1px solid transparent");
+					}
+				} else if (j == 2) {
+					tlinetest[0][0][i].dwpt = parseFloat($(this).text());
+					if (tlinetest[0][0][i].dwpt > tlinetest[0][0][i].temp) {
+						// Send error message to user to correct temp and dwpt
+						console.log("Testing: dewpoint temp is greater than temp");
+						console.log("Temp: " + tlinetest[0][0][i].temp);
+						console.log("Dewpoint: " + tlinetest[0][0][i].dwpt);
+						$(this).css("border", "2px red solid");
+						$(this).prev().css("border", "2x red solid");
+						return false
+					} else {
+						console.log("Testing: dewpoint temp is less than temp");
+						console.log("Temp: " + tlinetest[0][0][i].temp);
+						console.log("Dewpoint: " + tlinetest[0][0][i].dwpt);
+						$(this).css("border", "1px solid transparent");
+						$(this).prev().css("border", "1px solid transparent");
+					}
+				} else if (j == 3) {
+					if (parseFloat($(this).text()) > 360 || parseFloat($(this).text()) < 0 ) {
+						var howLarge = parseFloat($(this).text())/360;
+						if (howLarge < 1 && howLarge > 0) {
+							var direct = parseFloat($(this).text());
+						} else if (howLarge < 0 && howLarge > -1) {
+							var direct = parseFloat($(this).text()) + 360;
+						} else if (Math.abs(howLarge) >= 1) {
+							var multiplier = Math.floor(howLarge);
+							var direct = parseFloat($(this).text()) - 360*multiplier;
+						}
+						$(this).text(direct);
+					}
+					tlinetest[0][0][i].wdir = parseFloat($(this).text());
+				} else if (j == 4) {
+					if (inputText.match(/^\d*\.?\d+$/)) {
+						tlinetest[0][0][i].wspd = parseFloat($(this).text());
+						tlinetest[0][0][i].wspdround = Math.round((parseFloat($(this).text())/5))*5;
+					} else {
+						$(this).text(tlinetest[0][0][i].wspd);
+						return false;
+					}
+
+				}
+			} else {
+				console.log("Matching else");
+				if (j == 1) {
+					$(this).text(tlinetest[0][0][i].temp);
+				} else if (j == 2) {
+					$(this).text(tlinetest[0][0][i].dwpt);
+				} else if (j == 3) {
+					$(this).text(tlinetest[0][0][i].wdir);
+				} else if (j == 4) {
+					$(this).text(tlinetest[0][0][i].wspd);	
+				}
+				return false;
+			}
+			$(this).removeClass("blank");
+		});
+	});
 	drawSkew();
 	drawText();
 }
@@ -1070,7 +1051,7 @@ function drawText() {
 	$(".label").remove();
 	d3.selectAll("text.titleText > *").remove();
 	d3.selectAll("text.indexVal").remove();
-    units = [' mb', ' mb', ' mb', ' mb', ' mb', ' mb', ' J/kg', ' J/kg', ' J/kg', ' J/kg', '', ' m2/s2', ' kts', '', '', '', '', '', ' mb', ' ˚C', ' m', ' mb', ' mb', ' in', " %", " g/kg", " hPa", " g/kg", " K", " K"];
+    units = [' mb', ' mb', ' mb', ' mb', ' mb', ' mb', ' J/kg', ' J/kg', ' J/kg', ' J/kg', '', ' m2/s2', ' kts', '', '', '', '', '', ' mb', ' ˚C', ' m', ' mb', ' mb', ' in', " %", " g/kg", " g/kg", " K", " K"];
 	indices = [];
 	indices.push(tlinetest[0][0][0].elP);
 	indices.push(tlinetest[0][0][0].elPmix);
@@ -1100,7 +1081,6 @@ function drawText() {
 
 	indices.push(tlinetest[0][0][0].relh);
 	indices.push(tlinetest[0][0][0].mr.toPrecision(4));
-	indices.push(tlinetest[0][0][0].e.toPrecision(4));
 	indices.push(tlinetest[0][0][0].sh);
 	indices.push(tlinetest[0][0][0].theta);
 	indices.push(tlinetest[0][0][0].thetaE);
@@ -1306,11 +1286,8 @@ function drawToolTips() {
 	// Define drag beavior
 	var drag = d3.behavior.drag()
 		.on("dragstart", dragStart)
-		.on("touchstart", dragStart)
 		.on("drag", dragMove)
-		.on("touchmove", dragMove)
-		.on("dragend", dragEnd)
-		.on("touchend", dragEnd);
+		.on("dragend", dragEnd);
 
   // Draw T/Td tooltips
   focus3 = focusgroup.insert("g",":first-child").attr("class", "focus twc").style("display", "none");
@@ -1415,11 +1392,9 @@ function mousemove() {
 	focus6b.select("text").text("  " + d.press+"mb");
 	focus7.select("text").text(d.wspd+` @`+d.wdir+"˚");
 	$(".RH").text(d.relh + "%")
-	var mrText = d.mr.toFixed(2) + "\u00A0g/kg";
+	var mrText = d.mr.toPrecision(4) + "\u00A0g/kg";
 	$(".MixingRatio").text(mrText)
-	var eText = d.e.toFixed(2) + "\u00A0hPa";
-	$(".VaporPressure").text(eText);
-	$(".SpecHum").text(d.sh + "\u00A0g/kg")
+	$(".SpecHum").text(d.sh + "\u00A0 g/kg")
 	$(".Theta").text(d.theta + "\u00A0K")
 	$(".ThetaE").text(d.thetaE + "\u00A0K")
 
@@ -1427,11 +1402,8 @@ function mousemove() {
 
 var dragWind = d3.behavior.drag()
 		.on("dragstart", dragWindStart)
-		.on("touchstart", dragWindStart)
 		.on("drag", dragWindMoveCircular)
-		.on("touchmove", dragWindMoveCircular)
-		.on("dragend", dragWindEnd)
-		.on("touchend", dragWindEnd);
+		.on("dragend", dragWindEnd);
 
 var dragLocX;
 
@@ -1622,7 +1594,7 @@ function drawTextLabels() {
 
 	spacing = 20;
 	var headers = ['Values', '', 'Values'];
-	labels = ['EL', 'EL (mixed)', 'LFC', 'LFC (mixed)', 'LCL', 'LCL (mixed)', 'SBCAPE', 'MLCAPE', 'CIN', 'MLCIN', 'BRN', 'BRN Shear', 'Shear 6km', 'LI', 'LI (mixed)', 'KI', 'TT', 'SWEAT', 'CCL', 'Tc', 'Thickness', 'Wet-Bulb 0˚', 'Freezing Lvl', 'PW', 'RH', 'Mixing Ratio', 'Vapor Pressure', 'Spec Hum', 'Theta', 'ThetaE'];
+	labels = ['EL', 'EL (mixed)', 'LFC', 'LFC (mixed)', 'LCL', 'LCL (mixed)', 'SBCAPE', 'MLCAPE', 'CIN', 'MLCIN', 'BRN', 'BRN Shear', 'Shear 6km', 'LI', 'LI (mixed)', 'KI', 'TT', 'SWEAT', 'CCL', 'Tc', 'Thickness', 'Wet-Bulb 0˚', 'Freezing Lvl', 'PW', 'RH', 'Mixing Ratio', 'Spec Hum', 'Theta', 'ThetaE'];
     
     svgtext.selectAll("labels")
      .data(labels.slice(0,18)).enter().append("text")

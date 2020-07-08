@@ -12,109 +12,16 @@
 			<label for="tvc_check"><input id="tvc_check" type="checkbox" checked="checked">Virtual Temperature</input></label>
 			<label for="twc_check"><input id="twc_check" type="checkbox" checked="checked">Wet Bulb Temperature</input></label>
 		</div>
+
 		<div id="upload_wrapper">
 			<label id="fileUpload" for="input-file">Upload File:</label>
 			<input type="file" id="input-file">
 		</div>
-		<div id="editData">
-			<button id="editButton" onClick="tableVis()">Show Data Table</button>
-		</div>
 		<div id="resets">
 			<p>Preset Soundings:
 				<select id="allstar_sounding">
-					<option disabled>&#9473; Defaults &#9473;</option>
 					<option value="data_TOP.json" default>Default Sounding</option>
 					<option value="data_SkewT.json">Flash Sounding</option>
-					<option disabled>&#9473; Thunderstorms & Tornadoes &#9473;</option>
-						<option value="./All-Star-Soundings/BMX_2011427_18.html">Tornado Outbreak (BMX)</option>
-						<option value="./All-Star-Soundings/BMX_2011428_00.html">Tornado Outbreak (BMX)</option>
-						<option value='./All-Star-Soundings/TOP_200354_12.html'>Tornado Outbreak (TOP)</option>
-						<option value='./All-Star-Soundings/TOP_200354_18.html'>Tornado Outbreak (TOP)</option>
-						<option value='./All-Star-Soundings/TOP_200355_00.html'>Tornado Outbreak -- Post Dryline (TOP)</option>
-						<option value='./All-Star-Soundings/OUN_200358_12.html'>Moore, OK Tornado (OUN)</option>
-						<option value='./All-Star-Soundings/OUN_200358_18.html'>Moore, OK Tornado (OUN)</option>
-						<option value='./All-Star-Soundings/OUN_200359_00.html'>Moore, OK Tornado (OUN)</option>
-						<option value='./All-Star-Soundings/TOP_2004530_00.html'>NE/KS/OK Tornadoes (TOP)</option>
-						<option value='./All-Star-Soundings/OUN_2004530_00.html'>NE/KS/OK Tornadoes (OUN)</option>
-						<option value='./All-Star-Soundings/BMX_2011427_18.html'>Severe Weather Outbreak (BMX)</option>
-						<option value='./All-Star-Soundings/BMX_2011428_00.html'>Severe Weather Outbreak (BMX)</option>
-						<option value='./All-Star-Soundings/JAN_2011427_18.html'>Severe Weather Outbreak (JAN)</option>
-						<option value='./All-Star-Soundings/OUN_2011524_12.html'>Severe Weather Outbreak (OUN)</option>
-						<option value='./All-Star-Soundings/OUN_2011524_18.html'>Severe Weather Outbreak (OUN)</option>
-						<option value='./All-Star-Soundings/OUN_2013520_12.html'>Moore, OK EF5 Tornado (OUN)</option>
-						<option value='./All-Star-Soundings/OUN_2013520_18.html'>Moore, OK EF5 Tornado (OUN)</option>
-						<option value='./All-Star-Soundings/OUN_2013531_12.html'>El Reno, OK EF3 Tornado (OUN)</option>
-						<option value='./All-Star-Soundings/FGZ_2017820_00.html'>Dry Microburst (FGZ)</option>
-						<option value='./All-Star-Soundings/OUN_2015615_00.html'>Wet Microburst (OUN)</option>
-						<option value='./All-Star-Soundings/IAD_2012630_00.html'>Derecho (IAD)</option>
-					<option disabled>&#9473; Hurricanes &#9473;</option>
-						<option value='./All-Star-Soundings/EYW_2004813_00.html'>Hurricane Charley (EYW)</option>
-						<option value='./All-Star-Soundings/EYW_2004813_12.html'>Hurricane Charley (EYW)</option>
-						<option value='./All-Star-Soundings/TBW_2004813_18.html'>Hurricane Charley (TBW)</option>
-						<option value='./All-Star-Soundings/TBW_2004814_00.html'>Hurricane Charley (TBW)</option>
-						<option value='./All-Star-Soundings/CRP_2003716_00.html'>Hurricane Claudette (Near Landfall; CRP)</option>
-						<option value='./All-Star-Soundings/DRT_2003716_00.html'>Hurricane Claudette (Inland Dry Environment; DRT)</option>
-						<option value='./All-Star-Soundings/DRT_2003716_06.html'>Hurricane Claudette (Inland Moistening Environment; DRT)</option>
-						<option value='./All-Star-Soundings/DRT_2003716_12.html'>Hurricane Claudette (Inland over DRT; DRT)</option>
-						<option value='./All-Star-Soundings/76595_2002923_12.html'>Hurricane Isidore (76595)</option>
-						<option value='./All-Star-Soundings/MMMD_2002922_12.html'>Hurricane Isidore (MMMD)</option>
-						<option value='./All-Star-Soundings/LIX_2005827_06.html'>Hurricane Katrina (LIX)</option>
-						<option value='./All-Star-Soundings/LZK_2005830_00.html'>Remnants of Hurricane Katrina (LZK)</option>
-						<option value='./All-Star-Soundings/TXKF_20141018_12.html'>Hurricane Gonzalo (direct hit on Bermuda; TXKF)</option>
-						<option value='./All-Star-Soundings/JAX_2016108_00.json'>Hurricane Matthew (JAX)</option>
-						<option value='./All-Star-Soundings/CRP_2017826_00.html'>Hurricane Harvey (Near Landfall; CRP)</option>
-						<option value='./All-Star-Soundings/EYW_2017910_00.html'>Hurricane Irma (12 hrs prior to landfall; EYW))</option>
-						<option value='./All-Star-Soundings/TBW_2017911_00.html'>Hurricane Irma (12 hrs post landfalll TBW)</option>
-					<option disabled>&#9473; Heavy Snow &#9473;</option>
-						<option value="./All-Star-Soundings/ABR_20051129_00.html">Heavy Snow (ABR)</option>
-						<option value='./All-Star-Soundings/BUF_20011224_12.html'>Heavy Lake Effect Snow (BUF)</option>
-						<option value='./All-Star-Soundings/BUF_20011225_00.html'>Heavy Lake Effect Snow (BUF)</option>
-						<option value='./All-Star-Soundings/OUN_20021223_18.html'>Heavy Snow/Thundersnow</option>
-						<option value='./All-Star-Soundings/FWD_2004213_12.html'>Heavy Snow</option>
-						<option value='./All-Star-Soundings/FWD_2004214_00.html'>Heavy Snow</option>
-						<option value='./All-Star-Soundings/FWD_2004214_12.html'>Heavy Snow</option>
-						<option value='./All-Star-Soundings/FWD_2004215_00.html'>Heavy Snow</option>
-						<option value='./All-Star-Soundings/ABR_20051129_00.html'>Winter Storm</option>
-						<option value='./All-Star-Soundings/OKX_2006212_06.html'>Historic Blizzard</option>
-						<option value='./All-Star-Soundings/CHH_2006212_06.html'>Historic Blizzard</option>
-						<option value='./All-Star-Soundings/LBF_2006321_00.html'>Great Plains Snowstorm</option>
-						<option value='./All-Star-Soundings/OAX_2006321_00.html'>Great Plains Snowstorm</option>
-						<option value='./All-Star-Soundings/BUF_20131212_00.html'>Heavy Lake Effect Snow</option>
-						<option value='./All-Star-Soundings/CHH_2015127_12.html'>Boston Blizzard</option>
-						<option value='./All-Star-Soundings/BUF_20141119_00.html'>Heavy Lake Effect Snow</option>
-						<option value='./All-Star-Soundings/GYX_2015128_00.html'>Blizzard</option>
-						<option value='./All-Star-Soundings/TFX_2019929_12.html'>4 Feet of Snow</option>
-					<option disabled>&#9473; Heavy Rain/Flooding &#9473;</option>
-						<option value='./All-Star-Soundings/FWD_2004728_00.html'>Heavy Rain</option>
-						<option value='./All-Star-Soundings/FWD_2004728_12.html'>Heavy Rain</option>
-						<option value='./All-Star-Soundings/FWD_2004729_00.html'>Heavy Rain</option>
-						<option value='./All-Star-Soundings/FFC_2009920_12.html'>Atlanta Flash Flood</option>
-						<option value='./All-Star-Soundings/OUN_2010614_00.html'>Oklahoma City Flash Flood</option>
-						<option value='./All-Star-Soundings/OUN_2010614_12.html'>Oklahoma City Flash Flood</option>
-						<option value='./All-Star-Soundings/OKX_2014813_12.html'>Historic Flooding on Long Island</option>
-						<option value='./All-Star-Soundings/DNR_2013912_12.html'>Historic Flooding along Front Range of Colorado</option>
-						<option value='./All-Star-Soundings/DNR_2013913_12.html'>Historic Flooding along Front Range of Colorado</option>
-					<option disabled>&#9473; Precipitation Typing &#9473;</option>
-						<option value='./All-Star-Soundings/FWD_20001213_12.html'>Freezing Rain/Ice Pellets</option>
-						<option value='./All-Star-Soundings/OUN_20001213_12.html'>Freezing Rain/Ice Pellets</option>
-						<option value='./All-Star-Soundings/FWD_20001226_00.html'>Rain/Freezing Rain/Ice Pellets</option>
-						<option value='./All-Star-Soundings/OUN_20001226_00.html'>Rain/Freezing Rain/Ice Pellets</option>
-						<option value='./All-Star-Soundings/GSO_200821_12.html'>Cold Air Damming</option>
-					<option disabled>&#9473; Heat Wave &#9473;</option>
-						<option value='./All-Star-Soundings/OUN_2003721_00.html'>Heat Wave</option>
-						<option value='./All-Star-Soundings/OUN_201183_00.html'>Heat Wave</option>
-						<option value='./All-Star-Soundings/FWD_201183_00.html'>Heat Wave</option>
-						<option value='./All-Star-Soundings/DVN_1995714_00.html'>Heat Wave</option>
-						<option value='./All-Star-Soundings/ILX_1995714_00.html'>Heat Wave</option>
-						<option value='./All-Star-Soundings/NKX_201877_00.html'>Heat Wave</option>
-					<option disabled>&#9473; Cold Wave &#9473;</option>
-						<option value='./All-Star-Soundings/PABR_2002110_00.html'>Large Inversion/Low Tropopause</option>
-						<option value='./All-Star-Soundings/OAX_201417_12.html'>Arctic Cold Blast (Record-setting Surface High)</option>
-						<option value='./All-Star-Soundings/UIL_201427_12.html'>Seattle Record Cold</option>
-						<option value='./All-Star-Soundings/MPX_199622_12.html'>Frigid Cold</option>
-						<option value='./All-Star-Soundings/ABR_201416_00.json'>Brutal Cold</option>
-					<option disabled>&#9473; Wildfire &#9473;</option>
-						<option value='./All-Star-Soundings/MFR_2018727_00.html'>Carr Wildfire</option>		
 				</select>
 			<button id="default" onClick="loadSounding()" value="default">Load Sounding</button>
 			</p>
@@ -122,22 +29,14 @@
 	</div>
 </div>
 <div id="hodobox"></div>
-<div id="editTableWrap"></div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script src="jsfunctions.js"></script>
 <script type="text/javascript">
 
 $(document).ready( function() {
-	$(window).keydown(function(event){
-		if(event.keyCode == 13) {
-		event.preventDefault();
-		return false;
-		}
-  	});
-
 	$("input:checkbox").on("change", function() {
 		var checkbox_id = $(this).prop("id");
 		var className = checkbox_id.split("_",1).toString();
@@ -147,21 +46,17 @@ $(document).ready( function() {
 			$(".wbztext, .wbz_rectline").css('visibility', $(".wbztext, .wbz_rectline").css('visibility') == 'hidden' ? 'visible' : 'hidden');
 			drawSkew();
 			drawText();
-			tabulate();
 		} else if (className == "tvc") {
 			drawSkew();
 			drawText();
-			tabulate();
 		} else if (className == "parcel") {
 			$(".lcltext, .lcl, .lfctext, .lfc, .eltext, .el").css('visibility', $(".lcltext, .lcl, .lfctext, .lfc, .eltext, .el").css('visibility') == 'hidden' ? 'visible' : 'hidden');
 			drawSkew();
 			drawText();
-			tabulate();
 		} else if (className == "parcelmix") {
 			$(".lclmixtext, .lclmix, .lfcmixtext, .lfcmix, .elmixtext, .elmix").css('visibility', $(".lclmixtext, .lclmix, .lfcmixtext, .lfcmix, .elmixtext, .elmix").css('visibility') == 'hidden' ? 'visible' : 'hidden');
 			drawSkew();
 			drawText();
-			tabulate();
 		} else {
 		}
 	})
@@ -169,176 +64,12 @@ $(document).ready( function() {
 });
 
 var lat, long;
-var columns = ['press', 'temp', 'dwpt', 'wdir', 'wspd'];
-
-function tableVis () {
-	$("#editTableWrap").toggle();
-	if ($("#editTableWrap").is(":visible")) {
-		$("#editButton").text("Hide Data Table");
-	} else {
-		$("#editButton").text("Show Data Table");
-	}
-	tabulate();
-}
-
-function tabulate() {
-	d3.select("#editTableWrap").html("");
-	var table = d3.select('#editTableWrap').append('table').attr("id","editTable");
-	var thead = table.append('thead');
-	var	tbody = table.append('tbody');
-
-	// append the header row
-	thead.append('tr')
-	  .selectAll('th')
-	  .data(columns).enter()
-	  .append('th')
-	    .text(function (column) { return column; });
-
-	// create a row for each object in the data
-	var rows = tbody.selectAll('tr')
-	  .data(tlinetest[0][0])
-	  .enter()
-	  .append('tr');
-
-	// create a cell in each row for each column
-	var cells = rows.selectAll('td')
-	  .data(function (row) {
-	    return columns.map(function (column) {
-	      return {column: column, value: row[column]};
-	    });
-	  })
-	  .enter()
-	  .append('td')
-		  .attr("contenteditable", "true")
-		  .attr("class", "edit")
-		  .text(function (d) { return d.value; });
-
-	rows.selectAll(":first-child").attr("contenteditable", "false");
-
-	$("[contenteditable=true]").on("input", function() {
-		var row = $(this).parent().children();
-		var i = $("tr:not(:first)").index($(this).parent());
-		var j = $(this).parent().children("td").index(this);
-   		update(row, i, j);
-	});
-
-  return table;
-}
-
-function update(r, i, j) {
-	var here = $("#editTable tr:not(:first)").eq(i).children("td").eq(j);
-	console.log(here);
-	console.log(i,j);
-
-	var inputText = r.eq(j).text().trim();
-
-	var signs = /^[-+.]?[.]?$/;
-	var numbers = /^[-+]?[0-9]*\.?[0-9]+$/;
-
-	if (j%4 == 1 || j%4 == 2) {
-		if (inputText.match(signs)) {
-			console.log("Matching signs");
-			return false
-		}
-	}
-
-	if (inputText == "") {
-		console.log("Matching no text");
-		here.addClass("blank");
-		return false
-	} else if (inputText.match(numbers)) {
-		console.log("Matching numbers");
-		if (j == 1) {
-			tlinetest[0][0][i].temp = parseFloat(inputText);
-			if (tlinetest[0][0][i].temp < tlinetest[0][0][i].dwpt) {
-				console.log("Testing: temp is less than dewpoint");
-				console.log("Temp: " + tlinetest[0][0][i].temp);
-				console.log("Dewpoint: " + tlinetest[0][0][i].dwpt);
-				// Send error message to user to correct temp and dwpt
-				here.addClass("blank");
-				here.next().addClass("blank");
-				return false
-			} else {
-				console.log("Testing: temp is greater than dewpoint");
-				console.log("Temp: " + tlinetest[0][0][i].temp);
-				console.log("Dewpoint: " + tlinetest[0][0][i].dwpt);
-				here.removeClass("blank");
-				here.next().removeClass("blank");
-			}
-		} else if (j == 2) {
-			tlinetest[0][0][i].dwpt = parseFloat(inputText);
-			if (tlinetest[0][0][i].dwpt > tlinetest[0][0][i].temp) {
-				// Send error message to user to correct temp and dwpt
-				console.log("Testing: dewpoint temp is greater than temp");
-				console.log("Temp: " + tlinetest[0][0][i].temp);
-				console.log("Dewpoint: " + tlinetest[0][0][i].dwpt);
-				here.addClass("blank");
-				here.prev().addClass("blank");
-				return false
-			} else {
-				console.log("Testing: dewpoint temp is less than temp");
-				console.log("Temp: " + tlinetest[0][0][i].temp);
-				console.log("Dewpoint: " + tlinetest[0][0][i].dwpt);
-				here.removeClass("blank");
-				here.prev().removeClass("blank");
-			}
-		} else if (j == 3) {
-			if (inputText.match(/^\d*\.?\d+$/)) {
-				if (parseFloat(inputText) > 360 || parseFloat(inputText) < 0 ) {
-					var howLarge = parseFloat(inputText)/360;
-					if (howLarge < 1 && howLarge > 0) {
-						var direct = parseFloat(inputText);
-					} else if (howLarge < 0 && howLarge > -1) {
-						var direct = parseFloat(inputText) + 360;
-					} else if (Math.abs(howLarge) >= 1) {
-						var multiplier = Math.floor(howLarge);
-						var direct = parseFloat(inputText) - 360*multiplier;
-					}
-					here.text(direct);
-				}
-				tlinetest[0][0][i].wdir = parseFloat(inputText);
-			} else {
-				here.text(tlinetest[0][0][i].wdir);
-				return false;
-			}
-		} else if (j == 4) {
-			if (inputText.match(/^\d*\.?\d+$/)) {
-				tlinetest[0][0][i].wspd = parseFloat(inputText);
-				tlinetest[0][0][i].wspdround = Math.round((parseFloat(inputText)/5))*5;
-			} else {
-				here.text(tlinetest[0][0][i].wspd);
-				return false;
-			}
-
-		}
-	} else {
-		console.log("Matching else");
-		if (j == 1) {
-			here.text(tlinetest[0][0][i].temp);
-		} else if (j == 2) {
-			here.text(tlinetest[0][0][i].dwpt);
-		} else if (j == 3) {
-			here.text(tlinetest[0][0][i].wdir);
-		} else if (j == 4) {
-			here.text(tlinetest[0][0][i].wspd);	
-		}
-		return false;
-	}
-	here.removeClass("blank");
-	drawSkew();
-	drawText();
-}
 
 function loadSounding () {
 	var soundingFile = $('#allstar_sounding').children('option:selected').val();
 	$(".focusgroup").empty();
 	title = "";
-	if (soundingFile.includes(".html")) {
-		getHTMLSounding(soundingFile);
-	} else if (soundingFile.includes(".json")) {
-		dataParse(soundingFile);
-	}
-	
+	dataParse(soundingFile);
 }
 
 var sounding = '';
@@ -346,17 +77,8 @@ var sounding = '';
 $("input[type='file']").on("change", function () {
 	const reader = new FileReader();
 	reader.readAsText(document.querySelector('input[type="file"]').files[0]);
-	console.log(reader.result);
 	reader.onload = () => storeResults(reader.result);
 });
-
-function getHTMLSounding(filename) {
-	var dataRead = fetch(filename)
-		.then(response => response.blob())
-		.then(function(myBlob) {
-			myBlob.text().then(text => storeResults(text));
-		});
-}
 
 function storeResults(result) {
 	sounding = result;
@@ -478,8 +200,10 @@ var bisectTemp = d3.bisector(function(d) { return d.press; }).left;
 
 // create svg container for sounding
 var svg = d3.select("div#mainbox").insert("svg", ":first-child")
-      .attr("width", width + m[1] + m[3])
-	  .attr("height", height + m[0] + m[2])
+      .attr("viewBox", "0 0 685 700")
+      .attr("preserveAspectRatio", "xMinYMin meet")
+//      .attr("width", width + m[1] + m[3])
+//	  .attr("height", height + m[0] + m[2])
 	  .attr("id","box")
     .append("g")
 		  .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
@@ -488,8 +212,10 @@ var titleText = d3.select("div#mainbox svg").append("svg").attr("class", "title"
 
 // create svg container for hodograph
 var svghodo = d3.select("div#hodobox").append("svg")
-      .attr("width", 360)
-      .attr("height", 300)
+      .attr("viewBox", "0 0 300 320")
+      .attr("preserveAspectRatio", "xMinYMin meet")
+//      .attr("width", 360)
+//      .attr("height", 300)
 	  .append("g")
 	  .attr("class","hodosvg")
 	  .attr("transform", "translate(150,150)");
@@ -567,7 +293,6 @@ function dataParse(fileName) {
 			drawSkew();
 			drawText();
 			drawToolTips();
-			tabulate();
 		});
 	} else {
 		alldata=[[sdata]];
@@ -624,7 +349,6 @@ function dataParse(fileName) {
 		drawSkew();
 		drawText();
 		drawToolTips();
-		tabulate();
 	}
 }
 
@@ -668,7 +392,7 @@ function makeBarbTemplates() {
     var speeds = d3.range(5,205,5);
 	barbdef = svg.append('defs')
 
-/*	barbdef.append("g")
+	barbdef.append("g")
 		.attr("id","rotateRect")
 	
 	d3.select("#rotateRect")
@@ -676,7 +400,7 @@ function makeBarbTemplates() {
 	d3.select("#rotateRect")
 		.append("line").attr("x1", "0").attr("x2", "10").attr("y1", "7.5").attr("y2","7.5").attr("transform","translate(35,0)");
 	d3.select("#rotateRect")
-		.append("circle").attr("r","4").attr("transform","translate(45,7.5)"); */
+		.append("circle").attr("r","4").attr("transform","translate(45,7.5)");
 
     speeds.forEach(function(d) {
     	var thisbarb = barbdef.append('g').attr('id', 'barb'+d);
@@ -1070,7 +794,7 @@ function drawText() {
 	$(".label").remove();
 	d3.selectAll("text.titleText > *").remove();
 	d3.selectAll("text.indexVal").remove();
-    units = [' mb', ' mb', ' mb', ' mb', ' mb', ' mb', ' J/kg', ' J/kg', ' J/kg', ' J/kg', '', ' m2/s2', ' kts', '', '', '', '', '', ' mb', ' ˚C', ' m', ' mb', ' mb', ' in', " %", " g/kg", " hPa", " g/kg", " K", " K"];
+    units = [' mb', ' mb', ' mb', ' mb', ' mb', ' mb', ' J/kg', ' J/kg', ' J/kg', ' J/kg', '', ' m2/s2', ' kts', '', '', '', '', '', ' mb', ' ˚C', ' m', ' mb', ' mb', ' in', " %", " g/kg", " g/kg", " K", " K"];
 	indices = [];
 	indices.push(tlinetest[0][0][0].elP);
 	indices.push(tlinetest[0][0][0].elPmix);
@@ -1100,7 +824,6 @@ function drawText() {
 
 	indices.push(tlinetest[0][0][0].relh);
 	indices.push(tlinetest[0][0][0].mr.toPrecision(4));
-	indices.push(tlinetest[0][0][0].e.toPrecision(4));
 	indices.push(tlinetest[0][0][0].sh);
 	indices.push(tlinetest[0][0][0].theta);
 	indices.push(tlinetest[0][0][0].thetaE);
@@ -1306,11 +1029,8 @@ function drawToolTips() {
 	// Define drag beavior
 	var drag = d3.behavior.drag()
 		.on("dragstart", dragStart)
-		.on("touchstart", dragStart)
 		.on("drag", dragMove)
-		.on("touchmove", dragMove)
-		.on("dragend", dragEnd)
-		.on("touchend", dragEnd);
+		.on("dragend", dragEnd);
 
   // Draw T/Td tooltips
   focus3 = focusgroup.insert("g",":first-child").attr("class", "focus twc").style("display", "none");
@@ -1415,11 +1135,9 @@ function mousemove() {
 	focus6b.select("text").text("  " + d.press+"mb");
 	focus7.select("text").text(d.wspd+` @`+d.wdir+"˚");
 	$(".RH").text(d.relh + "%")
-	var mrText = d.mr.toFixed(2) + "\u00A0g/kg";
+	var mrText = d.mr.toPrecision(4) + "\u00A0g/kg";
 	$(".MixingRatio").text(mrText)
-	var eText = d.e.toFixed(2) + "\u00A0hPa";
-	$(".VaporPressure").text(eText);
-	$(".SpecHum").text(d.sh + "\u00A0g/kg")
+	$(".SpecHum").text(d.sh + "\u00A0 g/kg")
 	$(".Theta").text(d.theta + "\u00A0K")
 	$(".ThetaE").text(d.thetaE + "\u00A0K")
 
@@ -1427,11 +1145,8 @@ function mousemove() {
 
 var dragWind = d3.behavior.drag()
 		.on("dragstart", dragWindStart)
-		.on("touchstart", dragWindStart)
 		.on("drag", dragWindMoveCircular)
-		.on("touchmove", dragWindMoveCircular)
-		.on("dragend", dragWindEnd)
-		.on("touchend", dragWindEnd);
+		.on("dragend", dragWindEnd);
 
 var dragLocX;
 
@@ -1507,7 +1222,6 @@ function dragWindMoveCircular () {
 	d3.selectAll(".activeBarb").attr("transform","translate(" + translateX + ", " + translateY + ") rotate(" + newRotate + ")");
 	drawSkew();
 	drawText();
-	tabulate();
 }
 			
 function dragWindEnd () {
@@ -1598,7 +1312,6 @@ function dragMove(d) {
   }
   drawSkew();
   drawText();
-  tabulate();
 
   if (xLoc <= 0) {
 	  dragEnd();
@@ -1622,7 +1335,7 @@ function drawTextLabels() {
 
 	spacing = 20;
 	var headers = ['Values', '', 'Values'];
-	labels = ['EL', 'EL (mixed)', 'LFC', 'LFC (mixed)', 'LCL', 'LCL (mixed)', 'SBCAPE', 'MLCAPE', 'CIN', 'MLCIN', 'BRN', 'BRN Shear', 'Shear 6km', 'LI', 'LI (mixed)', 'KI', 'TT', 'SWEAT', 'CCL', 'Tc', 'Thickness', 'Wet-Bulb 0˚', 'Freezing Lvl', 'PW', 'RH', 'Mixing Ratio', 'Vapor Pressure', 'Spec Hum', 'Theta', 'ThetaE'];
+	labels = ['EL', 'EL (mixed)', 'LFC', 'LFC (mixed)', 'LCL', 'LCL (mixed)', 'SBCAPE', 'MLCAPE', 'CIN', 'MLCIN', 'BRN', 'BRN Shear', 'Shear 6km', 'LI', 'LI (mixed)', 'KI', 'TT', 'SWEAT', 'CCL', 'Tc', 'Thickness', 'Wet-Bulb 0˚', 'Freezing Lvl', 'PW', 'RH', 'Mixing Ratio', 'Spec Hum', 'Theta', 'ThetaE'];
     
     svgtext.selectAll("labels")
      .data(labels.slice(0,18)).enter().append("text")
@@ -2300,6 +2013,7 @@ function getCIN(t_arr, flag)
 				dt1 = tblt_pcl - tblt_obs;// // pcl temp - obs temp at present level
 				mean_dt = (dt0 + dt1) / 2; //avg of 2 dt's
 				sumCIN += (dz * mean_dt) / (mean_t + 273.15);// add to sum
+				console.log("Returning: " + sumCIN);
 				//since we just computed from the blt to the lfc, we're done.
 				//finish computation and return value
 				var cin = g * sumCIN; //multiply time g to get cape
