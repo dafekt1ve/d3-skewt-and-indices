@@ -51,6 +51,8 @@ function drawBackground() {
         allT.push(Ttuple);
     });
 
+    console.log(allT);
+    
     // Mixing Ratio Lines
     var mrline = d3.svg.line()
         .interpolate("linear")

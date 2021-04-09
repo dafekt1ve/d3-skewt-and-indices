@@ -1,22 +1,9 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<link rel="stylesheet" type="text/css" media="screen" href="bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" media="screen" href="css/meted-base.min.css">
-<link rel="stylesheet" type="text/css" media="screen" href="css/module-custom.css">
-<link rel="stylesheet" type="text/css" href="sounding.css">
-<title>Interactive Skew-T</title>
+<link rel="stylesheet" type="text/css" href="sounding_tephi.css">
+<title></title>
 <body>
-
-<div id="interaction-wrap">
-<div id="container" style="padding-top: 50px;">
-	
-	<nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container center">
-		<h2 id="title">Interactive Skew-T/Log-P Diagram </h2>
-      </div>
-	</nav>
-	
-	
+<div id="container">
 	<div id="checks">
 		<label for="parcel_check"><input id="parcel_check" type="checkbox" checked="checked">Parcel Temperature</input></label>
 		<label for="parcelmix_check"><input id="parcelmix_check" type="checkbox" checked="checked">Mixed Parcel Temperature</input></label>
@@ -32,18 +19,18 @@
 <div id="mainbox">
 	<div id="checks_wrapper">
 		<div id="upload_wrapper">
-			<label id="fileUpload" for="input-file" class="btn btn-default btn_upload">Upload File</label>
-			<input type="file" id="input-file" style="display:none;">
+			<label id="fileUpload" for="input-file">Upload File:</label>
+			<input type="file" id="input-file">
 		</div>
 		<div id="editData">
-			<button id="editButton" class="btn btn-default" onClick="tableVis()">Show Current Data</button>
+			<button id="editButton" onClick="tableVis()">Show Data Table</button>
 		</div>
 		<div id="reset">
-			<button id="resetSounding" class="btn btn-danger" onClick="resetSounding()">Reset Sounding</button>
+			<button id="resetSounding" onClick="resetSounding()">Reset Sounding</button>
 		</div>
 		<div id="undo_redo">
-			<button id="undo" class="btn btn-default btn_undo" onClick="undo()">Undo</button>
-			<button id="redo" class="btn btn-default btn_redo" onClick="redo()">Redo</button>
+			<button id="undo" onClick="undo()">Undo</button>
+			<button id="redo" onClick="redo()">Redo</button>
 		</div>
 
 		<div id="presets">
@@ -52,7 +39,7 @@
 					<option disabled>&#9473; Defaults &#9473;</option>
 					<option value="data_TOP.json" default>Default Sounding</option>
 					<option value="data_SkewT.json">Flash Sounding</option>
-					<option disabled>&#9473; Thunderstorms &amp; Tornadoes &#9473;</option>
+					<option disabled>&#9473; Thunderstorms & Tornadoes &#9473;</option>
 						<option value="./All-Star-Soundings/BMX_2011427_18.html">Tornado Outbreak (BMX)</option>
 						<option value="./All-Star-Soundings/BMX_2011428_00.html">Tornado Outbreak (BMX)</option>
 						<option value='./All-Star-Soundings/TOP_200354_12.html'>Tornado Outbreak (TOP)</option>
@@ -88,7 +75,7 @@
 						<option value='./All-Star-Soundings/LIX_2005827_06.html'>Hurricane Katrina (LIX)</option>
 						<option value='./All-Star-Soundings/LZK_2005830_00.html'>Remnants of Hurricane Katrina (LZK)</option>
 						<option value='./All-Star-Soundings/TXKF_20141018_12.html'>Hurricane Gonzalo (direct hit on Bermuda; TXKF)</option>
-						<option value='./All-Star-Soundings/JAX_20161008_00.json'>Hurricane Matthew (JAX)</option>
+						<option value='./All-Star-Soundings/JAX_2016108_00.json'>Hurricane Matthew (JAX)</option>
 						<option value='./All-Star-Soundings/CRP_2017826_00.html'>Hurricane Harvey (Near Landfall; CRP)</option>
 						<option value='./All-Star-Soundings/EYW_2017910_00.html'>Hurricane Irma (12 hrs prior to landfall; EYW))</option>
 						<option value='./All-Star-Soundings/TBW_2017911_00.html'>Hurricane Irma (12 hrs post landfalll TBW)</option>
@@ -143,31 +130,22 @@
 					<option disabled>&#9473; Wildfire &#9473;</option>
 						<option value='./All-Star-Soundings/MFR_2018727_00.html'>Carr Wildfire</option>		
 				</select>
-<!--			<button id="default" onClick="loadSounding()" value="default">Load Sounding</button>-->
-			</p>
-			<p id="link-set">
-				<a href="upload_instructions.htm" class="fbox-res-iframe" target="_blank"><span class="glyphicon glyphicon-link"></span> Upload File Instructions</a><br>
-				<a href="https://www.meted.ucar.edu/mesoprim/skewt/" target="_blank"><span class="glyphicon glyphicon-link"></span> <em>Skew-T Mastery</em> lesson</a>
+<!--			<button id="default" onClick="loadSounding()" value="default">Load Sounding</button> -->
 			</p>
 		</div>
 	</div>
 </div>
-<div id="hodobox"><div id="indicesWindow"></div></div>
+<div id="hodobox"><div id="indicesWrap"></div></div>
 <div id="editTableWrap"></div>
-<p id="copyright">&copy; The COMET Program</p>
-</div>
+<!-- <p id="readout" style="clear:both"></p> -->
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
-<script src="./jquery/jquery-3.4.1.min.js"></script>
-<script src="jquery/jquery-ui.min.js"></script>
-<script src="jquery/jquery-plugins.min.js"></script>
-<link rel="stylesheet" type="text/css" media="screen" href="jquery/apps/fancybox/fancybox.min.css">
-<script type="text/javascript" src="jquery/apps/fancybox/fancybox.min.js"></script>
-<script src="jsfunctions.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="jsfunctions_tephi.js"></script>
 <script type="text/javascript">
 
-$(document).ready( function() {	
+$(document).ready( function() {
 	$(window).keydown(function(event){
 		if(event.keyCode == 13) {
 		event.preventDefault();
@@ -181,23 +159,23 @@ $(document).ready( function() {
 
 	$("#undo").prop("disabled", true);
 	$("#redo").prop("disabled", true);
-
+	
 	$("#ml_depth").on("input", function () {
 		bl_depth = parseFloat($(this).val());
-		drawSkew();
+		drawTephi();
 		drawText();
 		tabulate("editTable", columns, tlinetest[0][0],true);
 	});
 
 	$("input:radio[name='CAPE_check']").on("change", function() {
-		drawSkew();
+		drawTephi();
 		drawText();
 	});
 
 	$("#allstar_sounding").change(function () {
 		loadSounding();
 	});
-
+	
 });
 
 function plotChecks() {
@@ -215,21 +193,21 @@ function plotChecks() {
 	});
 	if(className == "twc") {
 		$(".wbztext, .wbz_rectline").css('visibility', $(".wbztext, .wbz_rectline").css('visibility') == 'hidden' ? 'visible' : 'hidden');
-		drawSkew();
+		drawTephi();
 		drawText();
 		tabulate("editTable", columns, tlinetest[0][0],true);
 	} else if (className == "tvc") {
-		drawSkew();
+		drawTephi();
 		drawText();
 		tabulate("editTable", columns, tlinetest[0][0],true);
 	} else if (className == "parcel") {
 		$(".lcltext, .lcl, .lfctext, .lfc, .eltext, .el").css('visibility', $(".lcltext, .lcl, .lfctext, .lfc, .eltext, .el").css('visibility') == 'hidden' ? 'visible' : 'hidden');
-		drawSkew();
+		drawTephi();
 		drawText();
 		tabulate("editTable", columns, tlinetest[0][0],true);
 	} else if (className == "parcelmix") {
 		$(".lclmixtext, .lclmix, .lfcmixtext, .lfcmix, .elmixtext, .elmix").css('visibility', $(".lclmixtext, .lclmix, .lfcmixtext, .lfcmix, .elmixtext, .elmix").css('visibility') == 'hidden' ? 'visible' : 'hidden');
-		drawSkew();
+		drawTephi();
 		drawText();
 		tabulate("editTable", columns, tlinetest[0][0],true);
 	} else {
@@ -242,45 +220,28 @@ var loadedFile = false;
 var lat, long;
 var columns = ['press', 'temp', 'dwpt', 'wdir', 'wspd'];
 
-
 function tableVis () {
-	$("#editTableWindow").toggle();
-	//if ($("#editTableWrap").is(":visible")) {
-	
-	if ($("#editTableWindow").is(":visible")) {
-		$("#editButton").text("Hide Current Data");
+	$("#editTableWrap").toggle();
+	if ($("#editTableWrap").is(":visible")) {
+		$("#editButton").text("Hide Data Table");
 	} else {
-		$("#editButton").text("Show Current Data");
+		$("#editButton").text("Show Data Table");
 	}
-	tabulate("editTable", columns, tlinetest[0][0], true);
+	tabulate("editTable", columns, tlinetest[0][0],true);
 }
 
 function tabulate(tabName, headers, data, editFlag) {
-	d3.select("#" + tabName + "Window").html("");
-	var columnLabels = ['Pressure (hPa)', 'Temperature (°C)', 'Dewpoint (°C)', 'Wind Direction (°)', 'Wind Speed (kt)'];
-	var table = d3.select('#' + tabName + 'Window').append('table').attr("id",tabName).attr("class", "table table-responsive table-bordered table-striped drag-cancel");
-		//table.append('div').attr('class', 'drag-instructions').text('Click and drag this window to move it around; click on the values to edit them.');
-	
+	d3.select("#" + tabName + "Wrap").html("");
+	var table = d3.select('#' + tabName + 'Wrap').append('table').attr("id",tabName);
 	var thead = table.append('thead');
 	var	tbody = table.append('tbody');
 
-	if (tabName === 'editTable') {
-	// append the header row
-	thead.append('tr')
-	  .selectAll('th')
-	  .data(columnLabels).enter()
-	  .append('th')
-	    .text(function (column) { return column; });
-	}
-	else {
 	// append the header row
 	thead.append('tr')
 	  .selectAll('th')
 	  .data(headers).enter()
 	  .append('th')
 	    .text(function (column) { return column; });
-	}
-	
 
 	// create a row for each object in the data
 	var rows = tbody.selectAll('tr')
@@ -303,8 +264,7 @@ function tabulate(tabName, headers, data, editFlag) {
 	rows.selectAll(":first-child").attr("contenteditable", "false");
 	
 	if (editFlag) {
-		rows.selectAll().attr("class", "edit");
-		//table.append('div').attr('class', 'drag-instructions').text('Click and drag this window to move it around; click on the values to edit them.');
+		rows.selectAll().attr("class", "edit")
 	}
 
 	$("#editTable [contenteditable=true]").on("input", function() {
@@ -319,8 +279,8 @@ function tabulate(tabName, headers, data, editFlag) {
 
 function update(r, i, j) {
 	var here = $("#editTable tr:not(:first)").eq(i).children("td").eq(j);
+
 	var inputText = r.eq(j).text().trim();
-	console.log(inputText);
 
 	var signs = /^[-+.]?[.]?$/;
 	var numbers = /^[-+]?[0-9]*\.?[0-9]+$/;
@@ -399,7 +359,7 @@ function update(r, i, j) {
 		return false;
 	}
 	here.removeClass("blank");
-	drawSkew();
+	drawTephi();
 	drawText();
 }
 
@@ -417,8 +377,8 @@ function loadFile() {
 	loadedFile = true;
 	undoArr = [];
 	redoArr = [];
-	$("#undo").prop("disabled", false);
-	$("#redo").prop("disabled", false);
+	$("#undo").prop("disabled", true);
+	$("#redo").prop("disabled", true);
 }
 
 function storeResults(result) {
@@ -498,7 +458,7 @@ function undo() {
 	tlinetest[0][0][p].wspd = undoArr[0].wspd;
 	tlinetest[0][0][p].wdir = undoArr[0].wdir;
 	tlinetest[0][0][p].wspdround = undoArr[0].wspdround;
-	drawSkew();
+	drawTephi();
 	drawText();
 	tabulate("editTable", columns, tlinetest[0][0],true);
 	undoArr.shift();
@@ -527,7 +487,7 @@ function redo() {
 	tlinetest[0][0][p].wspd = redoArr[0].wspd;
 	tlinetest[0][0][p].wdir = redoArr[0].wdir;
 	tlinetest[0][0][p].wspdround = redoArr[0].wspdround;
-	drawSkew();
+	drawTephi();
 	drawText();
 	tabulate("editTable", columns, tlinetest[0][0],true);
 	redoArr.shift();
@@ -608,44 +568,157 @@ var p_sfc = 0;
 var t_sfc = 0;
 var td_sfc = 0;
 
-var m = [30, 40, 20, 35],
+var m = [30, 40, 30, 35], // m = margins[top, right, bottom, left]
     width = 700 - m[1] - m[3],
     height = 700 - m[0] - m[2];
 
+var basep = 1045, // adjust these for the final alignment of pressure lines to the axes
+	topp = 60 // adjust these for the final alignment of pressure lines to the axes
+
+// Modified MSC tephi test4
+var t_span = 106;
+var theta_span = 140;
+
+var t_ll = -50; // These should be equal to ensure 1 slopes // -50 was nice but -52 looks better
+var t_ul = t_ll - t_span;
+var t_lr = t_ll + t_span;
+var t_ur = t_ll;
+
+var theta_ll = 220;
+var theta_lr = theta_ll + theta_span;
+var theta_ul = theta_lr;
+var theta_ur = theta_ul + theta_span;
+
+//calculated values for plotting lines on the graph
+var dydtheta_l = height / (Math.log(theta_ul) - Math.log(theta_ll));
+var dydtheta_r = height / (Math.log(theta_ur) - Math.log(theta_lr));
+var dxdtheta_t = width / (Math.log(theta_ur) - Math.log(theta_ul));
+var dxdtheta_b = width / (Math.log(theta_lr) - Math.log(theta_ll));
+var dydtheta = (dydtheta_l + dydtheta_r)/2;
+var dxdtheta = (dxdtheta_t + dxdtheta_b)/2;
+var m_theta = -1 * dydtheta / dxdtheta;
+
+var dydt_l = height / (t_ul - t_ll);
+var dydt_r = height / (t_ur - t_lr);
+var dxdt_t = width / (t_ul - t_ur);
+var dxdt_b = width / (t_ll - t_lr);
+var dydt = (dydt_l + dydt_r)/2;
+var dxdt = (dxdt_t + dxdt_b)/2;
+var m_temp = dydt / dxdt;
+
+var rightLocate;
+var rightLoc = [];
+
+for (j=640; j>=0; j-=1) {
+	rightLocate = getTephiVals(width-70,j);
+	rightLoc.push(rightLocate);
+}
+
+function getTephiLoc(temp,theta) {
+	var b_theta = (Math.log(theta)-Math.log(theta_ll))*dydtheta;
+	var b_temp = (temp-t_ll)*dydt;
+	var xloc = (b_theta-b_temp)/(m_temp-m_theta);
+	var offset = (m_temp*xloc)+(temp-t_ll)*dydt; //offset from origin at lower left
+	var yloc = height - offset;
+	var press = getPress(temp,theta);
+	return([xloc, yloc, temp, theta, press])
+}
+
+function getTephiVals(xloc, yloc, press) {
+	var offset = height - yloc;
+	var temp = (offset - (m_temp*xloc))/dydt + t_ll;
+	var b_temp = (temp-t_ll)*dydt;
+	var b_theta = xloc*(m_temp-m_theta) + b_temp;
+	var theta = Math.pow(Math.E,b_theta/dydtheta+Math.log(theta_ll))
+	if (press) {
+		var pres = press;
+	} else {
+		var pres = getPress(temp,theta);
+	}
+//	var press = 400;
+	return ([temp, theta, pres, xloc, yloc])
+}
+
+/*Given a range Low to High and a percent this function 
+returns the value of the percent within the range.
+Ex. findValue(0,50,50) Would return 25 - On a scale 
+from 0 to 50, 50% would be 25
+*/
+function findValue(Low, High, Percent) {
+	tempRange= High - Low;
+	tempValue=((Percent/100) * tempRange) + Low;
+	return tempValue;
+}
+
+/*Given a range Low to High and a Value this function 
+returns the percent of the value within the range.
+Ex. getPercent(0,50,50) Would return 100 - On a scale 
+from 0 to 50, 50 would be 100%
+*/
+function getPercent(Low, High, Value) {
+//	console.log("== Start getPercent ==");
+//	console.log(Low,High,Value);
+	tempRange = High - Low;
+	adjustedValue = Value-Low;
+	percent = adjustedValue/tempRange*100;
+//	console.log(tempRange,adjustedValue,percent);
+//	console.log("== End getPercent ==");
+	return percent;
+}
+
+function getMyLow(my_y){
+//	percentage = ((y1 + height) - my_y)/height; // y1 doesn't seem correct
+	percentage = (height - my_y)/height;
+	t_lo = t_ll - ((t_ll - t_ul) * percentage);
+	return t_lo; 	
+}
+
+function getMyHigh(my_y){
+//	percentage = ((y1 + height)- my_y)/height; // y1 doesn't seem correct
+	percentage = (height - my_y)/height;
+	t_hi = t_lr - ((t_lr - t_ur) * percentage);
+	return t_hi;
+}
+
+function getPress(temp,theta) {
+	var temp = temp+273.15;
+	var p = 1000/Math.pow(theta/temp,Cp/R);
+	return p
+}
+
 var d2r = (Math.PI/180);
-var tempSkew = 55;
-var tan = Math.tan(tempSkew*d2r),
-    basep = 1050,
-    topp = 100,
-    plines = [1000,925,850,700,600,500,400,300,200,100]
-    pticks = [950,900,800,750,650,600,550,450,400,350,250,150];
+var tempSkew = 0;
+var tan = Math.tan(tempSkew*d2r);
+var	plines = [1050,1000,925,850,700,600,500,400,300,200,100],
+	plabels = [1000,925,850,700,600,500,400,300,200,100],
+	pticks = [1000,925,900,850,800,750,700,650,600,550,500,450,400,350,300,250,200,150,100];
 	barbsize = 25;
 
 // Scales and axes. Note the inverted domain for the y-scale: bigger is up!
-var x = d3.scale.linear().range([0, width]).domain([-45,50]),
-    y = d3.scale.log().range([0, height]).domain([topp, basep])
+var x = d3.scale.linear().range([0, width]).domain([t_ll-2,t_lr-2.5]), // this doesn't change the tephibg, just the axis label placement.
+    y = d3.scale.log().range([0, height]).domain([topp-26, basep+24]) // this doesn't change the tephibg, just the axis label placement.
     r = d3.scale.linear().range([0,300]).domain([0,150]),
-    y2 = d3.scale.linear(),
-    xAxis = d3.svg.axis().scale(x).tickSize(0,0).ticks(10).orient("bottom"),
-    yAxis = d3.svg.axis().scale(y).tickSize(0,0).tickValues(plines)
-              .tickFormat(d3.format(".0d")).orient("left")
+//    y2 = d3.scale.linear(),
+	xAxis = d3.svg.axis().scale(x).tickSize(5,0).ticks(10).orient("bottom"),
+    yAxis = d3.svg.axis().scale(y).tickSize(0,0).tickValues(plabels)
+			  .tickFormat(d3.format(".0d")).orient("left");
 	yAxis2 = d3.svg.axis().scale(y).tickSize(5,0).tickValues(pticks).orient("right"); // just for ticks
 
 // various path generators
 var line = d3.svg.line()
     .interpolate("linear")
-    .x(function(d,i) { return x(d.temp) + (y(basep)-y(d.press))/tan; })
-    .y(function(d,i) { return y(d.press); });
+		.x(function(d,i) { loc = getTephiLoc(d.temp,d.theta); return loc[0] })
+        .y(function(d,i) { loc = getTephiLoc(d.temp,d.theta); return loc[1] });
     
 var line2 = d3.svg.line()
     .interpolate("linear")
-    .x(function(d,i) { return x(d.dwpt) + (y(basep)-y(d.press))/tan; })
-    .y(function(d,i) { return y(d.press); });
+	.x(function(d,i) { loc = getTephiLoc(d.dwpt,calcTheta(d.press,d.dwpt)); return loc[0] })
+    .y(function(d,i) { loc = getTephiLoc(d.dwpt,calcTheta(d.press,d.dwpt)); return loc[1] });
 
 var hodoline = d3.svg.line.radial()
     .radius(function(d) { return r(d.wspd); })
 	.angle(function(d) { return (d.wdir+180)*(Math.PI/180); });
-    
+
 // bisector function for tooltips    
 var bisectTemp = d3.bisector(function(d) { return d.press; }).left;
 
@@ -685,33 +758,21 @@ var svghodo = d3.select("div#hodobox").insert("svg",":first-child")
 		.attr("opacity",".6")
 		.style("display", "none")
 		.attr("class", "focus hod");
-      
-/*var svgtext = d3.select("div#hodobox").append("svg").attr("class", "indices").attr("width", 320).attr("height", 400)
-			.append("g").attr("transform", "translate(0,50)");*/
-
 
 makeBarbTemplates();
 drawBackground();
 drawTextLabels();
 
-var skewtgroup = svg.append("g").attr("class", "skewt"); // put skewt lines in this group
+var tephigroup = svg.append("g").attr("class", "tephi"); // put tephi lines in this group
 var barbgroup  = svg.append("g").attr("class", "windbarb"); // put barbs in this group
 var hodogroup = svghodo.append("g").attr("class", "hodo"); // put hodo stuff in this group
-var membergroup = skewtgroup.append("g").attr("class", "membergroup"); // put member lines in this group
-var labelgroup = skewtgroup.append("g").attr("class", "labelgroup"); // put labels in this group
-var focusgroup = skewtgroup.append("g").attr("class", "focusgroup"); // put focus dots in this group
+var membergroup = tephigroup.append("g").attr("class", "membergroup"); // put member lines in this group
+var labelgroup = tephigroup.append("g").attr("class", "labelgroup"); // put labels in this group
+var focusgroup = tephigroup.append("g").attr("class", "focusgroup"); // put focus dots in this group
 
 var hodobarbstest = [];
 
-if(/[?&]ls=/.test(location.search)) {
-	var ls = location.search;
-	ls = ls.replace('?ls=',"");
-	ls = ls.replace('&ls=',"");
-	console.log(ls);
-	dataParse(ls);
-} else {
-	dataParse('data_TOP.json'); // 2003 Jun 24 00Z
-}
+dataParse('data_TOP.json'); // 2003 Jun 24 00Z
 
 function dataParse(fileName) {
 
@@ -726,7 +787,7 @@ function dataParse(fileName) {
 	
 	       		parsedCSV = alldata[mem][hr].filter(function(d) { return (d.temp > -1000 && d.dwpt > -1000); });
 	       		barbs = parsedCSV.filter(function(d) { return (d.wdir >= 0 && d.wspd >= 0 && d.press >= topp); });
-	       		hodobarbs = barbs.filter(function(d) { return (d.press >= 100); });
+	       		hodobarbs = barbs.filter(function(d) { return (d.press >= topp); });
 	        	interpdot = interpobjects[hr + 49*mem];
 	
 		        temp.push(hodobarbs);
@@ -740,7 +801,38 @@ function dataParse(fileName) {
 		    // need this for dots for some reason
 		    mouseoverdata = tlinetest[0][0].slice(0).reverse();
 			flattened = interpdots.reduce(function(a,b) { return a.concat(b); });
-			drawSkew();
+
+            var startJ = height;
+			var startK = height;
+
+            for (i=0; i<tlinetest[0][0].length; i++){
+                var ixflag = 0;
+                var iyflag = 0;
+                for (j=startJ+50; j>=0; j-=.1) {
+                    var rightLocate = getTephiVals(width,j);
+                    if (rightLocate[2] <= tlinetest[0][0][i].press && !ixflag) {
+                        tlinetest[0][0][i].yLocRight = rightLocate[4];
+                        ixflag = 1;
+                    }
+                    if (ixflag) {
+                        startJ = j;
+                        break;
+                    }
+                }
+				for (k=startK+50; k>=0; k-=.1) {
+					var leftLocate = getTephiVals(0,k);
+					if (leftLocate[2] <= tlinetest[0][0][i].press && !iyflag) {
+                        tlinetest[0][0][i].yLocLeft = leftLocate[4];
+                        iyflag = 1;
+                    }
+                    if (iyflag) {
+                        startK = k;
+                        break;
+                    }
+				}
+            }
+
+			drawTephi();
 			drawText();
 			drawToolTips();
 			tabulate("editTable", columns, tlinetest[0][0],true);
@@ -749,8 +841,7 @@ function dataParse(fileName) {
 		alldata=[[sdata]];
 	       	parsedCSV = alldata[mem][hr].filter(function(d) { return (d.temp > -1000 && d.dwpt > -1000); });
 	       	barbs = parsedCSV.filter(function(d) { return (d.wdir >= 0 && d.wspd >= 0 && d.press >= topp); });
-	       	hodobarbs = barbs.filter(function(d) { return (d.press >= 100); });
-
+	       	hodobarbs = barbs.filter(function(d) { return (d.press >= topp); });
 
 		var hAGL;
 		var test = [];
@@ -761,8 +852,8 @@ function dataParse(fileName) {
 			for (i=1; i<parsedCSV.length; i++) {
 				if (parsedCSV[i].hght > hAGL) {
 					var interp = d3.interpolateObject(parsedCSV[i-1],parsedCSV[i]);
-							var half = interp(1-(hAGL - parsedCSV[i].hght)/(parsedCSV[i-1].hght - parsedCSV[i].hght));
-							test.push(half);
+    		    			var half = interp(1-(hAGL - parsedCSV[i].hght)/(parsedCSV[i-1].hght - parsedCSV[i].hght));
+    		    			test.push(half);
 					break;
 				}
 			};
@@ -791,20 +882,44 @@ function dataParse(fileName) {
 			tlinetest[0][0][i].hghtagl = tlinetest[0][0][i].hght - height0;
 		}
 
+        var start = height
+        for (i=0; i<tlinetest[0][0].length; i++){
+            var ixflag = 0;
+            var iyflag = 0;
+            for (j=start+50; j>=0; j-=.1) {
+                var rightLocate = getTephiVals(width,j);
+                var leftLocate = getTephiVals(0,j);
+                if (rightLocate[2] <= tlinetest[0][0][i].press && !ixflag) {
+                    tlinetest[0][0][i].yLocRight = rightLocate[4];
+                    ixflag = 1;
+                }
+                if (leftLocate[2] <= tlinetest[0][0][i].press && !iyflag) {
+                    tlinetest[0][0][i].yLocLeft = leftLocate[4];
+                    iyflag = 1;
+                }
+                if (ixflag && iyflag) {
+                    start = j;
+                    break;
+                }
+            }
+        }
+
+        
+
 		d3.selectAll("g.focusgroup > *").remove();
 		d3.selectAll("g.membergroup > *").remove();
 		d3.selectAll("g.labelgroup > *").remove();
 		d3.selectAll("g.windbarb > *").remove();
 		d3.selectAll("g.hodo > *").remove();
 		makeBarbTemplates();
-		drawSkew();
+		drawTephi();
 		drawText();
 		drawToolTips();
 		tabulate("editTable", columns, tlinetest[0][0],true);
 	}
 }
 
-function interpDots(data) { 
+function interpDots(data) {
 	var hAGL;
 	var test = [];
 	var interpdot = [];
@@ -936,7 +1051,7 @@ function makeBarbTemplates() {
 		.attr("fill","#777");
 }
 
-function drawSkew() {
+function drawTephi() {
 	$(".member, .hododot, .hodoline, .titleText, .windbarb > *, .label").remove();
     for (var i=0; i<tlinetest[0][0].length; i+=1) {
         var tw = calcWetbulb(tlinetest[0][0][i].press, tlinetest[0][0][i].temp, tlinetest[0][0][i].dwpt);
@@ -964,13 +1079,13 @@ function drawSkew() {
 	var pw_total = calcPrecipWater();
 	tlinetest[0][0][0].pw = pw_total;
 
-	wb0_pres = calcFreezeLevel(true);
+    wb0_pres = calcFreezeLevel(true);
 	tlinetest[0][0][0].wbz = wb0_pres;
 
 	frz_lvl=calcFreezeLevel(false);
 	tlinetest[0][0][0].frzl = frz_lvl;
 
-	thk = calcThick();
+	thk = calcThick(); 
 	tlinetest[0][0][0].thick = thk;
 
 	for (i=0; i<tlinetest[0][0].length-1; i++) {
@@ -1097,17 +1212,20 @@ function drawSkew() {
 	mixpel = mixcapeBounds[3];
 	mixtel = mixcapeBounds[4];
 	mixzel = mixcapeBounds[5];
-	tlinetest[0][0][0].lfcPmix = mixplfc;
+	tlinetest[0][0][0].lfcPmix = mixplfc; 
 	tlinetest[0][0][0].lfcTmix = mixtlfc;
 	tlinetest[0][0][0].lfcZmix = mixzlfc;
-	tlinetest[0][0][0].elPmix = mixpel;
+	tlinetest[0][0][0].elPmix = mixpel; 
 	tlinetest[0][0][0].elTmix = mixtel;
 	tlinetest[0][0][0].elZmix = mixzel;
 
 	TvlclData = calcLCL(tlinetest[0][0][0].press,tlinetest[0][0][0].tv,tlinetest[0][0][0].dwpt);
+//        plcl_tv = TvlclData[0];
 		plcl_tv = lclData[0];
+//        tlcl_tv = TvlclData[1];
 		tlcl_tv = calcTC(plcl_tv,calcTheta(tlinetest[0][0][0].press, tlinetest[0][0][0].tv));
-		zlcl_tv = lclData[2];
+//        zlcl_tv = TvlclData[2]; 
+        zlcl_tv = lclData[2];
 	tlinetest[0][0][0].lclP_tv = plcl_tv;
 	tlinetest[0][0][0].lclT_tv = tlcl_tv;
 	tlinetest[0][0][0].lclZ_tv = zlcl_tv;
@@ -1119,18 +1237,21 @@ function drawSkew() {
 	pel_tv = capeBounds_tv[3];
 	tel_tv = capeBounds_tv[4];
 	zel_tv = capeBounds_tv[5];
-	tlinetest[0][0][0].lfcP_tv = plfc_tv;
+	tlinetest[0][0][0].lfcP_tv = plfc_tv; 
 	tlinetest[0][0][0].lfcT_tv = tlfc_tv;
 	tlinetest[0][0][0].lfcZ_tv = zlfc_tv;
-	tlinetest[0][0][0].elP_tv = pel_tv;
+	tlinetest[0][0][0].elP_tv = pel_tv; 
 	tlinetest[0][0][0].elT_tv = tel_tv;
 	tlinetest[0][0][0].elZ_tv = zel_tv;
 
 	TvmixlclData = calcLCL(tlinetest[0][0][0].mixParcelP_tv,tlinetest[0][0][0].mixParcelT_tv,tlinetest[0][0][0].mixParcelTd);
+//        mixplcl_tv = TvmixlclData[0]; 
 		mixplcl_tv = mixlclData[0];
+//        mixtlcl_tv = TvmixlclData[1];
 		mixtlcl_tv = calcTC(mixplcl_tv,calcTheta(tlinetest[0][0][0].press, tlinetest[0][0][0].mixParcelT_tv));
-		mixzlcl_tv = mixlclData[2];
-	tlinetest[0][0][0].lclPmix_tv = mixplcl_tv;
+//        mixzlcl_tv = TvmixlclData[2]; 
+        mixzlcl_tv = mixlclData[2];
+	tlinetest[0][0][0].lclPmix_tv = mixplcl_tv; 
 	tlinetest[0][0][0].lclTmix_tv = mixtlcl_tv;
 	tlinetest[0][0][0].lclZmix_tv = mixzlcl_tv;
 
@@ -1289,8 +1410,8 @@ function drawSkew() {
 
     var line3 = d3.svg.line() // Wet-bulb Temp
         .interpolate("linear")
-        .x(function(d,i) { return x(d.twc) + (y(basep)-y(d.press))/tan; })
-        .y(function(d,i) { return y(d.press); });
+		.x(function(d,i) { loc = getTephiLoc(d.twc,calcTheta(d.press,d.twc)); return loc[0] })
+		.y(function(d,i) { loc = getTephiLoc(d.twc,calcTheta(d.press,d.twc)); return loc[1] });
 
 	if ($("#twc_check").prop("checked")) {
 		twlines = membergroup.selectAll("twlines")
@@ -1302,8 +1423,8 @@ function drawSkew() {
 
     var line4 = d3.svg.line() // Virtual Temp
         .interpolate("linear")
-        .x(function(d,i) { return x(d.tv) + (y(basep)-y(d.press))/tan; })
-        .y(function(d,i) { return y(d.press); });
+		.x(function(d,i) { loc = getTephiLoc(d.tv,calcTheta(d.press,d.tv)); return loc[0] })
+		.y(function(d,i) { loc = getTephiLoc(d.tv,calcTheta(d.press,d.tv)); return loc[1] });
 
 	if ($("#tvc_check").prop("checked")) {		
 		tvlines = membergroup.selectAll("tvlines")
@@ -1316,8 +1437,8 @@ function drawSkew() {
 	if ($("input[name='CAPE_check']:checked").val() == "T") {
 		var line5 = d3.svg.line() // Parcel Temp
 			.interpolate("linear")
-			.x(function(d,i) { return x(d.parcelT) + (y(basep)-y(d.press))/tan; })
-			.y(function(d,i) { return y(d.press); });
+			.x(function(d,i) { loc = getTephiLoc(d.parcelT,calcTheta(d.press,d.parcelT)); return loc[0] })
+			.y(function(d,i) { loc = getTephiLoc(d.parcelT,calcTheta(d.press,d.parcelT)); return loc[1] });
 					
 		if ($("#parcel_check").prop("checked")) {
 			parlines = membergroup.selectAll("parcellines")
@@ -1329,8 +1450,8 @@ function drawSkew() {
 
 		var line6 = d3.svg.line() // Mixed Parcel Temp
 			.interpolate("linear")
-			.x(function(d,i) { return x(d.parcelTmix) + (y(basep)-y(d.press))/tan; })
-			.y(function(d,i) { return y(d.press); });
+			.x(function(d,i) { loc = getTephiLoc(d.parcelTmix,calcTheta(d.press,d.parcelTmix)); return loc[0] })
+			.y(function(d,i) { loc = getTephiLoc(d.parcelTmix,calcTheta(d.press,d.parcelTmix)); return loc[1] });
 					
 		if ($("#parcelmix_check").prop("checked")) {
 			parlines = membergroup.selectAll("parcellines")
@@ -1342,8 +1463,8 @@ function drawSkew() {
 	} else {
 		var line7 = d3.svg.line() // Parcel Temp (Tv)
 			.interpolate("linear")
-			.x(function(d,i) { return x(d.parcelT_tv) + (y(basep)-y(d.press))/tan; })
-			.y(function(d,i) { return y(d.press); });
+			.x(function(d,i) { loc = getTephiLoc(d.parcelT_tv,calcTheta(d.press,d.parcelT_tv)); return loc[0] })
+			.y(function(d,i) { loc = getTephiLoc(d.parcelT_tv,calcTheta(d.press,d.parcelT_tv)); return loc[1] });
 					
 		if ($("#parcel_check").prop("checked")) {
 			parlines = membergroup.selectAll("parcellines")
@@ -1355,8 +1476,8 @@ function drawSkew() {
 
 		var line8 = d3.svg.line() // Mixed Parcel Temp (Tv)
 			.interpolate("linear")
-			.x(function(d,i) { return x(d.parcelTmix_tv) + (y(basep)-y(d.press))/tan; })
-			.y(function(d,i) { return y(d.press); });
+			.x(function(d,i) { loc = getTephiLoc(d.parcelTmix_tv,calcTheta(d.press,d.parcelTmix_tv)); return loc[0] })
+			.y(function(d,i) { loc = getTephiLoc(d.parcelTmix_tv,calcTheta(d.press,d.parcelTmix_tv)); return loc[1] });
 					
 		if ($("#parcelmix_check").prop("checked")) {
 			parlines = membergroup.selectAll("parcellines")
@@ -1377,35 +1498,35 @@ function drawSkew() {
     	.attr("r", function(d, i) { return (i<50) ? 4 : 8 })
     	.attr("cx", function(d, i) { return r(d.wspd * Math.sin((180+d.wdir)*d2r)); })
 		.attr("cy", function(d, i) { return -r(d.wspd * Math.cos((180+d.wdir)*d2r)); })
-//		.attr("class", function(d,i) { return "hododot hgt"+((d.hghtagl/1000)}); // On upload of or reload of a preset sounding, the hododots lost their color because hghtagl wasn't defined.
 		.attr("class", function(d,i) { return "hododot hgt"+((d.hght - tlinetest[0][0][0].hght)/1000)}); 
 	
-	if (lat < 0) {
+	if (lat < 0) { // Southern Hemisphere
 		barbdata = barbgroup.selectAll("barbs")
 		.data(barbstest[0][0]).enter().append("g").attr("class","inactiveBarb")
-		.attr("transform", function(d,i) { return "translate("+width+","+y(d.press)+") rotate("+(d.wdir-90)+") scale(1,-1)" });
-	} else {
+        .attr("transform", function(d,i) { 
+            if (d.yLocRight >= 0) {return "translate("+width+","+d.yLocRight+") rotate("+(d.wdir-90)+") scale(1,-1)" }
+            else {return "translate("+width+","+-200+") rotate("+(d.wdir-90)+") scale(1,-1)"}
+        });
+	} else { // Northern Hemisphere
 		barbdata = barbgroup.selectAll("barbs")
 		.data(barbstest[0][0]).enter().append("g").attr("class","inactiveBarb")
-		.attr("transform", function(d,i) { return "translate("+width+","+y(d.press)+") rotate("+(d.wdir-90)+")"; });
+        .attr("transform", function(d,i) {
+            if (d.yLocRight >= 0) {return "translate("+width+","+d.yLocRight+") rotate("+(d.wdir-90)+")" }
+            else {return "translate("+width+","+-200+") rotate("+(d.wdir-90)+")"}
+        });
 	}
 
     allbarbs = barbdata.append("use")
     	.attr("href", function (d) { return "#barb"+d.wspdround; })
 		.attr("transform", function(d,i) { return "rotate(270)"; });
 
-//    allbarbs = barbdata.append("use")
-//    	.attr("href", function (d) { return "#speedRect"; });
-
-
-
 }
 
-function drawText() {
+function drawText(ind) {
 	$(".label").remove();
 	d3.selectAll("text.titleText > *").remove();
 	d3.selectAll("text.indexVal").remove();
-	units = [' mb', ' mb', ' mb', ' mb', ' mb', ' mb', ' J/kg', ' J/kg', ' J/kg', ' J/kg', '', ' m2/s2', ' kts', '', '', '', '', '', ' mb', ' ˚C', ' m', ' mb', ' mb', ' in', " %", " g/kg", " hPa", " g/kg", " K", " K"];
+	units = [' mb', ' mb', ' mb', ' mb', ' mb', ' mb', ' J/kg', ' J/kg', ' J/kg', ' J/kg', '', ' m2/s2', ' kts', '', '', '', '', '',' mb', ' ˚C', ' m', ' mb', ' mb', ' in', " %", " g/kg", " hPa", " g/kg", " K", " K"]
 	indices = [];
 	if ($("input[name='CAPE_check']:checked").val() == "Tv") {
 		indices.push(tlinetest[0][0][0].elP_tv);
@@ -1447,12 +1568,22 @@ function drawText() {
 	indices.push(tlinetest[0][0][0].frzl);
 	indices.push(tlinetest[0][0][0].pw);
 
-	indices.push(tlinetest[0][0][0].relh);
-	indices.push(tlinetest[0][0][0].mr.toPrecision(4));
-	indices.push(tlinetest[0][0][0].e.toPrecision(4));
-	indices.push(tlinetest[0][0][0].sh);
-	indices.push(tlinetest[0][0][0].theta);
-	indices.push(tlinetest[0][0][0].thetaE);
+	if (ind) {
+		indices.push(tlinetest[0][0][ind].relh);
+		indices.push(tlinetest[0][0][ind].mr.toPrecision(4));
+		indices.push(tlinetest[0][0][ind].e.toPrecision(4));
+		indices.push(tlinetest[0][0][ind].sh);
+		indices.push(tlinetest[0][0][ind].theta);
+		indices.push(tlinetest[0][0][ind].thetaE);
+	} else {
+		indices.push(tlinetest[0][0][0].relh);
+		indices.push(tlinetest[0][0][0].mr.toPrecision(4));
+		indices.push(tlinetest[0][0][0].e.toPrecision(4));
+		indices.push(tlinetest[0][0][0].sh);
+		indices.push(tlinetest[0][0][0].theta);
+		indices.push(tlinetest[0][0][0].thetaE);
+	}
+
 
 	d3.selection.prototype.eq = function (index) {
 		return d3.select(this[0][index]);
@@ -1461,79 +1592,175 @@ function drawText() {
 	$("#indices tbody tr").each(function(i) {
 		$(this).find("td:eq(1)").text(indices[i] + " " + units[i]).attr('class', 'indexVal ' + labels[i].replace(/\s/g, '').replace(/\(/g, '').replace(/\)/g, ''));
 	});
-    
+
+    var wbzflag = [0,0,0,0,0,0]; 
+    var frzlflag = [0,0,0,0,0,0];
+    var elmixflag = 0;
+    var lfcmixflag = 0; 
+    var elflag = 0; 
+    var lfcflag = 0; 
+    var lclmixflag = 0; 
+    var lclflag = 0;
+    var elmix_tvflag = 0;
+    var lfcmix_tvflag = 0; 
+    var el_tvflag = 0; 
+    var lfc_tvflag = 0; 
+    var lclmix_tvflag = 0; 
+    var lcl_tvflag = 0;
+    var start=height;
+    var frzlarr = []; 
+	var wbzarr = []; 
+
+	for (i=0; i<tlinetest[0][0][0].frzl.length; i++) { 
+		for (j=0; j<rightLoc.length; j++) { 
+			if (rightLoc[j][2] <= tlinetest[0][0][0].frzl[i] && !frzlflag[i]) { 
+				frzlarr.push(rightLoc[j][4]); 
+				frzlflag[i] = 1; 
+			} 
+		} 
+	} 
+	tlinetest[0][0][0].yfrzl = frzlarr; 
+
+	for (i=0; i<tlinetest[0][0][0].wbz.length; i++) { 
+		for (j=0; j<rightLoc.length; j++) { 
+			if (rightLoc[j][2] <= tlinetest[0][0][0].wbz[i] && !wbzflag[i]) { 
+				wbzarr.push(rightLoc[j][4]); 
+				wbzflag[i] = 1; 
+			} 
+		} 
+	} 
+	tlinetest[0][0][0].ywbz = wbzarr; 
+
+	for (j=0; j<rightLoc.length; j++) {
+/*        if (rightLoc[j][2] <= tlinetest[0][0][0].wbz && !wbzflag) { 
+            tlinetest[0][0][0].ywbz = rightLoc[j][4]; 
+            wbzflag = 1; 
+        }
+*/
+
+        if (rightLoc[j][2] <= tlinetest[0][0][0].elPmix && !elmixflag) {
+            tlinetest[0][0][0].yelmix = rightLoc[j][4];
+            elmixflag = 1;
+        }
+        if (rightLoc[j][2] <= tlinetest[0][0][0].elP && !elflag) {
+            tlinetest[0][0][0].yel = rightLoc[j][4];
+            elflag = 1;
+        }
+        if (rightLoc[j][2] <= tlinetest[0][0][0].lfcPmix && !lfcmixflag) {
+            tlinetest[0][0][0].ylfcmix = rightLoc[j][4];
+            lfcmixflag = 1;
+        }
+        if (rightLoc[j][2] <= tlinetest[0][0][0].lfcP && !lfcflag) {
+            tlinetest[0][0][0].ylfc = rightLoc[j][4];
+            lfcflag = 1;
+        }
+        if (rightLoc[j][2] <= tlinetest[0][0][0].lclPmix && !lclmixflag) {
+            tlinetest[0][0][0].ylclmix = rightLoc[j][4];
+            lclmixflag = 1;
+        }
+        if (rightLoc[j][2] <= tlinetest[0][0][0].lclP && !lclflag) {
+            tlinetest[0][0][0].ylcl = rightLoc[j][4];
+            lclflag = 1;
+        }
+
+        if (rightLoc[j][2] <= tlinetest[0][0][0].elPmix_tv && !elmix_tvflag) {
+            tlinetest[0][0][0].yelmix_tv = rightLoc[j][4];
+            elmix_tvflag = 1;
+        }
+        if (rightLoc[j][2] <= tlinetest[0][0][0].elP_tv && !el_tvflag) {
+            tlinetest[0][0][0].yel_tv = rightLoc[j][4];
+            el_tvflag = 1;
+        }
+        if (rightLoc[j][2] <= tlinetest[0][0][0].lfcPmix_tv && !lfcmix_tvflag) {
+            tlinetest[0][0][0].ylfcmix_tv = rightLoc[j][4];
+            lfcmix_tvflag = 1;
+        }
+        if (rightLoc[j][2] <= tlinetest[0][0][0].lfcP_tv && !lfc_tvflag) {
+            tlinetest[0][0][0].ylfc_tv = rightLoc[j][4];
+            lfc_tvflag = 1;
+        }
+        if (rightLoc[j][2] <= tlinetest[0][0][0].lclPmix_tv && !lclmix_tvflag) {
+            tlinetest[0][0][0].ylclmix_tv = rightLoc[j][4];
+            lclmix_tvflag = 1;
+        }
+        if (rightLoc[j][2] <= tlinetest[0][0][0].lclP_tv && !lcl_tvflag) {
+            tlinetest[0][0][0].ylcl_tv = rightLoc[j][4];
+            lcl_tvflag = 1;
+        }
+    }
+
     if (tlinetest[0][0][0].wbz[0] > topp) {
 		if ($("#twc_check").prop("checked")) {
 			wb0 = labelgroup.selectAll("wbz")
-			.data(tlinetest[0][0][0].wbz).enter().insert("rect",":first-child") 
+			.data(tlinetest[0][0][0].ywbz).enter().insert("rect",":first-child")
 				.attr('x', width-70)
-				.attr('y', function(d) { return y(d) })
+				.attr('y', function(d,i) { return d })
 				.attr('width', 20)
 				.attr('height', 2)
 				.attr('class', 'wbz_rectline label');
 		
 			wb0text = labelgroup.selectAll("wbztext")
-			.data(tlinetest[0][0][0].wbz).enter().insert("text",":first-child")
+			.data(tlinetest[0][0][0].ywbz).enter().insert("text",":first-child")
 				.attr('x', width-72)
-				.attr('y', function(d) { return y(d) })
+				.attr('y', function(d,i) { return d })
 				.attr('dy', '0.4em')
 				.attr('text-anchor', 'end')
 				.attr('class', 'wbztext label')
-				.text(function(d) { return d + " mb"; });
+				.text(function(d,i) { return tlinetest[0][0][0].wbz[i] + " mb"; });
 		}
     }
 
     if (tlinetest[0][0][0].frzl[0] > topp) {
-		frzl = labelgroup.selectAll("frzl")
-		.data(tlinetest[0][0][0].frzl).enter().insert("rect",":first-child")
-			.attr('x', width-70)
-			.attr('y', function(d,i) { return y(d)})
-			.attr('width', 20)
-			.attr('height', 2)
-			.attr('class', 'frzl_rectline label');
-	
-		frzltext = labelgroup.selectAll("frzltext")
-		.data(tlinetest[0][0][0].frzl).enter().insert("text",":first-child")
-			.attr('x', width-72)
-			.attr('y', function(d,i) { return y(d)})
-			.attr('dy', '0.4em')
-			.attr('text-anchor', 'end')
-			.attr('class', 'frzltext label')
-			.text(function(d,i) { return d + " mb"; });
+			frzl = labelgroup.selectAll("frzl")
+			.data(tlinetest[0][0][0].yfrzl).enter().insert("rect",":first-child")
+				.attr('x', width-70)
+				.attr('y', function(d,i) { return d })
+				.attr('width', 20)
+				.attr('height', 2)
+				.attr('class', 'frzl_rectline label');
+		
+			frzltext = labelgroup.selectAll("frzltext")
+			.data(tlinetest[0][0][0].yfrzl).enter().insert("text",":first-child")
+				.attr('x', width-72)
+				.attr('y', function(d,i) { return d})
+				.attr('dy', '0.4em')
+				.attr('text-anchor', 'end')
+				.attr('class', 'frzltext label')
+				.text(function(d,i) { return tlinetest[0][0][0].frzl[i] + " mb"; });
     }
 
-    if (tlinetest[0][0][0].lclP > 100) {
+    if (tlinetest[0][0][0].lclP > topp) {
 		if ($("#parcel_check").prop("checked")) {
 			if ($("input[name='CAPE_check']:checked").val() == "Tv") {
 				lcl = labelgroup.selectAll("lcl")
-				.data([tlinetest[0][0][0].lclP_tv]).enter().insert("rect",":first-child")
+				.data([tlinetest[0][0][0].ylcl_tv]).enter().insert("rect",":first-child")
 					.attr('x', width-70)
-					.attr('y', function(d,i) { return y(tlinetest[0][0][0].lclP_tv)})
+					.attr('y', function(d,i) { return d}) 
 					.attr('width', 20)
 					.attr('height', 2)
 					.attr('class', 'lcl rectline label');
 					
 				lcltext = labelgroup.selectAll("lcltext")
-				.data([tlinetest[0][0][0].lclP_tv]).enter().insert("text",":first-child")
+				.data([tlinetest[0][0][0].ylcl_tv]).enter().insert("text",":first-child")
 					.attr('x', width-72)
-					.attr('y', function(d,i) { return y(tlinetest[0][0][0].lclP_tv)})
+					.attr('y', function(d,i) { return d}) 
 					.attr('dy', '0.4em')
 					.attr('text-anchor', 'end')
 					.attr('class', 'lcltext label')
 					.text(function(d,i) { return tlinetest[0][0][0].lclP_tv + " mb"; });
 			} else {
 				lcl = labelgroup.selectAll("lcl")
-				.data([tlinetest[0][0][0].lclP]).enter().insert("rect",":first-child")
+				.data([tlinetest[0][0][0].ylcl]).enter().insert("rect",":first-child")
 					.attr('x', width-70)
-					.attr('y', function(d,i) { return y(tlinetest[0][0][0].lclP)})
+					.attr('y', function(d,i) { return d}) 
 					.attr('width', 20)
 					.attr('height', 2)
 					.attr('class', 'lcl rectline label');
 					
 				lcltext = labelgroup.selectAll("lcltext")
-				.data([tlinetest[0][0][0].lclP]).enter().insert("text",":first-child")
+				.data([tlinetest[0][0][0].ylcl]).enter().insert("text",":first-child")
 					.attr('x', width-72)
-					.attr('y', function(d,i) { return y(tlinetest[0][0][0].lclP)})
+					.attr('y', function(d,i) { return d})
 					.attr('dy', '0.4em')
 					.attr('text-anchor', 'end')
 					.attr('class', 'lcltext label')
@@ -1542,38 +1769,38 @@ function drawText() {
 		}
     }
 
-    if (tlinetest[0][0][0].lclPmix > 100) {
+    if (tlinetest[0][0][0].lclPmix > topp) {
 		if ($("#parcelmix_check").prop("checked")) {
 			if ($("input[name='CAPE_check']:checked").val() == "Tv") {
 				lcl = labelgroup.selectAll("lcl")
-				.data([tlinetest[0][0][0].lclPmix_tv]).enter().insert("rect",":first-child")
+				.data([tlinetest[0][0][0].ylclmix_tv]).enter().insert("rect",":first-child")
 					.attr('x', width-70)
-					.attr('y', function(d,i) { return y(tlinetest[0][0][0].lclPmix_tv)})
+					.attr('y', function(d,i) { return d})
 					.attr('width', 20)
 					.attr('height', 2)
 					.attr('class', 'lclmix rectline label');
 					
 				lcltext = labelgroup.selectAll("lcltext")
-				.data([tlinetest[0][0][0].lclPmix_tv]).enter().insert("text",":first-child")
+				.data([tlinetest[0][0][0].ylclmix_tv]).enter().insert("text",":first-child")
 					.attr('x', width-72)
-					.attr('y', function(d,i) { return y(tlinetest[0][0][0].lclPmix_tv)})
+					.attr('y', function(d,i) { return d})
 					.attr('dy', '0.4em')
 					.attr('text-anchor', 'end')
 					.attr('class', 'lclmixtext label')
 					.text(function(d,i) { return tlinetest[0][0][0].lclPmix_tv + " mb (mix)"; });
 			} else {
 				lcl = labelgroup.selectAll("lcl")
-				.data([tlinetest[0][0][0].lclPmix]).enter().insert("rect",":first-child")
+				.data([tlinetest[0][0][0].ylclmix]).enter().insert("rect",":first-child")
 					.attr('x', width-70)
-					.attr('y', function(d,i) { return y(tlinetest[0][0][0].lclPmix)})
+					.attr('y', function(d,i) { return d})
 					.attr('width', 20)
 					.attr('height', 2)
 					.attr('class', 'lclmix rectline label');
 					
 				lcltext = labelgroup.selectAll("lcltext")
-				.data([tlinetest[0][0][0].lclPmix]).enter().insert("text",":first-child")
+				.data([tlinetest[0][0][0].ylclmix]).enter().insert("text",":first-child")
 					.attr('x', width-72)
-					.attr('y', function(d,i) { return y(tlinetest[0][0][0].lclPmix)})
+					.attr('y', function(d,i) { return d})
 					.attr('dy', '0.4em')
 					.attr('text-anchor', 'end')
 					.attr('class', 'lclmixtext label')
@@ -1582,38 +1809,38 @@ function drawText() {
 		}
     }
 
-    if (tlinetest[0][0][0].lfcP > 100) {
+    if (tlinetest[0][0][0].lfcP > topp) {
 		if ($("#parcel_check").prop("checked")) {
 			if ($("input[name='CAPE_check']:checked").val() == "Tv") {
 				lfc = labelgroup.selectAll("lfc")
-				.data([tlinetest[0][0][0].lfcP_tv]).enter().insert("rect",":first-child")
+				.data([tlinetest[0][0][0].ylfc_tv]).enter().insert("rect",":first-child") 
 					.attr('x', width-70)
-					.attr('y', function(d,i) { return y(tlinetest[0][0][0].lfcP_tv)})
+					.attr('y', function(d,i) { return d})
 					.attr('width', 20)
 					.attr('height', 2)
 					.attr('class', 'lfc rectline label');
 					
 				lfctext = labelgroup.selectAll("lfctext")
-				.data([tlinetest[0][0][0].lfcP_tv]).enter().insert("text",":first-child")
+				.data([tlinetest[0][0][0].ylfc_tv]).enter().insert("text",":first-child")
 					.attr('x', width-72)
-					.attr('y', function(d,i) { return y(tlinetest[0][0][0].lfcP_tv)})
+					.attr('y', function(d,i) { return d})
 					.attr('dy', '0.4em')
 					.attr('text-anchor', 'end')
 					.attr('class', 'lfctext label')
 					.text(function(d,i) { return tlinetest[0][0][0].lfcP_tv + " mb"; });
 			} else {
 				lfc = labelgroup.selectAll("lfc")
-				.data([tlinetest[0][0][0].lfcP]).enter().insert("rect",":first-child")
+				.data([tlinetest[0][0][0].ylfc]).enter().insert("rect",":first-child")
 					.attr('x', width-70)
-					.attr('y', function(d,i) { return y(tlinetest[0][0][0].lfcP)})
+					.attr('y', function(d,i) { return d})
 					.attr('width', 20)
 					.attr('height', 2)
 					.attr('class', 'lfc rectline label');
 					
 				lfctext = labelgroup.selectAll("lfctext")
-				.data([tlinetest[0][0][0].lfcP]).enter().insert("text",":first-child")
+				.data([tlinetest[0][0][0].ylfc]).enter().insert("text",":first-child")
 					.attr('x', width-72)
-					.attr('y', function(d,i) { return y(tlinetest[0][0][0].lfcP)})
+					.attr('y', function(d,i) { return d})
 					.attr('dy', '0.4em')
 					.attr('text-anchor', 'end')
 					.attr('class', 'lfctext label')
@@ -1622,38 +1849,38 @@ function drawText() {
 		}
     }
 
-    if (tlinetest[0][0][0].elP > 100) {
+    if (tlinetest[0][0][0].elP > topp) {
 		if ($("#parcel_check").prop("checked")) {
 			if ($("input[name='CAPE_check']:checked").val() == "Tv") {
 				el = labelgroup.selectAll("el")
-				.data([tlinetest[0][0][0].elP_tv]).enter().insert("rect",":first-child")
+				.data([tlinetest[0][0][0].yel_tv]).enter().insert("rect",":first-child")
 					.attr('x', width-70)
-					.attr('y', function(d,i) { return y(tlinetest[0][0][0].elP_tv)})
+					.attr('y', function(d,i) { return d})
 					.attr('width', 20)
 					.attr('height', 2)
 					.attr('class', 'el rectline label');
 					
 				eltext = labelgroup.selectAll("eltext")
-				.data([tlinetest[0][0][0].elP_tv]).enter().insert("text",":first-child")
+				.data([tlinetest[0][0][0].yel_tv]).enter().insert("text",":first-child")
 					.attr('x', width-72)
-					.attr('y', function(d,i) { return y(tlinetest[0][0][0].elP_tv)})
+					.attr('y', function(d,i) { return d})
 					.attr('dy', '0.4em')
 					.attr('text-anchor', 'end')
 					.attr('class', 'eltext label')
 					.text(function(d,i) { return tlinetest[0][0][0].elP_tv + " mb"; });
 			} else {
 				el = labelgroup.selectAll("el")
-				.data([tlinetest[0][0][0].elP]).enter().insert("rect",":first-child")
+				.data([tlinetest[0][0][0].yel]).enter().insert("rect",":first-child")
 					.attr('x', width-70)
-					.attr('y', function(d,i) { return y(tlinetest[0][0][0].elP)})
+					.attr('y', function(d,i) { return d})
 					.attr('width', 20)
 					.attr('height', 2)
 					.attr('class', 'el rectline label');
 					
 				eltext = labelgroup.selectAll("eltext")
-				.data([tlinetest[0][0][0].elP]).enter().insert("text",":first-child")
+				.data([tlinetest[0][0][0].yel]).enter().insert("text",":first-child")
 					.attr('x', width-72)
-					.attr('y', function(d,i) { return y(tlinetest[0][0][0].elP)})
+					.attr('y', function(d,i) { return d})
 					.attr('dy', '0.4em')
 					.attr('text-anchor', 'end')
 					.attr('class', 'eltext label')
@@ -1663,38 +1890,38 @@ function drawText() {
 		}
     }
 
-    if (tlinetest[0][0][0].lfcPmix > 100) {
+    if (tlinetest[0][0][0].lfcPmix > topp) {
 		if ($("#parcelmix_check").prop("checked")) {
 			if ($("input[name='CAPE_check']:checked").val() == "Tv") {
 				lfc = labelgroup.selectAll("lfcmix")
-				.data([tlinetest[0][0][0].lfcPmix_tv]).enter().insert("rect",":first-child")
+				.data([tlinetest[0][0][0].ylfcmix_tv]).enter().insert("rect",":first-child")
 					.attr('x', width-70)
-					.attr('y', function(d,i) { return y(tlinetest[0][0][0].lfcPmix_tv)})
+					.attr('y', function(d,i) { return d})
 					.attr('width', 20)
 					.attr('height', 2)
 					.attr('class', 'lfcmix rectline label');
 					
 				lfctext = labelgroup.selectAll("lfcmixtext")
-				.data([tlinetest[0][0][0].lfcPmix_tv]).enter().insert("text",":first-child")
+				.data([tlinetest[0][0][0].ylfcmix_tv]).enter().insert("text",":first-child")
 					.attr('x', width-72)
-					.attr('y', function(d,i) { return y(tlinetest[0][0][0].lfcPmix_tv)})
+					.attr('y', function(d,i) { return d})
 					.attr('dy', '0.4em')
 					.attr('text-anchor', 'end')
 					.attr('class', 'lfcmixtext label')
 					.text(function(d,i) { return tlinetest[0][0][0].lfcPmix_tv + " mb (mix)"; });
 			} else {
 				lfc = labelgroup.selectAll("lfcmix")
-				.data([tlinetest[0][0][0].lfcPmix]).enter().insert("rect",":first-child")
+				.data([tlinetest[0][0][0].ylfcmix]).enter().insert("rect",":first-child")
 					.attr('x', width-70)
-					.attr('y', function(d,i) { return y(tlinetest[0][0][0].lfcPmix)})
+					.attr('y', function(d,i) { return d})
 					.attr('width', 20)
 					.attr('height', 2)
 					.attr('class', 'lfcmix rectline label');
 					
 				lfctext = labelgroup.selectAll("lfcmixtext")
-				.data([tlinetest[0][0][0].lfcPmix]).enter().insert("text",":first-child")
+				.data([tlinetest[0][0][0].ylfcmix]).enter().insert("text",":first-child")
 					.attr('x', width-72)
-					.attr('y', function(d,i) { return y(tlinetest[0][0][0].lfcPmix)})
+					.attr('y', function(d,i) { return d})
 					.attr('dy', '0.4em')
 					.attr('text-anchor', 'end')
 					.attr('class', 'lfcmixtext label')
@@ -1703,38 +1930,38 @@ function drawText() {
 		}
     }
 
-    if (tlinetest[0][0][0].elPmix > 100) {
+    if (tlinetest[0][0][0].elPmix > topp) {
 		if ($("#parcelmix_check").prop("checked")) {
 			if ($("input[name='CAPE_check']:checked").val() == "Tv") {
 				el = labelgroup.selectAll("elmix")
-				.data([tlinetest[0][0][0].elPmix_tv]).enter().insert("rect",":first-child")
+				.data([tlinetest[0][0][0].elPmix_tv]).enter().insert("rect",":first-child") 
 					.attr('x', width-70)
-					.attr('y', function(d,i) { return y(tlinetest[0][0][0].elPmix_tv)})
+					.attr('y', function(d,i) { return y(tlinetest[0][0][0].elPmix_tv)}) 
 					.attr('width', 20)
 					.attr('height', 2)
 					.attr('class', 'elmix rectline label');
 					
 				eltext = labelgroup.selectAll("elmixtext")
-				.data([tlinetest[0][0][0].elPmix_tv]).enter().insert("text",":first-child")
+				.data([tlinetest[0][0][0].elPmix_tv]).enter().insert("text",":first-child") 
 					.attr('x', width-72)
-					.attr('y', function(d,i) { return y(tlinetest[0][0][0].elPmix_tv)})
+					.attr('y', function(d,i) { return y(tlinetest[0][0][0].elPmix_tv)}) 
 					.attr('dy', '0.4em')
 					.attr('text-anchor', 'end')
 					.attr('class', 'elmixtext label')
 					.text(function(d,i) { return tlinetest[0][0][0].elPmix_tv + " mb (mix)"; });
 			} else {
 				el = labelgroup.selectAll("elmix")
-				.data([tlinetest[0][0][0].elPmix]).enter().insert("rect",":first-child")
+				.data([tlinetest[0][0][0].yelmix]).enter().insert("rect",":first-child")
 					.attr('x', width-70)
-					.attr('y', function(d,i) { return y(tlinetest[0][0][0].elPmix)})
+					.attr('y', function(d,i) { return d}) 
 					.attr('width', 20)
 					.attr('height', 2)
 					.attr('class', 'elmix rectline label');
 					
 				eltext = labelgroup.selectAll("elmixtext")
-				.data([tlinetest[0][0][0].elPmix]).enter().insert("text",":first-child")
+				.data([tlinetest[0][0][0].yelmix]).enter().insert("text",":first-child")
 					.attr('x', width-72)
-					.attr('y', function(d,i) { return y(tlinetest[0][0][0].elPmix)})
+					.attr('y', function(d,i) { return d}) 
 					.attr('dy', '0.4em')
 					.attr('text-anchor', 'end')
 					.attr('class', 'elmixtext label')
@@ -1743,8 +1970,7 @@ function drawText() {
 		}
     }
 
-//    titleText = labelgroup.selectAll("title")
-	titleText = d3.select("#mainbox svg g g.skewtbg").selectAll("title")
+	titleText = d3.select("#mainbox svg g g.tephibg").selectAll("title")
 	  .data([title]).enter().insert("text",":first-child")
         .attr('dy', '0.4em')
     	.attr('class', 'titleText')
@@ -1804,50 +2030,76 @@ function drawToolTips() {
   focus.append("circle").attr("r", 6);
   focus.append("text").attr("x", 9).attr("dy", ".35em");
 
-  d3.selectAll(".overlay, .skewt")
+  d3.selectAll(".overlay, .tephi")
   	.attr("width", width)
 	.attr("height", height);
 
   plotChecks();
 }
 
-d3.selectAll(".skewt, .windbarb")
+d3.selectAll(".tephi, .windbarb")
 .on("mouseover", function() { $(".focus").show();})
-.on("mouseout", function() { $(".focus").hide(); $(".activeBarb").attr("class", "inactiveBarb");});
+.on("mouseout", function() { $(".focus").hide(); 
+$(".activeBarb").attr("class", "inactiveBarb");});
 
-d3.selectAll(".skewt, .windbarb")
+d3.selectAll(".tephi, .windbarb")
 	.on("mousemove", mousemove);
 
 var ind = "";
 var idx;
 var mouseTemp = "";
 
+
 function mousemove() {
+	$("#editTable td").css("outline","");
 	idx = "";
-	var y0 = y.invert(d3.mouse(this)[1]); // get y value of mouse pointer in pressure space
-	var i = bisectTemp(mouseoverdata, y0, 1, mouseoverdata.length-1);
+	var x1 = d3.mouse(this)[0]; // get x value of mouse pointer
+	var y1 = d3.mouse(this)[1]; // get y value of mouse pointer
+	var vals = getTephiVals(x1,y1);
+
+	var i = bisectTemp(mouseoverdata, vals[2], 1, mouseoverdata.length-1);
 	var d0 = mouseoverdata[i - 1];
 	var d1 = mouseoverdata[i];
-	var d = y0 - d0.press > d1.press - y0 ? d1 : d0;
+	var d = vals[2] - d0.press > d1.press - vals[2] ? d1 : d0;
 
-	focus.attr("transform", "translate(" + (x(d.temp) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
-	focus2.attr("transform", "translate(" + (x(d.dwpt) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
-	focus3.attr("transform", "translate(" + (x(d.twc) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
-	focus4.attr("transform", "translate(" + (x(d.tv) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
-	if ($("input[name='CAPE_check']:checked").val() == "Tv") {
-		focus5.attr("transform", "translate(" + (x(d.parcelT_tv) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
-		focus5b.attr("transform", "translate(" + (x(d.parcelTmix_tv) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
+	var loc = getTephiLoc(d.temp, d.theta);
+	focus.attr("transform", "translate(" + loc[0] + "," + loc[1] + ")");
+
+	var dwpt_loc = getTephiLoc(d.dwpt, calcTheta(d.press, d.dwpt));
+	focus2.attr("transform", "translate(" + dwpt_loc[0] + "," + dwpt_loc[1] + ")");
+
+	var twc_loc = getTephiLoc(d.twc, calcTheta(d.press, d.twc));
+	focus3.attr("transform", "translate(" + twc_loc[0] + "," + twc_loc[1] + ")");
+
+	var tv_loc = getTephiLoc(d.tv, calcTheta(d.press, d.tv));
+	focus4.attr("transform", "translate(" + tv_loc[0] + "," + tv_loc[1] + ")");	
+
+    if ($("input[name='CAPE_check']:checked").val() == "Tv") {
+		var parcelT_tv_loc = getTephiLoc(d.parcelT_tv, calcTheta(d.press, d.parcelT_tv));
+		focus5.attr("transform", "translate(" + parcelT_tv_loc[0] + "," + parcelT_tv_loc[1] + ")");
+		var parcelTmix_tv_loc = getTephiLoc(d.parcelTmix_tv, calcTheta(d.press, d.parcelTmix_tv));
+		focus5b.attr("transform", "translate(" + parcelTmix_tv_loc[0] + "," + parcelTmix_tv_loc[1] + ")");
 	} else {
-		focus5.attr("transform", "translate(" + (x(d.parcelT) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
-		focus5b.attr("transform", "translate(" + (x(d.parcelTmix) + (y(basep)-y(d.press))/tan)+ "," + y(d.press) + ")");
+		var parcelT_loc = getTephiLoc(d.parcelT, calcTheta(d.press, d.parcelT));
+		focus5.attr("transform", "translate(" + parcelT_loc[0] + "," + parcelT_loc[1] + ")");
+		var parcelTmix_loc = getTephiLoc(d.parcelTmix, calcTheta(d.press, d.parcelTmix));
+		focus5b.attr("transform", "translate(" + parcelTmix_loc[0] + "," + parcelTmix_loc[1] + ")");
 	}
 
-	focus6.attr("transform", "translate(0," + y(d.press) + ")");
-	focus6b.attr("transform", "translate(0," + y(d.press) + ")");
-	focus6c.attr("transform", "translate(0," + y(d.press) + ")");
-	focus7.attr("transform", "translate(" + width + "," + y(d.press) + ")");
+    if (d.yLocLeft >= 0) {
+        focus6.attr("transform", "translate(0," + d.yLocLeft + ")"); // altitude km
+        focus6b.attr("transform", "translate(0," + d.yLocLeft + ")"); // pressure
+		focus6c.attr("transform", "translate(0," + d.yLocLeft + ")"); // altitude ft
+    }
+    if (d.yLocRight >= 0) {
+        focus7.attr("transform", "translate(" + width + "," + d.yLocRight + ")"); // windt
+    } else {
+        $(focus7).hide();
+    }
+    
 
-	var currPress = $(".pres").find("text").text().trim().split("m");
+	var currPress = $(".pres").find("text").text().trim().split("m"); // Splits on mb (for English)
+//	var currPress = $(".pres").find("text").text().trim().split("h"); // Splits on hPa (for Spanish/French)
 	currPress = currPress[0];
 
 	for (k=0; k < tlinetest[0][0].length; k++) {
@@ -1888,10 +2140,14 @@ function mousemove() {
 	var mrText = d.mr.toFixed(2) + "\u00A0g/kg";
 	$(".MixingRatio").text(mrText)
 	var eText = d.e.toFixed(2) + "\u00A0hPa";
-	$(".VaporPressure").text(eText);
+	$(".VaporPres").text(eText); // Solved the mouseover not changing issue.
 	$(".SpecHum").text(d.sh + "\u00A0g/kg")
 	$(".Theta").text(d.theta + "\u00A0K")
 	$(".ThetaE").text(d.thetaE + "\u00A0K")
+	$("#editTable tr:eq("+ idx +") td:eq(0)").css("outline","black 2px solid");
+	$("#editTable tr:eq("+ idx +") td:eq(1)").css("outline","red 2px solid");
+	$("#editTable tr:eq("+ idx +") td:eq(2)").css("outline","green 2px solid");
+	$("#editTable tr:eq("+ idx +") td:eq(3), #editTable tr:eq("+ idx +") td:eq(4)").css("outline","orange 2px solid");
 
 }
 
@@ -1962,7 +2218,7 @@ function rPosition(mouseX, mouseY) {
 
 function dragWindMoveCircular () {
     event.preventDefault();
-	d3.selectAll(".skewt, .windbarb")
+	d3.selectAll(".tephi, .windbarb")
 		.on("mousemove", null)
 		.on("mouseover", null)
 		.on("mouseout", null);
@@ -2025,7 +2281,7 @@ function dragWindMoveCircular () {
 
 	$(".windt").children().text("" + newWspd + " @" + windDir+ "˚");
 	d3.selectAll(".activeBarb").attr("transform","translate(" + translateX + ", " + translateY + ") rotate(" + newRotate + ")");
-	drawSkew();
+	drawTephi();
     $(".windbarb g:eq(" + idx + ")").attr("class", "activeBarb");
     d3.selectAll(".windbarb").append("g")
         .attr("id","origSpeedRing")
@@ -2051,7 +2307,7 @@ function dragWindMoveCircular () {
 }
 			
 function dragWindEnd () {
-	d3.selectAll(".skewt, .windbarb")
+	d3.selectAll(".tephi, .windbarb")
 		.on("mouseover", function() { $(".focus").show()})
 		.on("mouseout", function() { $(".focus").hide(); $(".activeBarb").attr("class", "inactiveBarb")})
 		.on("mousemove", mousemove);
@@ -2059,15 +2315,20 @@ function dragWindEnd () {
 	$(".focus.twc, .focus.tvc, .focus.parcel, .focus.parcelmix, .focus.alt, .focus.pres, .focus.falt, .focus.tmpc, .focus.dwpc").css("display", "");
 }
 
-var yTrans = 0;
+var startVals = [];
 
-function dragStart(d) {
+function dragStart(d) { 
 	event.preventDefault();
 	$(".focus.twc, .focus.tvc, .focus.parcel, .focus.parcelmix, .focus.alt, .focus.pres, .focus.falt, .focus.windt").css("display", "none");
 	yTrans = d3.select(this).attr("transform");
   	yTrans = yTrans.split(",");
-  	yTrans = yTrans[1].split(")");
+	xTrans = yTrans[0].split("(");
+	yTrans = yTrans[1].split(")");
+	xTrans = xTrans[1];
 	yTrans = yTrans[0];
+
+	startVals = getTephiVals(xTrans, yTrans);
+
 	var undoObj = {
 		"index": idx,
 		"press": tlinetest[0][0][idx].press,
@@ -2079,13 +2340,17 @@ function dragStart(d) {
 	}
 	undoArr.unshift(undoObj);
 	$("#undo").prop("disabled", false);
+
+	d3.select(this).attr("transform", "translate(" + startVals[3] + "," + startVals[4] + ")");
 }
 
 function dragMove(d) {
-	var xLoc = d3.event.x;
-	$(".focus.twc, .focus.tvc, .focus.parcel, .focus.parcelmix, .focus.alt, .focus.pres, .focus.falt, .focus.windt, .focus.hod, .focus.hodarrow").css("display", "none");
+  var x1 = d3.event.x;
+  var y1 = d3.event.y;
 
-  d3.selectAll(".skewt, .windbarb")
+  $(".focus.twc, .focus.tvc, .focus.parcel, .focus.parcelmix, .focus.alt, .focus.pres, .focus.falt, .focus.windt, .focus.hod, .focus.hodarrow").css("display", "none");
+
+  d3.selectAll(".tephi, .windbarb")
   	.on("mousemove", null)
 	.on("mouseover", null)
 	.on("mouseout", null);
@@ -2096,94 +2361,97 @@ function dragMove(d) {
 	pres.push(elem);
   };
 
-  var currPress = $(".pres").find("text").text().trim().split("m");
-  currPress = currPress[0];
-  ind = pres.indexOf(parseFloat(currPress));
-  if (xLoc >= 0 && xLoc < 625) {
-	  d3.select(this).attr("transform", "translate(" + xLoc + "," + yTrans + ")");
+  currPress = tlinetest[0][0][idx].press;
+  ind = idx;
+
+  myLeft= 0;
+  myRight= width;
+  var elId = $(this).attr("id");
+  myLow= getMyLow(y1);
+  myHigh= getMyHigh(y1);
+  var myPosition=x1;
+  var myPercent=getPercent(myLeft, myRight, myPosition);
+  var myValue=findValue(myLow, myHigh, myPercent);
+
+  var theta = calcTheta(tlinetest[0][0][ind].press,myValue);
+  tlinetest[0][0][ind].theta = theta;
+  var b_theta = (Math.log(theta)-Math.log(theta_ll))*dydtheta;
+  var b_temp = (myValue-t_ll)*dydt;
+	
+	var xloc = (b_theta-b_temp)/(m_temp-m_theta);
+	var offset = (m_temp*xloc)+(myValue-t_ll)*dydt; //offset from origin at lower left
+	var yloc = height - offset;
+
+	tephiVals = getTephiVals(xloc, yloc, currPress);
+  
+  if (x1 >= 0 && x1 < width && y1 >= 0 && y1 < height) {
+	d3.select(this).attr("transform", "translate(" + tephiVals[3] + "," + tephiVals[4] + ")");
   } else {
 		return;
   }
 
-  var elId = $(this).attr("id");
-
   if (elId == "dragDew") {
-		var otherXLoc = $("#dragTemp").attr("transform");
-		otherXLoc = otherXLoc.split(",");
-		otherXLoc = otherXLoc[0].split("(");
-		otherXLoc = otherXLoc[1];
-		
-		if (xLoc >= 0 && xLoc < 625) {
-			mouseTemp = x.invert(xLoc - (y(basep)-yTrans)/tan);
+		if (x1 >= 0 && x1 < width && y1 >= 0 && y1 < height) {
+			mouseTemp = tephiVals[0];
 			// Redraw label (truncated value)
 			$(this).find('text').text(Math.round(mouseTemp) + "˚C");
 			// Modify that element in line2[el] or tlinetest[0][0][el].dwpt
 			tlinetest[0][0][ind].dwpt = parseFloat(mouseTemp.toFixed(2));
-			if (otherXLoc <= xLoc) {
+			if (tlinetest[0][0][ind].dwpt >= tlinetest[0][0][ind].temp) {
 				tlinetest[0][0][ind].temp = parseFloat(mouseTemp.toFixed(2));
-				d3.select("#dragTemp").attr("transform", "translate(" + xLoc + "," + yTrans + ")");
+				d3.select("#dragTemp").attr("transform", "translate(" + tephiVals[3] + "," + tephiVals[4] + ")");
 				$("#dragTemp").find("text").text(Math.round(mouseTemp) + "˚C");
 			}
 		}
 
   } else if (elId == "dragTemp") {
-	var otherXLoc = $("#dragDew").attr("transform");
-		otherXLoc = otherXLoc.split(",");
-		otherXLoc = otherXLoc[0].split("(");
-		otherXLoc = otherXLoc[1];
-
-		if (xLoc >= 0 && xLoc < 625) {
-			mouseTemp = x.invert(xLoc - (y(basep)-yTrans)/tan);
+		if (x1 >= 0 && x1 < width && y1 >= 0 && y1 < height) {
+			mouseTemp = tephiVals[0];
 			// Redraw label (truncated value)
 			$(this).find('text').text(Math.round(mouseTemp) + "˚C");
 			// Modify the element in line[el] or tlinetest[0][0][el].temp
 			tlinetest[0][0][ind].temp = parseFloat(mouseTemp.toFixed(2));
-			if (otherXLoc >= xLoc) {
+			if (tlinetest[0][0][ind].temp <= tlinetest[0][0][ind].dwpt) {
 				tlinetest[0][0][ind].dwpt = parseFloat(mouseTemp.toFixed(2));
-				d3.select("#dragDew").attr("transform", "translate(" + xLoc + "," + yTrans + ")");
+				d3.select("#dragDew").attr("transform", "translate(" + tephiVals[3] + "," + tephiVals[4] + ")");
 				$("#dragDew").find("text").text(Math.round(mouseTemp) + "˚C");
 			}
 		}
-
 		
   } else {
 	  	console.log("Didn't find that ID for dragging");
   }
-  drawSkew();
-  drawText();
+  drawTephi();
+  drawText(ind);
   tabulate("editTable", columns, tlinetest[0][0],true);
 
-  if (xLoc <= 0) {
+  if (x1 <= 0) {
 	  dragEnd();
-  } else if (xLoc > 625) {
+  } else if (x1 > 625) {
 	  dragEnd();
   }
-
 }
 
 function dragEnd(d) {
-  d3.selectAll(".skewt, .windbarb").on("mousemove", mousemove);
+  d3.selectAll(".tephi, .windbarb").on("mousemove", mousemove);
   $(".focus.twc, .focus.tvc, .focus.parcel, .focus.parcelmix, .focus.alt, .focus.pres, .focus.falt, .focus.windt, .focus.hod, .focus.hodarrow").css("display", "");
 
-  d3.selectAll(".skewt, .windbarb")
+  d3.selectAll(".tephi, .windbarb")
   	.on("mouseover", function() { $(".focus").show();})
   	.on("mouseout", function() { $(".focus").hide(); $(".activeBarb").attr("class", "inactiveBarb");});
-
 }
 
 function drawTextLabels() {
 
 spacing = 20;
-var headers = ['','',];
-/*labels = ['EL', 'EL (mixed)', 'LFC', 'LFC (mixed)', 'LCL', 'LCL (mixed)', 'SBCAPE', 'MLCAPE', 'CIN', 'MLCIN', 'BRN', 'BRN Shear', 'Shear 6km', 'LI', 'LI (mixed)', 'KI', 'TT', 'SWEAT'];
-labels2 = ['CCL', 'Tc', 'Thickness', 'Wet-Bulb 0˚', 'Freezing Lvl', 'PW', 'RH', 'Mixing Ratio', 'Vapor Pres', 'Spec Hum', 'Theta', 'ThetaE']; GP:MOD*/
-labels = ['EL', 'EL (mixed)', 'LFC', 'LFC (mixed)', 'LCL', 'LCL (mixed)', 'SBCAPE', 'MLCAPE', 'CIN', 'MLCIN', 'Bulk Richardson Num.', 'Bulk Richardson Num. Shear', 'Shear 6km', 'Lifted Index', 'Lifted Index (mixed)', 'K Index', 'Total Totals', 'SWEAT', 'CCL', 'Tc', 'Thickness', 'Wet-Bulb 0˚', 'Freezing Lvl', 'Precipitable Water', 'Relative Humidity', 'Mixing Ratio', 'Vapor Pres', 'Spec Hum', 'Theta', 'ThetaE'];
+var headers = ['Item','Values'];
+labels = ['EL', 'EL (mixed)', 'LFC', 'LFC (mixed)', 'LCL', 'LCL (mixed)', 'SBCAPE', 'MLCAPE', 'CIN', 'MLCIN', 'BRN', 'BRN Shear', 'Shear 6km', 'LI', 'LI (mixed)', 'KI', 'TT', 'SWEAT','CCL', 'Tc', 'Thickness', 'Wet-Bulb 0˚', 'Freezing Lvl', 'PW', 'RH', 'Mixing Ratio', 'Vapor Pres', 'Spec Hum', 'Theta', 'ThetaE'];
 
 tabulate("indices", headers, labels, false);
 
 $("#indices tbody tr").each(function(i) {
 	$(this).find("td:eq(0)").text(labels[i]);
-	//$(this).find("td:eq(2)").text(labels2[i]) GP:MOD;
+//	$(this).find("td:eq(2)").text(labels2[i]);
 });
 	
 }
@@ -2292,9 +2560,7 @@ function calcLCL(pres, t, dp)
 	A = 1 / (TDK - 56);
 	B = Math.log (TK/TDK)/800;
 	var TCK = 1 / (A+B) + 56;
-//	var lcl_t = Math.round((TCK-273.15)*10)/10;
 	var lcl_t = TCK-273.15;
-//	var lcl_p = Math.round(P * Math.pow(TCK / TK, 3.5037));
 	var lcl_p = Math.round(P * Math.pow(TCK / TK, 7/2));
 
 	for (i=0; i<tlinetest[0][0].length-1; i++) {
@@ -2442,7 +2708,7 @@ function calcTT()
 	return Math.round(t850 + td850 - (2*t500));
 }
 
-function calcFreezeLevel(flag)
+function calcFreezeLevel(flag) 
 {
 	var temp0;
 	var temp1;
@@ -2450,13 +2716,13 @@ function calcFreezeLevel(flag)
 	var logp_temp0_arr = new Array();
 	var j = 0;
 	for(i=1; i<tlinetest[0][0].length-1; i++){
-		if (!flag) {
+		if (!flag) { 
 		temp0 = tlinetest[0][0][i].temp;
-		temp1 = tlinetest[0][0][i-1].temp;
-		} else {
+		temp1 = tlinetest[0][0][i-1].temp; 
+		} else { 
 		temp0 = tlinetest[0][0][i].twc;	
 		temp1 = tlinetest[0][0][i-1].twc;
-		} 
+		}
 		if(temp0 <= 0){
 			if (i > 0) {
 				if (temp1 > 0) { 
@@ -2473,8 +2739,8 @@ function calcFreezeLevel(flag)
 		} else {
 			range_fraction = 1;
 		}
-		log_lop = log10(temp_frz_t_arr[k][2]); 
-		log_hip = log10(temp_frz_t_arr[k][3]); 
+		log_lop = log10(temp_frz_t_arr[k][2]);
+		log_hip = log10(temp_frz_t_arr[k][3]);
 		logp_temp0 = (range_fraction * (log_hip - log_lop)) + log_lop;
 		logp_temp0_arr.push(Math.round(Math.pow(10, logp_temp0)));
 	}
@@ -2531,7 +2797,7 @@ function getBRN(cape)
 		vprev = v;
 	}
 
-	//console.log(sumu, sumv, sumrho, sumrho500)
+//	console.log(sumu, sumv, sumrho, sumrho500)
 
 	u6kmAvg = sumu/sumrho;
 	v6kmAvg = sumv/sumrho;
@@ -2735,9 +3001,9 @@ function getCAPE(capeType, useTv)
 			temp_LCL = tlinetest[0][0][0].lclT_tv;
 		}
 	} else if (capeType == "Moist Adiabats") {
-		var press_EL = 100;
-		var press_LFC = 1000;
-		var press_LCL = 1000;
+		var press_EL = topp;
+		var press_LFC = basep;
+		var press_LCL = basep;
 		var temp_LCL = 10;
 	} else {
 		var press_EL = tlinetest[0][0][0].elP;
@@ -2823,13 +3089,15 @@ function getCAPE(capeType, useTv)
 
 			sumCAPE += (dz * dt) / (mean_t + 273.15); //add to sum
 		}else if (i<el_index && i>lfc_index) { //in the middle, between the EL and LFC
+			if (i+1 >= tlinetest[0][0].length) {
+				break;
+			}
 			if (useTv) {
 //				mean_t = (tlinetest[0][0][i].tv + tlinetest[0][0][i+1].tv) / 2;
 				mean_t = (temp_t + tlinetest[0][0][i].tv) / 2;
 			} else {
 				mean_t = (temp_t + tlinetest[0][0][i].temp) / 2;
 			}
-
 			dz = calcThickness(tlinetest[0][0][i].press, tlinetest[0][0][i+1].press, mean_t);
 			if (useTv) {
 				dt0 = temp_t - tlinetest[0][0][i].tv;// pcl temp - obs temp at current level
@@ -3407,6 +3675,7 @@ function findLFCandEL(flag)
 				obsT_hi = obsT_lo;
 				pclT_hi = pclT_lo;
 				//what if there is NO LFC???
+				//if (i==1){
 				if (i == tlinetest[0][0].length-2) {
 					plfc = -1;
 				}
@@ -3474,6 +3743,7 @@ function findLFCandEL(flag)
 			}
 
 			return [plfc, tlfc, zlfc, pel, tel, zel];
+
 		}else{
 			if(i <= 0) {
 				pel = -1; //never found an equil level
@@ -3700,23 +3970,14 @@ $(".x .tick").each( function() {
 	var tickTran = $(this).attr("transform");
 	tickTranX = tickTran.split(",");
 	tickTranX = tickTranX[0].split("(");
-	tickTranX = tickTranX[1]-14;
+	tickTranX = tickTranX[1]-15;
 	tickTranY = tickTran.split(",");
 	tickTranY = tickTranY[1].split(")");
-	tickTranY = tickTranY[0]+8;
+	tickTranY = tickTranY[0]+4;
 	$(this).attr("transform", "translate(" + tickTranX + " " + tickTranY + ") rotate(-" + tempSkew + ")");
-	
+});
 
-	
-});
-$(function(){
-	$('.draggableWindow').draggable({ 
-		cursor: "move",
-        cancel: ".drag-cancel"
-	});
-});
 </script>
 
-<div id="editTableWindow" class="draggableWindow" style="display:none;"></div>
 </body>
 </html>

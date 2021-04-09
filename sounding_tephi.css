@@ -15,9 +15,6 @@ body {
   margin-top: 10px;
   color: #000;
 }
-#link-set {
-  margin-top: 20px;
-}
 
 .axis path,
 .axis line {
@@ -217,12 +214,11 @@ div.rollover.selected { background-color: #EFEFEF; border-bottom: 2px solid gray
 #presets {clear: both;}
 #checks_wrapper {margin: 10px; background-color: #e9e9e9}
 
-#editTableWrap { display: none; }
+#editTableWrap { display: none };
 
 .blank {
-  border: 2px red solid !important;
+  border: 2px red solid;
 }
-
 
 /*//STYLIZED OVERWRITES///////////////////*/
 /*reset*/
@@ -236,31 +232,31 @@ th {
 }
 /*custom*/
 #interaction-wrap {
-	min-height: 1000px;
-	/*background-color: #98a0ad;*/
+  min-height: 1000px;
+  /*background-color: #98a0ad;*/
 }
 #mainbox, #hodobox, #editTableWrap {
-	background-color: #fff;
+  background-color: #fff;
 }
 #hodobox, #mainbox {
-	margin-bottom: 10px;
-	min-height: 850px;
+  margin-bottom: 10px;
+  min-height: 850px;
 }
 /*#hodobox {
-	min-height: 819px;
+  min-height: 819px;
 }*/
 #checks {
-	background-color: #b9bdc8;
+  background-color: #b9bdc8;
 }
 
 #container h1 {
-	font-size: 16px;
+  font-size: 16px;
 }
 #copyright {
-	font-weight: bold;
-	font-style: italic;
-	font-size: 12px;
-	text-align: right;
+  font-weight: bold;
+  font-style: italic;
+  font-size: 12px;
+  text-align: right;
   clear: both;
 }
 .table {
@@ -470,7 +466,7 @@ table th[class*=col-] {
 .table.table-bordered tr {
   text-align: right;
 }
-#editTableWindow {
+#editTableWrap {
   width: 500px;
   height: 600px;
   padding: 2em;
@@ -484,7 +480,7 @@ table th[class*=col-] {
   left: 0px;
   z-index: 1;
 }
-#editTableWindow::before {
+#editTableWrap::before {
   content: 'Click and drag this window to move it around. Click on each of the values to edit.';
   position: relative;
   font-weight: bold;
@@ -498,8 +494,13 @@ table th[class*=col-] {
   z-index: 1;
   width: 290px;
 }
-#indices tr > td:first-child {
+#indices tr:first-child {
+  display: none;
+}
+#indices tr > td:first-child,
+#indices tr > td:nth-child(3) {
   font-weight: bold;
+  width: 100px;
 }
 #editTable {
   z-index: 99;
@@ -550,4 +551,31 @@ input[type="checkbox"], input[type="radio"] {
 }
 .drag-cancel:hover {
   cursor: default;
+}
+td.indexVal {
+  width: 85px;
+}
+
+#dragCloseButton {
+  position: absolute;
+  top:8px;
+  right:16px;
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-color: transparent;
+  border: 4px solid #fa5858;
+  border-radius: 50%;
+  text-align: center;
+  padding: 4px;
+  color: #fa5858;
+  font-weight: bold;
+}
+#dragCloseButton:hover {
+  color: #fff;
+  background-color: #555;
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+  border-color: #555;
 }
