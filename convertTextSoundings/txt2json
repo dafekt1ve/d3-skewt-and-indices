@@ -1,0 +1,146 @@
+#!/bin/bash
+file=$1
+#file="./sounding.txt"
+name=`echo $file | cut -d "/" -f 2 | cut -d "." -f 1`
+file2="$name.json"
+
+presArr=()
+hghtArr=()
+tempArr=()
+dwptArr=()
+wspdArr=()
+wdirArr=()
+
+n=0
+
+while IFS=+ read -r f1 f2 f3 f4 f5  
+do
+   if [[ $n -eq 0 ]]
+   then 
+      num=$f1
+      num=`echo $num | cut -d "=" -f 2`
+      num="${num%"${num##*[![:space:]]}"}"
+      let "n+=1"
+      continue
+   fi
+   f1=`echo $f1 | cut -d "=" -f 2` 
+   f1="${f1// /}"
+   f1="${f1#"${f1%%[![:space:]]*}"}"
+   f2="${f2//%2d/-}"
+   f2="${f2// /}"
+   f3="${f3//%2d/-}"
+   f3="${f3// /}"
+   f4="${f4// /}"
+   f5="${f5// /}"
+   f5="${f5%"${f5##*[![:space:]]}"}"
+
+   presArr+=($f1)
+   tempArr+=($f2)
+   dwptArr+=($f3)
+   wspdArr+=($f4)
+   wdirArr+=($f5)
+
+   let "n+=1"
+   if [[ $n -eq $num+1 ]] 
+   then
+      break
+   fi
+
+done <"$file"
+
+rhs1=`echo 288/.0065 | bc -l`
+rhs=0
+exp=0
+rhs2ExpMinus=0
+hght=0
+
+for p in "${presArr[@]}"
+do
+   exp=`echo "e(l($p/1013.25)*0.19035714285714285714)" | bc -l`
+   rhs2ExpMinus=`echo 1 - $exp | bc -l`
+   hght=`echo "($rhs1) * ($rhs2ExpMinus)" | bc -l`
+   hghtArr+=($hght)
+done
+
+
+min=0
+max=$(( ${#presArr[@]} -1 ))
+
+while [[ min -lt max ]]
+do
+    x="${presArr[$min]}"
+    presArr[$min]="${presArr[$max]}"
+    presArr[$max]="$x"
+
+    x="${hghtArr[$min]}"
+    hghtArr[$min]="${hghtArr[$max]}"
+    hghtArr[$max]="$x"
+
+    x="${tempArr[$min]}"
+    tempArr[$min]="${tempArr[$max]}"
+    tempArr[$max]="$x"
+
+    x="${dwptArr[$min]}"
+    dwptArr[$min]="${dwptArr[$max]}"
+    dwptArr[$max]="$x"
+
+    x="${wspdArr[$min]}"
+    wspdArr[$min]="${wspdArr[$max]}"
+    wspdArr[$max]="$x"
+
+    x="${wdirArr[$min]}"
+    wdirArr[$min]="${wdirArr[$max]}"
+    wdirArr[$max]="$x"
+
+    # Move closer
+    (( min++, max-- ))
+done
+
+echo ${presArr[@]}
+echo ${hghtArr[@]}
+echo ${tempArr[@]}
+echo ${dwptArr[@]}
+echo ${wspdArr[@]}
+echo ${wdirArr[@]}
+
+echo ${#presArr[@]}
+echo ${#hghtArr[@]}
+echo ${#tempArr[@]}
+echo ${#dwptArr[@]}
+echo ${#wspdArr[@]}
+echo ${#wdirArr[@]}
+
+
+echo "{" > $file2
+
+data_string="${presArr[*]}"
+echo -n '   "pres": [[[' >> $file2
+echo -n "${data_string//${IFS:0:1}/,}" >> $file2
+echo "]]]," >> $file2
+
+data_string="${hghtArr[*]}"
+echo -n '   "hght": [[[' >> $file2
+echo -n "${data_string//${IFS:0:1}/,}" >> $file2
+echo "]]]," >> $file2
+
+data_string="${tempArr[*]}"
+echo -n '   "tmpc": [[[' >> $file2
+echo -n "${data_string//${IFS:0:1}/,}" >> $file2
+echo "]]]," >> $file2
+
+data_string="${dwptArr[*]}"
+echo -n '   "dwpt": [[[' >> $file2
+echo -n "${data_string//${IFS:0:1}/,}" >> $file2
+echo "]]]," >> $file2
+
+data_string="${wdirArr[*]}"
+echo -n '   "wdir": [[[' >> $file2
+echo -n "${data_string//${IFS:0:1}/,}" >> $file2
+echo "]]]," >> $file2
+
+data_string="${wspdArr[*]}"
+echo -n '   "wspd": [[[' >> $file2
+echo -n "${data_string//${IFS:0:1}/,}" >> $file2
+echo "]]]" >> $file2
+echo "}" >> $file2
+
