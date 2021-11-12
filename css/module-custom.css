@@ -1,0 +1,768 @@
+/* ========================================================== */
+/* === LATEST CORE 2.O CUSTOM STYLES ======================== */
+/* ========================================================== */
+/* ========================================================== */
+/* === 1.0 OVERALL HTML ELEMENTS ============================ */
+body {
+  background-color: #fff;
+  min-width: 320px; }
+
+/* WebFont Stack 1 - Normal Weight */
+@font-face {
+  font-family: "futurapro-normal";
+  src: url("fonts/futurapro/futurapro-normal.eot");
+  src: url("fonts/futurapro/futurapro-normal.eot?#iefix") format("embedded-opentype"), url("fonts/futurapro/futurapro-normal.woff") format("woff"), url("fonts/futurapro/futurapro-normal.ttf") format("truetype");
+  font-style: normal;
+  font-weight: normal; }
+/* WebFont Stack 2 - Bold, Black, or Heavy */
+@font-face {
+  font-family: "futurapro-bold";
+  src: url("fonts/futurapro/futurapro-bold.eot");
+  src: url("fonts/futurapro/futurapro-bold.eot?#iefix") format("embedded-opentype"), url("fonts/futurapro/futurapro-bold.woff") format("woff"), url("fonts/futurapro/futurapro-bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: bold; }
+/* Links */
+a {
+  color: #127edd;
+  text-decoration: none; }
+
+a:hover,
+a:focus {
+  color: #84a833;
+  text-decoration: underline; }
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "futurapro-normal", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+
+/* Text Selection */
+::-moz-selection {
+  color: #fff;
+  background: #300CD2; }
+
+::selection {
+  color: #fff;
+  background: #300CD2; }
+
+/* ========================================================== */
+/* === 2.0 BOOTSTRAP COMPONENTS ============================= */
+/* === PAGE NAVIGATOR (pager) =============================== */
+.pager li > a,
+.pager li > span {
+  color: #84a833;
+  background-color: transparent;
+  border: 2px solid #84a833; }
+
+.pager li > a:hover,
+.pager li > a:focus {
+  background-color: #84a833;
+  color: #fff; }
+
+/* === DROPDOWN MENUS ======================================= */
+.dropdown-menu > .active > a,
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus {
+  background-color: #84a833; }
+
+/* === PILLS ================================================ */
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus {
+  background-color: #535353; }
+
+.nav > li > a:hover, .nav > li > a:focus {
+  text-decoration: none;
+  background-color: #84a833;
+  color: #fff; }
+
+/* === BUTTONS ================================================ */
+.btn {
+  background: #555;
+  color: #fff;
+  border: 2px solid #84a833;
+  border-radius: 2.5em;
+  font-family: "futurapro-normal";
+  transition: 0.2s ease-in-out all;
+  box-shadow: none;
+  text-shadow: none; }
+
+.btn:hover,
+.btn:active,
+.btn:focus {
+  background: #84a833;
+  border: 2px solid #84a833; }
+
+/* === DEFAULT BUTTON ======================================== */
+.btn-default {
+  background-color: #555;
+  border-color: #555; }
+
+.btn-default:hover,
+.btn-default:focus {
+  background-color: #333;
+  border-color: #333;
+  color: #fff;
+  background-position: 0 -15px; }
+
+.btn-default:active,
+.btn-default.active {
+  background-color: #333;
+  border-color: #333; }
+
+.btn-default:disabled,
+.btn-default[disabled] {
+  background-color: #D7D7D7;
+  background-image: none;
+  border-color: #ddd; }
+
+.btn-default:disabled:hover,
+.btn-default[disabled]:hover {
+  background-color: #D7D7D7;
+  background-image: none;
+  border-color: #ddd; }
+
+/* === PRIMARY BUTTON ======================================== */
+.btn-primary {
+  background-color: #84a833;
+  /*border-color: $module-color1;*/ }
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #5f7925;
+  border-color: #5f7925;
+  background-position: 0 -15px; }
+
+.btn-primary:active,
+.btn-primary.active {
+  background-color: #5f7925;
+  border-color: #5f7925; }
+
+.btn-primary:disabled,
+.btn-primary[disabled] {
+  background-color: #b4d36e;
+  background-image: none;
+  border-color: #b4d36e; }
+
+/* === SUCCESS BUTTON ======================================== */
+.btn-success {
+  background-color: #8FCE44;
+  border-color: #8FCE44; }
+
+.btn-success:hover,
+.btn-success:focus {
+  background-color: #75b12e;
+  border-color: #75b12e;
+  background-position: 0 -15px; }
+
+.btn-success:active,
+.btn-success.active {
+  background-color: #75b12e;
+  border-color: #75b12e; }
+
+.btn-success:disabled,
+.btn-success[disabled] {
+  background-color: #D7D7D7;
+  background-image: none;
+  border-color: #D7D7D7; }
+
+/* === WARNING BUTTON ======================================== */
+.btn-warning {
+  background-color: #FFAF3C;
+  border-color: #FFAF3C; }
+
+.btn-warning:hover,
+.btn-warning:focus {
+  background-color: #ff9a09;
+  border-color: #ff9a09;
+  background-position: 0 -15px; }
+
+.btn-warning:active,
+.btn-warning.active {
+  background-color: #ff9a09;
+  border-color: #ff9a09; }
+
+.btn-warning:disabled,
+.btn-warning[disabled] {
+  background-color: #D7D7D7;
+  background-image: none;
+  border-color: #D7D7D7; }
+
+/* === DANGER BUTTON ======================================== */
+.btn-danger {
+  background-color: #FA5858;
+  border-color: #FA5858; }
+
+.btn-danger:hover,
+.btn-danger:focus {
+  background-color: #f93a3a;
+  border-color: #f93a3a;
+  background-position: 0 -15px; }
+
+.btn-danger:active,
+.btn-danger.active {
+  background-color: #f93a3a;
+  border-color: #f93a3a; }
+
+.btn-danger:disabled,
+.btn-danger[disabled] {
+  background-color: #D7D7D7;
+  background-image: none;
+  border-color: #D7D7D7; }
+
+/* === DEFAULT PANEL ======================================== */
+.panel-default {
+  border-color: #d5d5d5; }
+
+.panel-default > .panel-heading {
+  color: #fff;
+  background-color: #555;
+  border-color: #555; }
+
+/* === PRIMARY PANEL ======================================== */
+.panel-primary {
+  border-color: #84a833; }
+
+.panel-primary > .panel-heading {
+  color: #fff;
+  background-color: #84a833;
+  border-color: #84a833; }
+
+/* === SUCCESS PANEL ======================================== */
+.panel-success {
+  border-color: #8FCE44; }
+
+.panel-success > .panel-heading {
+  color: #fff;
+  background-color: #8FCE44;
+  border-color: #8FCE44; }
+
+/* === WARNING PANEL ======================================== */
+.panel-warning {
+  border-color: #FFAF3C; }
+
+.panel-warning > .panel-heading {
+  color: #fff;
+  background-color: #FFAF3C;
+  border-color: #FFAF3C; }
+
+/* === DANGER PANEL ======================================== */
+.panel-danger {
+  border-color: #FA5858; }
+
+.panel-danger > .panel-heading {
+  color: #fff;
+  background-color: #FA5858;
+  border-color: #FA5858; }
+
+.panel-title > a:hover,
+.panel-title > a:active,
+.panel-title > a:focus {
+  color: #fff; }
+
+.msdb-error {
+  margin-bottom: 0px;
+  background: #ef0707;
+  font-size: 80%; }
+
+.msdb-error span {
+  color: #fff !important; }
+
+.msdb-error a {
+  color: #000;
+  text-decoration: underline; }
+
+.msdb-error a:hover,
+.msdb-error a:active,
+.msdb-error a:focus {
+  color: #000;
+  text-decoration: none; }
+
+/* ========================================================== */
+/* === 3.0 LATEST CORE 2 COMPONENTS ========================= */
+/* === MODULE HEADER ======================================== */
+#module-title {
+  color: #fff;
+  font-family: "futurapro-bold";
+  font-size: 40px;
+  line-height: 40px;
+  text-shadow: 1px 1px 0px #000, 2px 2px 0px #000;
+  padding-top: 25px; }
+
+#module-title small, .module-title small {
+  color: #535353;
+  font-weight: normal !important; }
+
+#splash-page .module-title {
+  font-size: 72px;
+  line-height: 72px; }
+
+/* Module Title Media Queries */
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  #module-title {
+    font-size: 46px;
+    line-height: 46px; }
+
+  #splash-page .module-title {
+    font-size: 56px;
+    line-height: 56px; } }
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  #module-title {
+    font-size: 48px;
+    line-height: 48px; }
+
+  #splash-page .module-title {
+    font-size: 64px;
+    line-height: 64px; } }
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  #module-title {
+    font-size: 52px;
+    line-height: 52px;
+    /* text-align:left;
+    padding-left:16px; */ }
+
+  #splash-page .module-title {
+    font-size: 75px;
+    line-height: 75px; } }
+#module-credit {
+  color: #fff;
+  font-family: "futurapro-normal";
+  text-shadow: 1px 1px 0px #000, 2px 2px 0px #000;
+  font-size: 12px; }
+
+/* === MODULE NAVIGATION MENU =============================== */
+.module-nav li.active a,
+.module-nav li.active a:focus,
+.module-nav li.active a:hover {
+  background-color: #84a833; }
+
+/* === MODULE UNIT/CHAPTER DROPDOWN MENU ==================== */
+.unit-header {
+  background: #84a833;
+  color: #fff; }
+
+#collapsible-toc .panel-default .panel-heading {
+  background: #84a833;
+  border-top-right-radius: 0px !important;
+  border-top-left-radius: 0px !important; }
+
+#collapsible-toc .panel-default .panel-heading a,
+#collapsible-toc .panel-default .panel-heading a:hover,
+#collapsible-toc .panel-default .panel-heading a:active {
+  color: #fff !important; }
+
+/* === BACK TO TOP BUTTON =================================== */
+.back-top a {
+  color: #ccc;
+  text-decoration: none; }
+
+.back-top a:hover {
+  color: #353535;
+  text-decoration: none; }
+
+/* === IMAGE AND TEXT CAPTIONS ============================== */
+.image-caption, .text-caption {
+  background: #d7d7d7; }
+
+/* === SPLASH PAGE ============================== */
+body#splash-page {
+  background-color: #fff; }
+
+#splash-page .footer-text a {
+  color: #84a833; }
+
+#module-topbanner {
+  background-image: url("../assets/module-banner.jpg");
+  background-repeat: no-repeat;
+  background-size: 1168px 170px;
+  background-position: top center; }
+
+/* ========================================================== */
+/* === 4.0 MODULE-SPECIFIC COMPONENTS ======================= */
+/* Swatch test */
+#module-color-1 {
+  background-color: #84a833; }
+
+#module-color-2 {
+  background-color: #84a833; }
+
+#module-color-3 {
+  background-color: #535353; }
+
+#module-color-4 {
+  background-color: #353535; }
+
+#module-color-1, #module-color-2, #module-color-3, #module-color-4 {
+  border-color: #ddd; }
+
+#module-color-1:hover, #module-color-2:hover, #module-color-3:hover, #module-color-4:hover {
+  border-color: #000; }
+
+/* ========================================================== */
+/* === LC3 COMPONENTS ======================================= */
+body {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#7d7e7d+0,0e0e0e+100;Black+3D */
+  background: #7d7e7d;
+  /* Old browsers */
+  background: -moz-radial-gradient(center, ellipse cover, #7d7e7d 0%, #0e0e0e 100%) fixed;
+  /* FF3.6-15 */
+  background: -webkit-radial-gradient(center, ellipse cover, #7d7e7d 0%, #0e0e0e 100%) fixed;
+  /* Chrome10-25,Safari5.1-6 */
+  background: radial-gradient(ellipse at center, #7d7e7d 0%, #0e0e0e 100%) fixed;
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#0e0e0e',GradientType=1 );
+  /* IE6-9 fallback on horizontal gradient */ }
+
+.navbar-inverse {
+  background-color: #98a0ad;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#e5e5e5+0,ffffff+50,e5e5e5+100 */ }
+
+.navbar-inverse .navbar-nav > li > a {
+  color: #111; }
+
+.navbar-inverse .navbar-nav > li > a:focus,
+.navbar-inverse .navbar-nav > li > a:hover {
+  background-color: #84a833; }
+
+.chapter_description {
+  display: none; }
+
+.sidebar-toc {
+  margin-top: -10px; }
+
+.lc-docs-sidenav {
+  padding-left: 0px;
+  font-size: 12px; }
+
+.menu_here {
+  border-right: none; }
+
+.sidebar-toc ul li > a.menu_here {
+  background-color: #475a1b;
+  color: #fff; }
+
+.sidebar-toc hr {
+  margin-top: 0px;
+  margin-bottom: 10px; }
+
+#tab_nav {
+  font-size: 13px;
+  margin-left: -1px;
+  margin-right: -1px; }
+
+#tab_nav > li > a {
+  white-space: normal;
+  line-height: 1.1; }
+
+.lc-docs-sidenav > li a {
+  padding: 2px 8px; }
+
+.lc-docs-sidenav ul {
+  margin-left: 12px; }
+
+#lesson-sidebar-title {
+  margin-top: 15px;
+  margin-bottom: 0px; }
+
+#lesson-sidebar-unit-title {
+  font-size: 15px; }
+
+#lesson-title {
+  font-size: 34px;
+  line-height: 34px;
+  margin-top: 10px;
+  color: #fff;
+  /*text-shadow: $module-title-shadow;*/ }
+
+#lesson-subtitle {
+  font-size: 20px;
+  margin-top: -12px;
+  color: #bfbfbf;
+  /*text-shadow: $module-title-shadow;*/ }
+
+@media (min-width: 768px) {
+  #lesson-sidebar-title {
+    font-size: 18px; }
+
+  #lesson-sidebar-unit-title {
+    font-size: 12px; }
+
+  #lesson-title {
+    font-size: 40px;
+    line-height: 40px;
+    margin-top: 10px; }
+
+  #lesson-subtitle {
+    font-size: 24px;
+    margin-top: -14px; } }
+@media (min-width: 992px) {
+  #lesson-copyright {
+    text-align: left; }
+
+  #lesson-footer {
+    text-align: right; }
+
+  #lesson-image-credit {
+    text-align: right; }
+
+  #parent-links {
+    margin-right: -12px; }
+
+  #lesson-sidebar-title {
+    font-size: 20px; }
+
+  #lesson-sidebar-unit-title {
+    font-size: 16px; }
+
+  #lesson-title {
+    font-size: 60px;
+    line-height: 60px;
+    margin-top: 10px; }
+
+  #lesson-subtitle {
+    font-size: 32px;
+    margin-top: -18px; } }
+#master-container {
+  height: 100%;
+  overflow: hidden;
+  margin-top: 50px;
+  background-color: #fff;
+  border: 1px solid #555;
+  /*border-radius: 8px;*/
+  overflow: hidden;
+  box-shadow: 2px 2px 18px rgba(45, 45, 45, 0.25); }
+
+#master-container.splash-background {
+  background: url(../assets/module-cover.jpg) top center no-repeat;
+  /*min-height: 640px;*/
+  background-color: #b9bdc9;
+  position: relative; }
+
+.splash-overlay {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&0.65+0,0+35 */
+  background: -moz-linear-gradient(top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0) 100%);
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0) 100%);
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0) 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=0 );
+  /* IE6-9 */
+  overflow: hidden;
+  height: 100%;
+  padding-left: 15px;
+  padding-right: 15px;
+  z-index: 2; }
+
+/*#lesson-footer.splash-footer {
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+	left: 0px;
+	clear: both;
+	padding: 0px 15px;
+}*/
+.stage_nav {
+  margin-top: 0px;
+  position: absolute;
+  display: block;
+  left: 0;
+  right: 0;
+  bottom: 0; }
+
+.pager {
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  margin-top: 0px;
+  margin-bottom: 0px; }
+
+.pager li > a {
+  border: none;
+  border-radius: 0;
+  padding: 10px 15px; }
+
+.pager .previous > a {
+  border-right: 1px solid #ccc; }
+
+.pager .next > a {
+  border-left: 1px solid #ccc; }
+
+#lesson-content {
+  padding-bottom: 60px;
+  min-height: 480px;
+  background-color: #fff; }
+
+/*#cover-overlay {
+    background: rgba(255,255,255,0.25);
+    overflow: hidden;
+    height: 100%;
+    z-index: 2;
+	margin-left: -15px;
+	margin-right: -15px;
+	padding-left: 15px;
+	padding-right: 15px;
+}*/
+.lesson-titles {
+  /*padding-top: 50px;*/ }
+
+#lesson-midrow-items {
+  padding-bottom: 100px; }
+
+#lesson-midrow-items .btn {
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); }
+
+#lesson-description {
+  text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.8), -1px -1px 4px #fff; }
+
+#lesson-splash-toc {
+  /*background-color: rgba(255,255,255,0.65);*/
+  background-color: rgba(18, 18, 18, 0.7);
+  /*position: absolute;
+  bottom: 26px;
+  left: 0;
+  right: 0;*/ }
+
+#lesson-splash-credits {
+  font-weight: bold;
+  font-size: 11px;
+  color: #fff;
+  text-shadow: 1px 1px 4px #000;
+  /*position: absolute;
+  top: -20px;
+  right: 15px;
+  left: 15px;*/ }
+
+#lesson-image-credit {
+  text-align: left; }
+
+.unit-panel {
+  max-width: 640px;
+  background-color: rgba(255, 255, 255, 0.8); }
+
+.unit-panel p {
+  font-size: 13px; }
+
+#lesson-footer {
+  font-size: 11px;
+  text-align: center;
+  background-color: #fff;
+  border-top: 1px solid #555; }
+
+#lesson-copyright {
+  text-align: center;
+  margin-top: 6px;
+  margin-bottom: 4px; }
+
+#parent-links {
+  list-style-type: none;
+  float: none;
+  padding-left: 0px;
+  margin-top: 6px;
+  margin-bottom: 4px; }
+
+@media (min-width: 768px) {
+  #lesson-image-credit {
+    text-align: right; }
+
+  #lesson-midrow-items {
+    padding-bottom: 250px; } }
+@media (min-width: 992px) {
+  #lesson-copyright {
+    text-align: left; }
+
+  #lesson-footer {
+    text-align: right; }
+
+  #lesson-image-credit {
+    text-align: right; }
+
+  #parent-links {
+    margin-right: -12px; }
+
+  #lesson-midrow-items {
+    padding-bottom: 350px; } }
+#parent-links > li {
+  display: inline-block;
+  padding: 0px 2px; }
+
+#parent-links > li:after {
+  content: '';
+  display: inline-block;
+  height: 12px;
+  width: 2px;
+  margin-left: 8px;
+  background-color: #353535;
+  margin-bottom: -2px; }
+
+#parent-links > li:last-child:after {
+  background-color: transparent; }
+
+.deprecated {
+  color: #ccc;
+  text-decoration: line-through; }
+
+.style-guide {
+  border: 1px solid #ddd;
+  border-radius: 4px; }
+
+.style-guide > h4 {
+  text-align: center; }
+
+.heading-font-sample {
+  font-family: "futurapro-normal"; }
+
+.guide-sample-characters {
+  font-size: 80px; }
+
+.retired-template-thumb {
+  width: 220px;
+  padding: 10px;
+  margin: 10px 15px;
+  border-radius: 3px;
+  background-color: #ede4d3;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2); }
+
+.retired-template-thumb a {
+  color: black; }
+
+.retired-template-thumb a img {
+  transition: all ease 0.2s; }
+
+.retired-template-thumb a:hover img {
+  -webkit-filter: sepia(1);
+  filter: sepia(1); }
+
+.feedback {
+  display: none; }
+
+.swf {
+  border: 2px solid red;
+  /*content: 'SWF FILE';*/
+  display: block;
+  min-height: 250px;
+  width: 350px; }
+
+.swf:before {
+  content: 'SWF FILE';
+  display: block; }
+
+.padleft20 {
+  margin-left: 20px; }
+
+.feedback {
+  background-color: #ddd;
+  margin: 5px;
+  padding: 5px; }
+
+.question.wrap fieldset {
+  padding-left: 20px; }
+
+.unit-panel a {
+  color: #111; }
+
+.unit-panel a:hover {
+  color: #127edd; }
+
+/*# sourceMappingURL=module-custom.css.map */

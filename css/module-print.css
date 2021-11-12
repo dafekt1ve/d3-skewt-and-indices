@@ -1,0 +1,381 @@
+/* ========================================================== */
+/* === LATEST CORE 2.0 PRINT STYLES ========================= */
+* {
+    text-shadow: none !important;
+    box-shadow: none !important;
+	font-family: sans-serif !important;
+}
+body {
+	font-size: 12px;
+}
+a,a:visited {
+    text-decoration: underline;
+}
+
+/* Include Link Paths for Images
+a[href]:after {
+    content: " (" attr(href) ")";
+}
+abbr[title]:after {
+    content: " (" attr(title) ")";
+}
+a[href^="javascript:"]:after,a[href^="#"]:after {
+    content: "";
+}
+*/
+
+/*pre,blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+}*/
+
+thead {
+    display: table-header-group;
+}
+
+tr,img {
+    page-break-inside: avoid;
+}
+
+img {
+	height: auto;
+	width: auto;
+    max-width: 960px !important;
+}
+
+p,h2,h3 {
+    orphans: 3;
+    widows: 3;
+}
+
+h2,h3 {
+    page-break-after: avoid;
+}
+
+select {
+    background: #fff !important;
+}
+
+/*.page h3 {
+	page-break-before: always !important;
+}*/
+.lc-docs-sidenav li.divider{
+	list-style: none;
+	border-top: 1px solid #ccc;
+	margin: 10px 0px;
+	max-width: 190px;
+}
+.navbar {
+    display: none;
+}
+
+.table td,.table th {
+    background-color: #fff !important;
+}
+
+.btn {
+	padding: 4px 6px;
+}
+.btn.btn-default {
+	border-top: 2px solid;
+}
+.btn.btn-primary {
+	border-top: 2px solid #333;
+}
+.btn.btn-success {
+	border-top: 2px solid green;
+}
+.btn.btn-warning {
+	border-top: 2px solid orange;
+}
+.btn.btn-danger {
+	border-top: 2px solid red;
+}
+
+.btn>.caret,.dropup>.btn>.caret {
+    border-top-color: #000 !important;
+}
+
+.label {
+    border: 1px solid #000;
+}
+
+.table {
+    border-collapse: collapse !important;
+}
+
+.table-bordered th,.table-bordered td {
+    border: 1px solid #ddd !important;
+}
+
+.visible-print {
+    display: block !important;
+}
+
+table.visible-print {
+    display: table;
+}
+
+tr.visible-print {
+    display: table-row !important;
+}
+
+th.visible-print,td.visible-print {
+    display: table-cell !important;
+}
+
+.visible-print-block {
+    display: none !important;
+}
+
+.visible-print-block {
+    display: block !important;
+}
+
+.visible-print-inline {
+    display: none !important;
+}
+
+.visible-print-inline {
+    display: inline !important;
+}
+
+.visible-print-inline-block {
+    display: none !important;
+}
+
+.visible-print-inline-block {
+    display: inline-block !important;
+}
+
+.hidden-print {
+    display: none !important;
+}
+
+.page h2:first-child, .page h3:first-child {
+	border-bottom:1px solid #333;
+}
+
+iframe {
+	width: 800px;
+	min-height: 640px;
+}
+
+iframe .answers p {
+	display:inline-block !important;
+}
+
+.btn, .btn-group {
+	background-color: transparent !important;
+	border: 1px solid #ccc;
+}
+.close {
+	display:none !important;
+}
+/* Collapsible panels print fix */
+.panel-collapse.collapse.in {
+	display:block;
+}
+.panel-collapse.collapse,
+.panel-collapse.collapsing {
+	display:none;
+}
+
+/* Latest Core 2.0 - Print Fixed Components */
+#module-wrapper {
+	max-width:1200px;
+	margin:0px auto;
+	padding:0px 20px;
+}	
+
+#module-content {
+	background-color:#fff !important;
+}
+#module-title {
+	font-size:28px !important;
+	font-weight:bold;
+}
+#module-credit {
+	font-size:11px;
+	font-weight:bold;
+	font-style:italic;
+	margin:0;
+}
+.chapter_title {
+	font-size:18px;
+}
+.show-after {
+	display: block !important;
+}
+/* Absolute print items */
+.absolute-print {
+	display: block !important;
+}
+.absolute-module {
+	display: none !important;
+}
+.back-top,
+.print-top-link {
+	position: fixed;
+	bottom: 10px;
+	right: 0px;
+	float: right;
+	width: 100px;
+	padding-left: 20px;
+	background-color: rgba(255,255,255,0.9);
+	border-radius: 2px;
+}
+/* 2016  Fixes ========= */
+.nav-tabs {
+	display: none;
+}
+.tab-pane {
+	border: 1px solid #ccc;
+	/*border-top-right-radius: 8px;*/
+	margin: 5px auto;
+	padding: 10px;
+	margin-top: -14px;
+}
+.page .tab-pane h3:first-child {
+	display: block;
+	color: #555;
+    border-bottom: 1px solid #ccc;
+}
+.center.caption {
+	display: inline-block;
+	text-align: center;
+}
+.image-caption, .text-caption, .caption p {
+	background-color: #ddd;
+	margin: 0px auto 15px;
+	padding: 4px;
+	font-size: .9em;
+	line-height: 1.1;
+}
+.btn-group.unit-dropdown {
+	border: none;
+}
+.btn-group.unit-dropdown button {
+	display: none;
+}
+#chapter_select {
+	margin-top: -20px;
+}
+
+/* Sweeper side by side comparison */
+.image-sweep {
+	margin: 20px auto;
+	clear: both;
+	width: 100%;
+	max-width: 100% !important;
+}
+.image-sweep img {
+	width: 49%;
+}
+/* Latest Core 3.0 */
+.tab-content {
+	margin: 20px auto;
+}
+.tab-content > h3 {
+	display: inline-block;
+	padding: 8px;
+	font-size: 13px;
+	color: #555;
+	background-color: #fff;
+	border-top: 2px solid #555;
+	border-left: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+	border-bottom: none !important;
+}
+
+.panel.panel-default,
+.panel.panel-primary,
+.panel.panel-warning,
+.panel.panel-danger,
+.panel.panel-success {
+	border: 1px solid #ccc;
+	margin: 15px auto;
+}
+.panel .panel-heading {
+	padding: 8px 10px;
+	border-bottom: 1px solid #ccc;
+}
+.panel .panel-title {
+	margin: 0 0;
+}
+.panel .panel-body {
+	padding: 8px 10px;
+}
+
+pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+code {
+	font-family: Menlo,Monaco,Consolas,"Courier New",monospace !important;
+	font-size: 10px;
+	background-color: #444;
+	color: #92EE54;
+	display: block;
+}
+.msdb-error {
+	margin-bottom: 0px;
+}
+.glyphicon-plus-sign:after {
+	content: '+';
+	margin-left: 4px;
+}
+.glyphicon-minus-sign:after {
+	content: '-';
+	margin-left: 4px;
+}
+.programmer-note {
+	max-height: 360px;
+	overflow: scroll;
+	font-size: 75%;
+	border-radius: 0px;
+	border-top-right-radius: 0px;
+	border-top-left-radius: 0px;
+}
+.programmer-note h4 {
+	font-size: 11px;
+	margin-top: 2px;
+}
+.programmer-note a {
+	background-color: #ff4835;
+	color: #000;
+}
+.programmer-note a:hover {
+	color: #fff;
+}
+.programmer-note .panel-heading {
+	padding: 0 0;
+	border-bottom: 2px solid #ff4835;
+}
+.programmer-note .panel-body {
+	background-color: #ff4835;
+}
+
+/* Latest Core 2.0 - Print Hidden Components */
+.module-nav, .print_hide, .drawtool-controls, .drag_controls_holder,
+.message, .message-incorrect, .message-correct,
+.unit-dropdown, .footer-links, .submit-button,
+.zoomContainer, .zoom-instructions, .radio-image-selector ul {
+	display: none !important;
+}
+
+#quiz-prompt, #userSurvey {
+	display: none !important;
+}
+
+/* HTML5 Media Player */
+.mejs-audio, .mejs-video,
+.mejs__audio {
+	display: none !important;
+}
+.page {
+	clear: both;
+}
